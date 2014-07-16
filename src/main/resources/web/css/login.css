@@ -1,0 +1,84 @@
+#bg_img {
+	overflow: hidden;
+	position: relative;
+	display: inline-block;
+   background: url("../images/login_bg.png") no-repeat; 
+   width: 1273px;
+   height: 1003px;
+}
+#cont {
+	text-align: center;
+}
+/* body {
+   background: url("../images/login_bg.png") no-repeat center center fixed; 
+}
+*/
+
+/* html { 
+  background: url("../images/login_bg.png") no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+*/
+.auth_input {
+	position: absolute;
+	background-color: transparent;
+   border: 0px solid;	
+	color: #918874;
+	font-weight: bold;
+	width: 220px;
+	text-align: center;
+}
+#auth_user {
+	left: 522px;
+	top: 563px;	
+}
+#auth_pass {
+	left: 522px;
+	top: 589px;	
+}
+.auth_input:focus {
+	outline: 0;
+}
+.msg {
+	position: absolute;
+	text-align: center;
+}
+#login_msg {
+	color: #FFE0E0;
+	font-weight: bold;
+	left: 512px;
+	top: 540px;	
+	width: 240px;
+}
+.but {
+	position: absolute;
+	width: 102px;
+	height: 31px;
+	background-image: url("../images/login_btn.png");
+	background-repeat: no-repeat;
+}
+
+#login_but {
+	left: 528px;
+	top: 618px;
+	background-position: 0px -31px;
+}
+
+#login_but:hover {
+	left: 528px;
+	top: 618px;
+	background-position: 0px -93px;
+}
+#quit_but {
+	left: 639px;
+	top: 617px;
+	background-position: 0px 0px;
+}
+#quit_but:hover {
+	left: 639px;
+	top: 618px;
+	background-position: 0px -62px;
+}

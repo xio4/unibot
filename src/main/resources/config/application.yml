@@ -1,0 +1,18 @@
+banner:
+   location=classpath:/banner.txt
+spring:
+   thymeleaf:
+      prefix=classpath:/web/templates/
+      suffix=.html
+      mode=HTML5
+      encoding=UTF-8
+      content-type=text/html 
+      cache=false 
+logging:
+   file: global.log
+server:
+   port: 8080
+management:
+   port: 9001
+   address: 127.0.0.1
+debug: true

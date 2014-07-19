@@ -5,6 +5,7 @@ import java.util.Properties;
 import javax.annotation.Resource;
 import javax.sql.DataSource;
 
+import org.hibernate.FlushMode;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -54,7 +55,7 @@ public abstract class HibernateConfig {
 			setProperty("hibernate.dialect",
 					env.getProperty("hibernate.dialect"));
 		}});
-		
+//		fb.getObject().getCurrentSession().setFlushMode(FlushMode.AUTO);
 		return fb;
 	}
 
@@ -63,6 +64,7 @@ public abstract class HibernateConfig {
 	{
 		HibernateTransactionManager htm = new HibernateTransactionManager();
 		htm.setSessionFactory(getSessionFactoryBean().getObject());
+//		htm.setDataSource(dataSource);
 
 		return htm;
 	}

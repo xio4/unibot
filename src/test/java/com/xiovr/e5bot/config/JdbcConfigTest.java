@@ -11,7 +11,6 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.core.env.Environment;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
-import org.testng.Assert;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
@@ -22,7 +21,7 @@ import org.hsqldb.jdbcDriver;
  */
 @Configuration
 @PropertySource("classpath:properties/db.properties")
-@Profile("test")
+//@Profile("test")
 public abstract class JdbcConfigTest {
 	@Resource
 	Environment env;

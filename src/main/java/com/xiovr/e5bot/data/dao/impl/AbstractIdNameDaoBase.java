@@ -32,9 +32,10 @@ public abstract class AbstractIdNameDaoBase<T extends IdNameEntity, K extends Se
 
 	@SuppressWarnings("unchecked")
 	public AbstractIdNameDaoBase()	{
+		super();
 		daoClazz = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass())
 				.getActualTypeArguments()[0];
-//		System.out.println(daoClazz);
+//		getHibernateTemplate().setCheckWriteOperations(false);
 		
 	}
 
@@ -52,7 +53,7 @@ public abstract class AbstractIdNameDaoBase<T extends IdNameEntity, K extends Se
 	 * @see com.xiovr.e5bot.data.dao.IdNameDaoBase#find(java.io.Serializable)
 	 */
 	@Override
-	public T find(K id) {
+	public T getById(K id) {
 		return (T)(getHibernateTemplate().get(daoClazz, id));
 	}
 
@@ -74,7 +75,7 @@ public abstract class AbstractIdNameDaoBase<T extends IdNameEntity, K extends Se
 	@Override
 	public void delete(K id)
 	{
-		T t = find(id);
+		T t = getById(id);
 		Assert.notNull(t);
 		getHibernateTemplate().delete(t);
 	}

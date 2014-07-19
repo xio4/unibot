@@ -25,6 +25,7 @@ class LoginController {
      */
     @RequestMapping(value ={"/login"}, method = RequestMethod.GET)
     public String login() {
+    	testService.test();
         return "login";
     }
 }

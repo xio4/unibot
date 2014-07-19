@@ -37,8 +37,8 @@
   <logger name="org.springframework">  
     <level value="INFO" />  
   </logger>  
-  <logger name="org.hibernate.type" level="ALL" />
-  <logger name="org.hibernate" level="DEBUG" />
+  <logger name="org.hibernate.type" level="INFO" />
+  <logger name="org.hibernate" level="INFO" />
   
   <root>  
     <level value="DEBUG" />  

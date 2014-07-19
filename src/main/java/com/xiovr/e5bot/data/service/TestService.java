@@ -10,14 +10,17 @@ import com.xiovr.e5bot.data.model.Classes;
 import com.xiovr.e5bot.data.model.ItemName;
 
 @Service
-@Transactional
+@Transactional()
 public class TestService {
 	@Autowired
 	ItemNameDaoImpl itemNameDao;
 	
 	@Transactional
 	public void test() {
-		ItemName cls = itemNameDao.find(10L);
+		ItemName cls = itemNameDao.getById(10L);
+		System.out.println("cls+"+cls);
+		cls.setName("WTF");
+		itemNameDao.update(cls);
 		System.out.println("cls=" + cls.getName());
 	}
 

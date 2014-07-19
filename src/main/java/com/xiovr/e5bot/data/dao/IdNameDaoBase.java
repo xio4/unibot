@@ -9,6 +9,6 @@ public interface IdNameDaoBase<T extends IdNameEntity, K extends Serializable> {
 	T save(T name);
 	void update(T name);
 	void delete(K id);
-	T find(K id);
+	T getById(K id);
 	List<T> findAll();
 }

@@ -18,10 +18,12 @@ public class BotManagerTest extends TestBase {
 	@Autowired 
 	BotManager botManager;
 
+
 	@Test()
 	public void testBotManager_create_count_destroy_bot()
 	{
 		botManager.clear();
+		
 		Bot bot = botManager.createBot();
 		Assert.assertNotNull(bot);
 		Assert.assertEquals(botManager.botsCount(), 1);
@@ -44,7 +46,6 @@ public class BotManagerTest extends TestBase {
 	public void testBotManager_start_stop_bot()
 	{
 
-		System.out.println("LKJLJKLJLKJLKJLKJLKJLKJ");
 		Bot bot = botManager.createBot();
 		botManager.start(bot.getBotId());
 		Assert.assertNotEquals(bot.getStatus(), Bot.OFFLINE_STATUS);

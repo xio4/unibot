@@ -1,6 +1,6 @@
-package com.xiovr.e5bot.bot.packet;
+package com.xiovr.e5bot.plugin;
 
-import com.xiovr.e5bot.plugin.PluginContext;
+import com.xiovr.e5bot.bot.packet.Packet;
 
 public interface CryptorCommand {
 	public void execute(PluginContext context, Packet packet);

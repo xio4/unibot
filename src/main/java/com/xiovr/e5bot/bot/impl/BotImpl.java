@@ -40,5 +40,45 @@ public class BotImpl implements Bot {
 		botType = type;
 		
 	}
+	@Override
+	public String getLogin() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public void setLogin(String login) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public String getPassword() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public void setPassword(String password) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public String getName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public void setName(String name) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public int getServerId() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	@Override
+	public void setServerId(int id) {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

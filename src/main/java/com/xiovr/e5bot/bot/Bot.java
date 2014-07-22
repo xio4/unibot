@@ -15,5 +15,15 @@ public interface Bot {
 	public int getStatus();
 	public int getType();
 	public void setType(int type);
+	public String getLogin();
+	public void setLogin(String login);
+	public String getPassword();
+	public void setPassword(String password);
+	public String getName();
+	public void setName(String name);
+	public int getServerId();
+	public void setServerId(int id);
+	
+
 
 }

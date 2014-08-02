@@ -1,10 +1,9 @@
 package com.xiovr.e5bot.plugin;
 
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
+import org.eclipse.jdt.annotation.NonNull;
 
+import com.xiovr.e5bot.bot.BotContext;
 import com.xiovr.e5bot.bot.packet.Packet;
-import com.xiovr.e5bot.bot.packet.PacketRingBuffer;
 
 public interface CryptorPlugin {
 	public void init(BotContext context);
@@ -14,10 +13,11 @@ public interface CryptorPlugin {
 	 */
 	//ArrayBlockingQueue bq;
 	public CryptorCommand getNextCommand(CryptorCommand lastCommand);
+	// TODO Not implemented yet
 	public void update();
-	public void decryptFromServer(Packet enc, Packet dec);
-	public void decryptFromClient(Packet enc, Packet dec);
-	public void encryptToServer(Packet dec, Packet enc);
-	public void encryptToClient(Packet dec, Packet enc);
+	public Packet decryptFromServer(@NonNull Packet enc, @NonNull Packet dec);
+	public Packet decryptFromClient(@NonNull Packet enc, @NonNull Packet dec);
+	public Packet encryptToServer(@NonNull Packet dec,@NonNull  Packet enc);
+	public Packet encryptToClient(@NonNull Packet dec,@NonNull  Packet enc);
 	public void dispose();
 }

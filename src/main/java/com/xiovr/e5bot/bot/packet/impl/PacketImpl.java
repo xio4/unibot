@@ -10,6 +10,8 @@ public class PacketImpl implements Packet {
 	private int bufAllocateSize;
 	private int type;
 	private int ownerId;
+	private long time;
+	private long num;
 
 	public PacketImpl()
 	{
@@ -21,13 +23,6 @@ public class PacketImpl implements Packet {
 		bufAllocateSize = size;
 		type = Packet.PCK_UNKNOWN;
 		ownerId = -1;
-	}
-
-	@Override
-	public String toHexString(String delimeter) {
-		String hex = "";
-		
-		return hex;
 	}
 
 	@Override
@@ -59,6 +54,28 @@ public class PacketImpl implements Packet {
 	@Override
 	public ByteBuffer getBuf() {
 		return buf;
+	}
+	@Override
+	public long getTime() {
+		return this.time;
+	}
+	@Override
+	public void setTime(long time) {
+		this.time = time;
+		
+	}
+	@Override
+	public long getNum() {
+		return num;
+	}
+	@Override
+	public void setNum(long pckNum) {
+		this.num = pckNum;
+		
+	}
+	@Override
+	public void clear() {
+		buf.limit(0);
 	}
 
 }

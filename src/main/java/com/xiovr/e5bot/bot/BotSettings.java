@@ -1,18 +1,10 @@
 package com.xiovr.e5bot.bot;
 
-public interface Bot {
-
-	public static final int OFFLINE_STATUS = 0x00;
-	public static final int LOGIN_STATUS = 0x01;
-	public static final int INWORLD_STATUS = 0x02;
-
+public interface BotSettings {
 	public static final int INGAME_TYPE = 0x01;
 	public static final int OUTGAME_TYPE = 0x02;
 
-	public int getBotId();
-	public void setBotId(int botId);
-	public void setStatus(int status);
-	public int getStatus();
+
 	public int getType();
 	public void setType(int type);
 	public String getLogin();
@@ -23,7 +15,16 @@ public interface Bot {
 	public void setName(String name);
 	public int getServerId();
 	public void setServerId(int id);
+	public boolean isClientProxy();
+	public void setClientProxy(boolean bProxy);
 	
-
+	public boolean isAutoConnect();
+	public void setAutoConnect(boolean bConnect);
+	public int getAutoConnectInterval();
+	public void setAutoConnectInterval(int connectInterval);
+	public boolean isDisabled();
+	public void setDisabled(boolean bDisabled);
+	public boolean isLogging();
+	public void setLogging(boolean bLogging);
 
 }

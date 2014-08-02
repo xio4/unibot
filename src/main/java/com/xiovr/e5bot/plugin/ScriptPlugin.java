@@ -1,5 +1,8 @@
 package com.xiovr.e5bot.plugin;
 
+import com.xiovr.e5bot.bot.BotContext;
+import com.xiovr.e5bot.bot.packet.Packet;
+
 /**
  * @author xio4
  * Base interface for java scripts
@@ -11,25 +14,26 @@ public interface ScriptPlugin {
 	 */
 	public void init(BotContext context);
 	/**
-	 * @return update interval in millisecons. if -1 then update() method disabled. May be more then 50ms
+	 * Open method then start server connection
 	 */
-	public int getUpdateInterval();
+	public void onOpen();
+	/**
+	 * @return name script for identify in logs
+	 */
+	public String getName();
 	/**
 	 * Update bot logic
 	 */
-	public void onUpdate();
+	public void update();
 	/**
-	 * Income package from server 
-	 * @param deltaTime is time interval between two incomeS() invokes
-	 * @return If packet is passthrought then true, else false
+	 * Income package from server or client
+	 * @param deltaTime is time interval between two onPck() invokes
 	 */
-	public boolean onPckS(float deltaTime);
+	public void onPck(Packet pck, float deltaTime);
 	/**
-	 * Income package from client 
-	 * @param deltaTime is time interval between two incomeC() invokes
-	 * @return If packet is passthrought then true, else false
+	 * Close method then close server connection 
 	 */
-	public boolean onPckC(float deltaTime);
+	public void onClose();
 	/**
 	 * Release script after stop one or bot
 	 */

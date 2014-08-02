@@ -8,6 +8,8 @@ import com.xiovr.e5bot.bot.packet.RingBufferPool;
 import java.lang.reflect.Array;
 import java.lang.reflect.ParameterizedType;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 public class RingBufferPoolImpl<T> implements RingBufferPool<T> {
 	/**
 	 * 
@@ -21,6 +23,7 @@ public class RingBufferPoolImpl<T> implements RingBufferPool<T> {
 	private int ringSize;
 	private int readMarker;
 	private int writeMarker;
+	private volatile boolean bFull;
 
 	public RingBufferPoolImpl()
 	{
@@ -38,10 +41,12 @@ public class RingBufferPoolImpl<T> implements RingBufferPool<T> {
 		readMarker = 0;
 		writeMarker = 0;
 		this.ringSize = ringSize;
+		// for putNb
+		this.bFull = false;
 	}
 
 	@Override
-	public T put(T newObj) throws InterruptedException {
+	public T put(@NonNull T newObj) throws InterruptedException {
 		lock.lockInterruptibly();
 		try {
 			writeMarker = (++writeMarker) % ringSize;
@@ -58,7 +63,7 @@ public class RingBufferPoolImpl<T> implements RingBufferPool<T> {
 	}
 
 	@Override
-	public T poll(T freeObj) throws InterruptedException {
+	public T poll(@NonNull T freeObj) throws InterruptedException {
 		lock.lockInterruptibly();
 		try {
 			while (writeMarker == readMarker)
@@ -79,6 +84,37 @@ public class RingBufferPoolImpl<T> implements RingBufferPool<T> {
 		return ringSize;
 	}
 
+	@Override
+	public T putNb(@NonNull T newObj) throws InterruptedException {
+		lock.lockInterruptibly();
+		try {
+			if (!bFull) { 
+				writeMarker = (++writeMarker) % ringSize;
+				if (writeMarker == readMarker)
+					bFull = true;
+			}
+			else {
+				if (writeMarker != readMarker) {
+					bFull = false;
+					writeMarker = (++writeMarker) % ringSize;
+				}
+				else
+				return newObj;
+			}
+			T oldObj = ring[writeMarker];
+			ring[writeMarker] = newObj;
+			emptyCond.signal();
+			return oldObj;
+		}
+		finally {
+			lock.unlock();
+		}
+	}
+	@Override
+	public boolean isNbFull() {
+		return bFull;
+	}
+	
 
 
 }

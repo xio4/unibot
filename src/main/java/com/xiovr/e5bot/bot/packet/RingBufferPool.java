@@ -2,6 +2,9 @@ package com.xiovr.e5bot.bot.packet;
 
 import java.io.Serializable;
 
+import org.eclipse.jdt.annotation.NonNull;
+
+
 /** 
  * RingBuffer uses {@link ReentrantLock} and is blocked on {@link put} and 
  * {@link poll} methods according to ring size
@@ -19,7 +22,14 @@ public interface RingBufferPool<T> extends Serializable {
 	 * @return new T to use from cyclic buffer
 	 * @throws InterruptedException 
 	 */
-	public T put(T t) throws InterruptedException;
+	public T put(@NonNull T t) throws InterruptedException;
+	/**
+	 * Non block {@link put}
+	 * @param t
+	 * @return true if item is put and false else 
+	 * @throws InterruptedException 
+	 */
+	public T putNb(@NonNull T newObj) throws InterruptedException;
 	/**
 	 * @return ring buffer size
 	 */
@@ -30,6 +40,10 @@ public interface RingBufferPool<T> extends Serializable {
 	 * @return head element and remove in ring buffer
 	 * @throws InterruptedException 
 	 */
-	public T poll(T freeObj) throws InterruptedException;
+	public T poll(@NonNull T freeObj) throws InterruptedException;
 
+	/**
+	 * @return true if full by {@link putNb} and false else
+	 */
+	public boolean isNbFull();
 }

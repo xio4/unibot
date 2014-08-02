@@ -1,25 +1,56 @@
 package com.xiovr.e5bot.bot.impl;
 
+import org.eclipse.jdt.annotation.NonNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.xiovr.e5bot.bot.Bot;
+import com.xiovr.e5bot.bot.BotContext;
+import com.xiovr.e5bot.bot.BotEnvironment;
+import com.xiovr.e5bot.bot.BotLauncher;
+import com.xiovr.e5bot.bot.BotMessageTransferRunnable;
+import com.xiovr.e5bot.bot.BotSettings;
 import com.xiovr.e5bot.bot.BotManager;
 import com.xiovr.e5bot.bot.network.BotConnection;
+import com.xiovr.e5bot.bot.network.ConnectionContext;
+import com.xiovr.e5bot.bot.packet.Packet;
+import com.xiovr.e5bot.bot.packet.RingBufferPool;
+import com.xiovr.e5bot.plugin.PluginLoader;
+import com.xiovr.e5bot.plugin.ScriptPlugin;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.List;
+import java.util.Properties;
+import java.util.concurrent.atomic.AtomicReferenceArray;
 
 public class BotManagerImpl implements BotManager {
 
-	BotConnection botConnection;
-	
-
+	Logger logger = LoggerFactory.getLogger(BotManagerImpl.class);
 	@Override
-	public BotConnection getBotConnection() {
-		return botConnection;
+	public BotEnvironment getBotEnvironment() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override
-	public void setBotConnection(BotConnection botConnection) {
-		this.botConnection = botConnection;
+	public void setBotEnvironment(BotEnvironment botEnvironment) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public ConnectionContext getConnectionContext() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setConnectionContext(@NonNull ConnectionContext connContext) {
+		// TODO Auto-generated method stub
 		
 	}
 
@@ -30,7 +61,49 @@ public class BotManagerImpl implements BotManager {
 	}
 
 	@Override
-	public Bot createBot() {
+	public @NonNull BotContext createBot() {
+
+		return new BotContextImpl(); 
+	}
+
+	@Override
+	public void destroyBot(int botId) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public BotContext getBot(int botId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean loadScript(int botId, ScriptPlugin script) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void stopScript(int botId) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void startScript(int botId) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void removeScript(int botId) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public List<BotContext> getBots() {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -42,26 +115,57 @@ public class BotManagerImpl implements BotManager {
 	}
 
 	@Override
-	public void destroyBot(Integer botId) {
+	public void connect(int botId) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public Bot getBot(int botId) {
+	public void disconnect(int botId) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public BotMessageTransferRunnable getBotMessageTransfer() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public void start(int botId) {
+	public void setBotMessageTransfer(@NonNull BotMessageTransferRunnable bmtt) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void stop(int botId) {
+	public void setPluginLoader(@NonNull PluginLoader pluginLoader) {
 		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public PluginLoader getPluginLoader() {
+		// TODO Auto-generated method stub
+		return null; 
+	}
+
+	@Override
+	public RingBufferPool<Packet> getSendBuffer() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setSendBuffer(RingBufferPool<Packet> sendBuf) {
+		// TODO Auto-generated method stub
+		
+	}
+//	AtomicReferenceArray<BotContext> botContexts;
+
+
+	@Override
+	public void loadBots() {
 		
 	}
 

@@ -1,5 +1,12 @@
 package com.xiovr.e5bot.utils;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.Properties;
+
 public class BotUtils {
 	final protected static char[] hexArray = "0123456789ABCDEF".toCharArray();
 
@@ -35,4 +42,28 @@ public class BotUtils {
 		}
 		return new String(hexChars);
 	}
+	
+    /**
+     * Load a Properties File
+     * @param propsFile
+     * @return Properties
+     * @throws IOException
+     */
+    public static Properties loadProperties(File propsFile) throws IOException 
+    {
+        Properties props = new Properties();
+        FileInputStream fis = new FileInputStream(propsFile);
+        props.load(fis);    
+        fis.close();
+        return props;
+    }
+    
+    
+    public static void saveProperties(File propsFile, Properties props, String comments) throws IOException
+    {
+    	FileOutputStream fos = new FileOutputStream(propsFile);
+    	props.store(fos, comments);
+    	fos.close();
+    }
+    
 }

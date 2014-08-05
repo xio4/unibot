@@ -27,9 +27,6 @@ public class BotGameConfigImpl implements BotGameConfig {
 	}
 
 
-
-
-
 	@Override
 	public void saveBotSettings(BotSettings settings, String botFn,
 			String comments) {
@@ -42,8 +39,6 @@ public class BotGameConfigImpl implements BotGameConfig {
 			props.setProperty("bot.name", settings.getName());
 			props.setProperty("bot.serverId",
 					String.valueOf(settings.getServerId()));
-			props.setProperty("bot.client_proxy",
-					String.valueOf(settings.isClientProxy()));
 			props.setProperty("bot.autoconnect",
 					String.valueOf(settings.isAutoConnect()));
 			props.setProperty("bot.autoconnect_interval",
@@ -52,7 +47,8 @@ public class BotGameConfigImpl implements BotGameConfig {
 					String.valueOf(settings.isDisabled()));
 			props.setProperty("bot.logging",
 					String.valueOf(settings.isLogging()));
-
+			props.setProperty("bot.modif_logging",
+					String.valueOf(settings.isModifLogging()));
 			BotUtils.saveProperties(fn, props, comments);
 		} catch (IOException e) {
 			logger.error("Error save file " + botFn);
@@ -67,7 +63,7 @@ public class BotGameConfigImpl implements BotGameConfig {
 			Properties props = new Properties();
 
 			props.setProperty("bot.type",
-					String.valueOf(BotSettings.INGAME_TYPE));
+					String.valueOf(BotSettings.OUTGAME_TYPE));
 			props.setProperty("bot.login", "");
 			props.setProperty("bot.password", "");
 			props.setProperty("bot.name", "");
@@ -77,6 +73,7 @@ public class BotGameConfigImpl implements BotGameConfig {
 			props.setProperty("bot.autoconnect_interval", String.valueOf(10));
 			props.setProperty("bot.disabled", String.valueOf(false));
 			props.setProperty("bot.logging", String.valueOf(false));
+			props.setProperty("bot.modif_logging", String.valueOf(false));
 
 			BotUtils.saveProperties(fn, props, comments);
 			return props;
@@ -109,14 +106,12 @@ public class BotGameConfigImpl implements BotGameConfig {
 		}
 
 		botSettings.setType(Integer.parseInt(props.getProperty("bot.type",
-				String.valueOf(BotSettings.INGAME_TYPE))));
+				String.valueOf(BotSettings.OUTGAME_TYPE))));
 		botSettings.setLogin(props.getProperty("bot.login", ""));
 		botSettings.setPassword(props.getProperty("bot.password", ""));
 		botSettings.setName(props.getProperty("bot.name", ""));
 		botSettings.setServerId(Integer.parseInt(props.getProperty(
 				"bot.serverId", "0")));
-		botSettings.setClientProxy(Boolean.parseBoolean(props.getProperty(
-				"bot.client_proxy", "false")));
 		botSettings.setAutoConnect(Boolean.parseBoolean(props.getProperty(
 				"bot.autoconnect", "false")));
 		botSettings.setAutoConnectInterval(Integer.parseInt(props.getProperty(
@@ -125,8 +120,9 @@ public class BotGameConfigImpl implements BotGameConfig {
 				"bot.disabled", "false")));
 		botSettings.setLogging(Boolean.parseBoolean(props.getProperty(
 				"bot.logging", "false")));
-
-		logger.info("Bot settings has been loaded");
+		botSettings.setModifLogging(Boolean.parseBoolean(props.getProperty(
+				"bot.modif_logging", "false")));
+		logger.info("Bot settings " + botFn + " has been loaded");
 	}
 	
 	private Properties createEnvironmentProps(File fn) {

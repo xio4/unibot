@@ -7,7 +7,9 @@ import org.slf4j.LoggerFactory;
 import com.xiovr.e5bot.bot.BotContext;
 import com.xiovr.e5bot.bot.BotEnvironment;
 import com.xiovr.e5bot.bot.BotLogger;
+import com.xiovr.e5bot.bot.BotSettings;
 import com.xiovr.e5bot.bot.packet.Packet;
+import com.xiovr.e5bot.bot.packet.PacketPool;
 import com.xiovr.e5bot.bot.packet.RingBufferPool;
 import com.xiovr.e5bot.bot.packet.impl.PacketImpl;
 import com.xiovr.e5bot.plugin.CryptorCommand;
@@ -16,35 +18,36 @@ import com.xiovr.e5bot.plugin.ScriptPlugin;
 import com.xiovr.e5bot.plugin.ScriptPluginRunnable;
 
 public class ScriptPluginRunnableImpl implements ScriptPluginRunnable {
-	Logger logger = LoggerFactory.getLogger("ScriptPluginThreadImpl");
+	Logger logger = LoggerFactory.getLogger(ScriptPluginRunnableImpl.class);
 	private volatile ScriptPlugin script;
-//	private volatile BotContext botContext;
+	// private volatile BotContext botContext;
 	private CryptorPlugin cryptorPlugin;
 	private CryptorCommand cryptorCommand;
 	private RingBufferPool<Packet> buf;
-	private @NonNull Packet pck;
-	private @NonNull Packet pck2;
+	private Packet pck;
+	private Packet pck2;
 	private long oldTime;
 	private boolean bRawData;
-	private boolean bClientProxy;
-	private boolean bLogging; 
+	private int botType;
+	private boolean bLogging;
+	private boolean bModifLogging;
 	private BotLogger botLogger;
 
 	public ScriptPluginRunnableImpl(BotContext botContext) {
 		bRawData = false;
-		bClientProxy = false;
 		cryptorCommand = null;
-		pck = new PacketImpl();
-		pck2 = new PacketImpl();
+		pck = PacketPool.obtain();
+		pck2 = PacketPool.obtain();
 		oldTime = System.currentTimeMillis();
 		this.bLogging = botContext.getBotSettings().isLogging();
+		this.bModifLogging = botContext.getBotSettings().isModifLogging();
 		this.botLogger = botContext.getBotLogger();
 		this.script = script;
-//		this.botContext = botContext;
+		// this.botContext = botContext;
 		this.buf = botContext.getReadBuffer();
 		BotEnvironment botEnvironment = botContext.getBotEnvironment();
 		this.bRawData = botEnvironment.isRawData();
-		this.bClientProxy = botContext.getSettings().isClientProxy();
+		this.botType = botContext.getBotSettings().getType();
 		this.cryptorPlugin = botContext.getCryptorPlugin();
 	}
 
@@ -55,11 +58,13 @@ public class ScriptPluginRunnableImpl implements ScriptPluginRunnable {
 		try {
 			while (!curThread.isInterrupted()) {
 				pck = buf.poll(pck);
+				if (pck == null)
+					pck = PacketPool.obtain();
 				if (script != null) {
 					long time = System.currentTimeMillis();
 					if (bRawData)
 						script.onPck(pck, time - oldTime);
-					if (bClientProxy) {
+					if (botType == BotSettings.PROXY_TYPE) {
 						if (pck.getType() == Packet.RAW_PCK_FROM_SERVER) {
 							cryptorPlugin.decryptFromServer(pck, pck2);
 							pck2.setTime(pck.getTime());
@@ -67,6 +72,8 @@ public class ScriptPluginRunnableImpl implements ScriptPluginRunnable {
 							if (bLogging)
 								botLogger.pckLog(pck2);
 							script.onPck(pck2, time - oldTime);
+							if (bModifLogging)
+								botLogger.pckModifLog(pck2);
 							cryptorPlugin.encryptToClient(pck2, pck);
 							pck.setType(Packet.RAW_PCK_TO_CLIENT);
 						} else if (pck.getType() == Packet.RAW_PCK_FROM_CLIENT) {
@@ -76,19 +83,38 @@ public class ScriptPluginRunnableImpl implements ScriptPluginRunnable {
 							if (bLogging)
 								botLogger.pckLog(pck2);
 							script.onPck(pck2, time - oldTime);
+							if (bModifLogging)
+								botLogger.pckModifLog(pck2);
 							cryptorPlugin.encryptToServer(pck2, pck);
 							pck.setType(Packet.RAW_PCK_TO_SERVER);
+							if (bRawData)
+								script.onPck(pck, time - oldTime);
 						}
 						if (bRawData)
 							script.onPck(pck, time - oldTime);
-					} else {
+					} else if (botType == BotSettings.OUTGAME_TYPE) {
 						cryptorPlugin.decryptFromServer(pck, pck2);
 						pck2.setTime(pck.getTime());
 						pck2.setType(Packet.PCK_FROM_SERVER);
-							if (bLogging)
-								botLogger.pckLog(pck2);
+						if (bLogging)
+							botLogger.pckLog(pck2);
 						script.onPck(pck2, time - oldTime);
+						if (bModifLogging)
+							botLogger.pckModifLog(pck2);
 
+					} else if (botType == BotSettings.INGAME_TYPE) {
+						if (bLogging)
+							botLogger.pckLog(pck);
+						script.onPck(pck, time - oldTime);
+						if (bModifLogging)
+							botLogger.pckModifLog(pck);
+
+						cryptorCommand = cryptorPlugin
+								.getNextCommand(cryptorCommand);
+						if (pck2.getBuf().limit() > 0)
+							cryptorCommand.execute(pck2);
+						oldTime = time;
+						return;
 					}
 					cryptorCommand = cryptorPlugin
 							.getNextCommand(cryptorCommand);
@@ -113,7 +139,7 @@ public class ScriptPluginRunnableImpl implements ScriptPluginRunnable {
 			script.update();
 		} catch (Exception e) {
 			// TODO It need sets service locator web-logger
-			logger.error("Error update script=" + script.getName());
+			logger.error("Error update script " + script.getName());
 			e.printStackTrace();
 		}
 

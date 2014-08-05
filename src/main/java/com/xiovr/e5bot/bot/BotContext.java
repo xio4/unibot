@@ -36,10 +36,8 @@ public interface BotContext {
 	public void reconnect(int seconds);
 	public void setStatus(int status);
 	public int getStatus();
-	public BotSettings getSettings();
-	public void setSettings(@NonNull BotSettings botSettings);
-	public Packet sendToServer(Packet pck) throws InterruptedException;
-	public Packet sendToClient(Packet pck) throws InterruptedException;
+	public void sendToServer(Packet pck) throws InterruptedException;
+	public void sendToClient(Packet pck) throws InterruptedException;
 	public boolean sendMsgToBot(String name, String msg);
 	public void setScript(@NonNull ScriptPlugin script);
 	public ScriptPlugin getScript();

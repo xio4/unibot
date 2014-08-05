@@ -6,6 +6,7 @@ import com.xiovr.e5bot.bot.BotContext;
 import com.xiovr.e5bot.bot.packet.Packet;
 
 public interface CryptorPlugin {
+
 	public void init(BotContext context);
 	/**
 	 * @param command If this null then createFirstCommand
@@ -20,4 +21,6 @@ public interface CryptorPlugin {
 	public Packet encryptToServer(@NonNull Packet dec,@NonNull  Packet enc);
 	public Packet encryptToClient(@NonNull Packet dec,@NonNull  Packet enc);
 	public void dispose();
+	public void onConnected(int type);
+	public void onDisconnected(int type);
 }

@@ -8,6 +8,15 @@ import com.xiovr.e5bot.bot.packet.Packet;
  * Base interface for java scripts
  */
 public interface ScriptPlugin {
+
+	/**
+	 * Max time in milliseconds which can script methods works
+	 */
+	public static final int MAX_WORK_TIME = 10;
+	public static final int CONN_TO_SERVER = 0x01;
+	public static final int CONN_TO_CLIENT = 0x02;
+	public static final int DISCONN_FROM_SERVER = 0x03;
+	public static final int DISCONN_FROM_CLIENT = 0x04;
 	/**
 	 * Init script before start
 	 * @param context is context to access with bot environment
@@ -16,7 +25,7 @@ public interface ScriptPlugin {
 	/**
 	 * Open method then start server connection
 	 */
-	public void onOpen();
+	public void onConnected(int type);
 	/**
 	 * @return name script for identify in logs
 	 */
@@ -33,7 +42,7 @@ public interface ScriptPlugin {
 	/**
 	 * Close method then close server connection 
 	 */
-	public void onClose();
+	public void onDisconnected(int type);
 	/**
 	 * Release script after stop one or bot
 	 */

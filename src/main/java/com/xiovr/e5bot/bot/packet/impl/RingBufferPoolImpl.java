@@ -10,7 +10,7 @@ import java.lang.reflect.ParameterizedType;
 
 import org.eclipse.jdt.annotation.NonNull;
 
-public class RingBufferPoolImpl<T> implements RingBufferPool<T> {
+public abstract class RingBufferPoolImpl<T> implements RingBufferPool<T> {
 	/**
 	 * 
 	 */
@@ -25,17 +25,18 @@ public class RingBufferPoolImpl<T> implements RingBufferPool<T> {
 	private int writeMarker;
 	private volatile boolean bFull;
 
-	public RingBufferPoolImpl()
+	public RingBufferPoolImpl(Class<?> clazz)
 	{
-		this(RingBufferPool.DEFAULT_SIZE);
+		this(clazz, RingBufferPool.DEFAULT_SIZE);
 	}
 	@SuppressWarnings("unchecked")
-	public RingBufferPoolImpl(int ringSize) {
+	public RingBufferPoolImpl(Class<?> clazz, int ringSize) {
 		lock = new ReentrantLock();
 		fullCond = lock.newCondition();
 		emptyCond = lock.newCondition();
-		clazz = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass())
-				.getActualTypeArguments()[0];
+//		clazz = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass())
+//				.getActualTypeArguments()[0];
+		this.clazz = clazz;
 		ring = (T[]) Array.newInstance(clazz, ringSize);
 //		pool = (T[]) Array.newInstance(clazz, ringSize);
 		readMarker = 0;
@@ -113,6 +114,20 @@ public class RingBufferPoolImpl<T> implements RingBufferPool<T> {
 	@Override
 	public boolean isNbFull() {
 		return bFull;
+	}
+	@Override
+	public int count() throws InterruptedException {
+		lock.lockInterruptibly();
+		try {
+		int cnt = writeMarker - readMarker;
+		if (cnt < 0) {
+			cnt = ringSize + cnt;
+		}
+		return cnt;
+		}
+		finally {
+			lock.unlock();
+		}
 	}
 	
 

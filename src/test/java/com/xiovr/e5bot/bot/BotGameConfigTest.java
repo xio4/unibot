@@ -86,11 +86,11 @@ public class BotGameConfigTest extends TestBase {
 		Assert.assertEquals(botSettings.getName(), "");
 		Assert.assertEquals(botSettings.getPassword(), "");
 		Assert.assertEquals(botSettings.getServerId(), 0);
-		Assert.assertEquals(botSettings.getType(), BotSettings.INGAME_TYPE);
+		Assert.assertEquals(botSettings.getType(), BotSettings.OUTGAME_TYPE);
 		Assert.assertEquals(botSettings.isAutoConnect(), false);
-		Assert.assertEquals(botSettings.isClientProxy(), false);
 		Assert.assertEquals(botSettings.isDisabled(), false);
 		Assert.assertEquals(botSettings.isLogging(), false);
+		Assert.assertEquals(botSettings.isModifLogging(), false);
 		
 		botSettings.setAutoConnectInterval(100);
 		botSettings.setLogin("test");
@@ -99,9 +99,9 @@ public class BotGameConfigTest extends TestBase {
 		botSettings.setServerId(300);
 		botSettings.setType(BotSettings.OUTGAME_TYPE);
 		botSettings.setAutoConnect(true);
-		botSettings.setClientProxy(true);
 		botSettings.setDisabled(true);
 		botSettings.setLogging(true);
+		botSettings.setModifLogging(true);
 		botGameConfig.saveBotSettings(botSettings, "testBotSettings.cfg", "Test");
 		botSettings = new BotSettingsImpl();
 		botGameConfig.loadBotSettings(botSettings, "testBotSettings.cfg");
@@ -113,8 +113,8 @@ public class BotGameConfigTest extends TestBase {
 		Assert.assertEquals(botSettings.getServerId(), 300);
 		Assert.assertEquals(botSettings.getType(), BotSettings.OUTGAME_TYPE);
 		Assert.assertEquals(botSettings.isAutoConnect(), true);
-		Assert.assertEquals(botSettings.isClientProxy(), true);
 		Assert.assertEquals(botSettings.isDisabled(), true);
 		Assert.assertEquals(botSettings.isLogging(), true);	
+		Assert.assertEquals(botSettings.isModifLogging(), true);
 	}
 }

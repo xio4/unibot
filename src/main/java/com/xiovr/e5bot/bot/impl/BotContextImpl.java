@@ -11,6 +11,7 @@ import com.xiovr.e5bot.bot.BotSettings;
 import com.xiovr.e5bot.bot.BotThreadFacade;
 import com.xiovr.e5bot.bot.network.BotConnection;
 import com.xiovr.e5bot.bot.packet.Packet;
+import com.xiovr.e5bot.bot.packet.PacketPool;
 import com.xiovr.e5bot.bot.packet.RingBufferPool;
 import com.xiovr.e5bot.bot.packet.impl.PacketImpl;
 import com.xiovr.e5bot.plugin.CryptorCommand;
@@ -98,45 +99,41 @@ public class BotContextImpl implements BotContext {
 		return this.status;
 	}
 
+	@SuppressWarnings("null")
 	@Override
-	public BotSettings getSettings() {
-		return botSettings;
-	}
-
-	@Override
-	public Packet sendToServer(Packet pck) throws InterruptedException {
+	public void sendToServer(Packet pck) throws InterruptedException {
+		if (pck == null)
+			return;
         long time = System.currentTimeMillis();
         pck.setType(Packet.PCK_TO_SERVER);
         if (botSettings.isLogging())
         	botLogger.pckLog(pck);
-        if (bcPck == null)
-        	bcPck = new PacketImpl();
+        bcPck = PacketPool.obtain(); 
         cryptorPlugin.encryptToServer(pck, bcPck);
         bcPck.setType(Packet.RAW_PCK_TO_SERVER);
         bcPck.setTime(time);
-        final Packet chPck = bcPck;
-        // exchange packets
-        bcPck = pck;
+        PacketPool.free(pck);
+        final Packet chPck = writeServerBuf.put(bcPck);
+        PacketPool.free(chPck);
         	
-        return writeServerBuf.put(chPck);
 	}
 
+	@SuppressWarnings("null")
 	@Override
-	public Packet sendToClient(Packet pck) throws InterruptedException {
+	public void sendToClient(Packet pck) throws InterruptedException {
+		if (pck == null)
+			return;
         long time = System.currentTimeMillis();
         pck.setType(Packet.PCK_TO_CLIENT);
         if (botSettings.isLogging())
         	botLogger.pckLog(pck);
-        if (bcPck == null)
-        	bcPck = new PacketImpl();
-        cryptorPlugin.encryptToServer(pck, bcPck);
+        bcPck = PacketPool.obtain(); 
+        cryptorPlugin.encryptToClient(pck, bcPck);
         bcPck.setType(Packet.RAW_PCK_TO_CLIENT);
         bcPck.setTime(time);
-        final Packet chPck = bcPck;
-        // exchange packets
-        bcPck = pck;
-        bcPck = writeClientBuf.put(bcPck);
-		return bcPck;
+        PacketPool.free(pck);
+        final Packet chPck = writeServerBuf.put(bcPck);
+        PacketPool.free(chPck);
 	}
 
 	//TODO sendMsgToBot not implemented yet
@@ -237,11 +234,6 @@ public class BotContextImpl implements BotContext {
 	public void setCryptorCommand(
 			@NonNull CryptorCommand cryptorCommand) {
 		this.cryptorCommand = cryptorCommand;
-	}
-
-	@Override
-	public void setSettings(@NonNull BotSettings botSettings) {
-		this.botSettings = botSettings;
 	}
 
 	@Override

@@ -46,4 +46,9 @@ public interface RingBufferPool<T> extends Serializable {
 	 * @return true if full by {@link putNb} and false else
 	 */
 	public boolean isNbFull();
+	
+	/**
+	 * @return count items in buffer
+	 */
+	public int count() throws InterruptedException;
 }

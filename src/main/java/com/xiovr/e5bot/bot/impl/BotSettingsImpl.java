@@ -9,11 +9,11 @@ public class BotSettingsImpl implements BotSettings {
 	private String password;
 	private String name;
 	private int serverId;
-	private boolean bClientProxy;
 	private boolean bAutoConnect;
 	private int autoConnectInterval;
 	private boolean bDisabled;
 	private boolean bLogging;
+	private boolean bModifLogging;
 	public BotSettingsImpl()
 	{
 		botType = BotSettings.INGAME_TYPE;
@@ -62,14 +62,6 @@ public class BotSettingsImpl implements BotSettings {
 		
 	}
 	@Override
-	public boolean isClientProxy() {
-		return bClientProxy;
-	}
-	@Override
-	public void setClientProxy(boolean bProxy) {
-		this.bClientProxy = bProxy;
-	}
-	@Override
 	public boolean isAutoConnect() {
 		return this.bAutoConnect;
 	}
@@ -101,6 +93,15 @@ public class BotSettingsImpl implements BotSettings {
 	@Override
 	public void setLogging(boolean bLogging) {
 		this.bLogging = bLogging;
+	}
+	@Override
+	public boolean isModifLogging() {
+		return this.bModifLogging;
+	}
+	@Override
+	public void setModifLogging(boolean bLogging) {
+		this.bModifLogging = bLogging;
+		
 	}
 
 }

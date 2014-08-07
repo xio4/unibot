@@ -14,8 +14,9 @@ import com.xiovr.e5bot.plugin.CryptorCommand;
 public interface BotConnection {
 
 	public void init(@NonNull NioEventLoopGroup workerGroup, 
-			@NonNull BotContext botContext);
+			@NonNull BotContext botContext, int stage);
 
+	public int getStage();
 	public void setHandlerContext(ChannelHandlerContext ctx);
 	public ChannelHandlerContext getHandlerContext();
 	public boolean isConnected();
@@ -24,4 +25,5 @@ public interface BotConnection {
 	
 	public void write(Packet pck);
 	public void flush();
+	public void writeAndFlush(Packet pck);
 }

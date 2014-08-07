@@ -1,16 +1,17 @@
 package com.xiovr.e5bot.bot;
 
 import java.net.InetSocketAddress;
+import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
 
 public interface BotEnvironment {
 	public void setUpdateInterval(long updatInterval);
 	public long getUpdateInterval();
-	public InetSocketAddress getClientAddress();
-	public void setClientAddress(@NonNull InetSocketAddress address);
-	public InetSocketAddress getServerAddress();
-	public void setServerAddress(@NonNull InetSocketAddress address);
+	public List<InetSocketAddress> getClientAddresses();
+	public void addClientAddress(@NonNull InetSocketAddress address);
+	public List<InetSocketAddress> getServerAddresses();
+	public void addServerAddress(@NonNull InetSocketAddress address);
 	public int getNextBotConnectionInterval();
 	public void setNextBotConnectionInterval(int interval);
 	public boolean isProxy();

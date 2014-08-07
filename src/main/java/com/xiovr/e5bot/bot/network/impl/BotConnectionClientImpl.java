@@ -15,6 +15,7 @@ public class BotConnectionClientImpl implements BotConnection {
 
 	private BotContext botContext;
 	private NioEventLoopGroup workerGroup;
+	private int stage;
 
 	@Override
 	public void connect(@NonNull InetSocketAddress address) {
@@ -36,9 +37,10 @@ public class BotConnectionClientImpl implements BotConnection {
 
 	@Override
 	public void init(@NonNull NioEventLoopGroup workerGroup,
-			@NonNull BotContext botContext) {
+			@NonNull BotContext botContext, int stage) {
 		this.botContext = botContext;
 		this.workerGroup = workerGroup;
+		this.stage = stage;
 	}
 
 	@Override
@@ -62,6 +64,17 @@ public class BotConnectionClientImpl implements BotConnection {
 	public void flush() {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public void writeAndFlush(Packet pck) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public int getStage() {
+		return this.stage;
 	}
 
 }

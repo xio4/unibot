@@ -1,5 +1,7 @@
 package com.xiovr.e5bot.bot;
 
+import java.util.List;
+
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.xiovr.e5bot.bot.network.BotConnection;
@@ -26,18 +28,22 @@ public interface BotContext {
 
 	public int getBotId();
 	public void setBotId(int botId);
+	public int getConnectStage();
+	public void setConnectStage(int stage);
 	public BotEnvironment getBotEnvironment();
 	public void setBotEnvironment(@NonNull BotEnvironment botEnvironment);
-	public BotConnection getServerConnection();
-	public void setServerConnection(BotConnection botConnection);
-	public BotConnection getClientConnection();
-	public void setClientConnection(BotConnection botConnection);
+	public List<BotConnection> getServerConnections();
+	public void addServerConnectionStage(@NonNull BotConnection botConnection);
+	public List<BotConnection> getClientConnections();
+	public void addClientConnectionStage(@NonNull BotConnection botConnection);
 	// TODO Not implemented yet
 	public void reconnect(int seconds);
-	public void setStatus(int status);
+	public boolean setStatus(int status);
 	public int getStatus();
 	public void sendToServer(Packet pck) throws InterruptedException;
 	public void sendToClient(Packet pck) throws InterruptedException;
+	public void sendToServerAndFlush(Packet pck) throws InterruptedException;
+	public void sendToClientAndFlush(Packet pck) throws InterruptedException;
 	public boolean sendMsgToBot(String name, String msg);
 	public void setScript(@NonNull ScriptPlugin script);
 	public ScriptPlugin getScript();
@@ -45,9 +51,13 @@ public interface BotContext {
 	public CryptorPlugin getCryptorPlugin();
 	public CryptorCommand getCryptorCommand();
 	public void setCryptorCommand(@NonNull CryptorCommand cryptorCommand);
+	@Deprecated
 	public RingBufferPool<Packet> getWriteClientBuffer();
+	@Deprecated
 	public void setWriteClientBuffer(@NonNull RingBufferPool<Packet> sendBuf);
+	@Deprecated
 	public RingBufferPool<Packet> getWriteServerBuffer();
+	@Deprecated
 	public void setWriteServerBuffer(@NonNull RingBufferPool<Packet> sendBuf);
 	public RingBufferPool<Packet> getReadBuffer();
 	public void setReadBuffer(@NonNull RingBufferPool<Packet> sendBuf);

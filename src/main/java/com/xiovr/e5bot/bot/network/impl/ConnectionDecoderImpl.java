@@ -23,14 +23,14 @@ public class ConnectionDecoderImpl extends ByteToMessageDecoder
 	@Override
 	protected void decode(ChannelHandlerContext ctx, ByteBuf in,
 			List<Object> out) throws Exception {
-		System.out.println("Run decoder bytes="+ in.readableBytes());
+//		System.out.println("Run decoder bytes="+ in.readableBytes());
 		if (in.readableBytes() < 2)
 			return;
 		
 		in.markReaderIndex();
 		int pckLen = in.readUnsignedShort() - 2;
-		System.out.println("packet len =" + pckLen);
-		System.out.println("readable bytes =" + in.readableBytes());
+//		System.out.println("packet len =" + pckLen);
+//		System.out.println("readable bytes =" + in.readableBytes());
 		if (in.readableBytes() < pckLen) {
 			in.resetReaderIndex();
 			return;
@@ -42,7 +42,6 @@ public class ConnectionDecoderImpl extends ByteToMessageDecoder
 		in.readBytes(pckArr, 2, pckLen);
 		pck.putHeader(pckLen+2);
 //		int rIndex = in.readerIndex();
-//		System.out.println("Here?");
 //		System.arraycopy(inArr, rIndex-2, pckArr, 0, pckLen+2);
 //		in.readerIndex(rIndex+pckLen);
 		out.add(pck);

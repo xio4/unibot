@@ -28,6 +28,7 @@ public class BotConnectionServerImpl implements BotConnection {
 	private Bootstrap bs;
 	private ChannelFuture cf;
 	private ChannelHandlerContext ctx;
+	private int stage;
 
 	public BotConnectionServerImpl() {
 		super();
@@ -45,7 +46,7 @@ public class BotConnectionServerImpl implements BotConnection {
 			protected void initChannel(SocketChannel ch) throws Exception {
 				ch.pipeline().addLast(new ConnectionDecoderImpl(),
 						new ConnectionEncoderImpl(),
-						new ServerConnectionHandlerImpl(botContext));
+						new ServerConnectionHandlerImpl(botContext, stage));
 			}
 		});
 		cf = bs.connect(address);
@@ -86,9 +87,10 @@ public class BotConnectionServerImpl implements BotConnection {
 
 	@Override
 	public void init(@NonNull NioEventLoopGroup workerGroup,
-			@NonNull BotContext botContext) {
+			@NonNull BotContext botContext, int stage) {
 		this.botContext = botContext;
 		this.workerGroup = workerGroup;
+		this.stage = stage;
 	}
 
 	@Override
@@ -111,6 +113,18 @@ public class BotConnectionServerImpl implements BotConnection {
 		if (ctx != null) {
 			ctx.flush();
 		}
+	}
+
+	@Override
+	public void writeAndFlush(Packet pck) {
+		if (ctx != null) {
+			ctx.writeAndFlush(pck);
+		}
+	}
+
+	@Override
+	public int getStage() {
+		return this.stage;
 	}
 
 }

@@ -22,11 +22,13 @@ public class ClientConnectionHandlerImpl extends
 	private static final Logger logger = LoggerFactory.getLogger(ClientConnectionHandlerImpl.class);
 	private BotContext botContext;
 	private RingBufferPool<Packet> readBufPool;
+	private int stage;
 
-	public ClientConnectionHandlerImpl(BotContext botContext) {
+	public ClientConnectionHandlerImpl(BotContext botContext, int stage) {
 //		super();
 		this.botContext = botContext;
 		this.readBufPool = botContext.getReadBuffer();
+		this.stage = stage;
 	}
 
 	@SuppressWarnings("null")
@@ -40,7 +42,7 @@ public class ClientConnectionHandlerImpl extends
 
 	@Override
 	public void channelActive(ChannelHandlerContext ctx) throws Exception {
-		botContext.getServerConnection().setHandlerContext(ctx);
+		botContext.getServerConnections().get(stage).setHandlerContext(ctx);
 		final CryptorPlugin cp = botContext.getCryptorPlugin();
 		if (cp != null)
 			cp.onConnected(ScriptPlugin.CONN_TO_CLIENT);
@@ -56,7 +58,7 @@ public class ClientConnectionHandlerImpl extends
 
 	@Override
 	public void channelInactive(ChannelHandlerContext ctx) throws Exception {
-		botContext.getServerConnection().setHandlerContext(null);
+		botContext.getServerConnections().get(stage).setHandlerContext(null);
 		final CryptorPlugin cp = botContext.getCryptorPlugin();
 		if (cp != null)
 			cp.onDisconnected(ScriptPlugin.DISCONN_FROM_CLIENT);

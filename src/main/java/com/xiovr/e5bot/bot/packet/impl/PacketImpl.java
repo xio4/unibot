@@ -15,6 +15,7 @@ public class PacketImpl implements Packet {
 	private int offset;
 	private byte[] array;
 	private int markSize;
+	private int stage;
 
 	public PacketImpl() {
 		this(Packet.PCK_SIZE);
@@ -328,5 +329,15 @@ public class PacketImpl implements Packet {
 		int header = array[1] & 0xff;
 		header |= (array[0] << 8) & 0xff00;
 		return header;
+	}
+
+	@Override
+	public int getConnStage() {
+		return this.stage;
+	}
+
+	@Override
+	public void setConnStage(int stage) {
+		this.stage = stage;
 	}
 }

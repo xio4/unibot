@@ -34,22 +34,26 @@ public class BotGameConfigTest extends TestBase {
 		botGameConfig.loadPropsToBotEnvironment(botEnvironment);
 		Assert.assertEquals(botEnvironment.getNextBotConnectionInterval(), 5);
 		Assert.assertEquals(botEnvironment.getUpdateInterval(), 100);
-		Assert.assertEquals(botEnvironment.getClientAddress().getHostString(), 
+		Assert.assertEquals(botEnvironment.getClientAddresses().get(0).getHostString(), 
 				BotGameConfigImpl.DEFAULT_CLIENT_IP);
-		Assert.assertEquals(botEnvironment.getClientAddress().getPort(), 
+		Assert.assertEquals(botEnvironment.getClientAddresses().get(0).getPort(), 
 				BotGameConfigImpl.DEFAULT_CLIENT_PORT);
 		
-		Assert.assertEquals(botEnvironment.getServerAddress().getHostString(), 
+		Assert.assertEquals(botEnvironment.getServerAddresses().get(0).getHostString(), 
 				BotGameConfigImpl.DEFAULT_SERVER_IP);
-		Assert.assertEquals(botEnvironment.getServerAddress().getPort(),
+		Assert.assertEquals(botEnvironment.getServerAddresses().get(0).getPort(),
 				BotGameConfigImpl.DEFAULT_SERVER_PORT);
 		Assert.assertEquals(botEnvironment.isProxy(), false);
 		Assert.assertEquals(botEnvironment.isRawData(), false);
 		
 		botEnvironment.setNextBotConnectionInterval(10);
 		botEnvironment.setUpdateInterval(200);
-		botEnvironment.setClientAddress(new InetSocketAddress("255.255.255.255", 1000));
-		botEnvironment.setServerAddress(new InetSocketAddress("125.124.123.11", 2000));
+		botEnvironment.getServerAddresses().clear();
+		botEnvironment.getClientAddresses().clear();
+		botEnvironment.addClientAddress(new InetSocketAddress("255.255.255.255", 1000));
+		botEnvironment.addServerAddress(new InetSocketAddress("125.124.123.11", 2000));
+		botEnvironment.addClientAddress(new InetSocketAddress("255.255.255.254", 1001));
+		botEnvironment.addServerAddress(new InetSocketAddress("126.124.123.11", 2001));
 		botEnvironment.setProxy(true);
 		botEnvironment.setRawData(true);
 		
@@ -60,15 +64,24 @@ public class BotGameConfigTest extends TestBase {
 		
         Assert.assertEquals(botEnvTest.getNextBotConnectionInterval(), 10);
 		Assert.assertEquals(botEnvTest.getUpdateInterval(), 200);
-		Assert.assertEquals(botEnvTest.getClientAddress().getHostString(), 
+		Assert.assertEquals(botEnvTest.getClientAddresses().get(0).getHostString(), 
 				"255.255.255.255");
-		Assert.assertEquals(botEnvTest.getClientAddress().getPort(), 
+		Assert.assertEquals(botEnvTest.getClientAddresses().get(0).getPort(), 
 				1000);
 		
-		Assert.assertEquals(botEnvTest.getServerAddress().getHostString(), 
+		Assert.assertEquals(botEnvTest.getServerAddresses().get(0).getHostString(), 
 				"125.124.123.11");
-		Assert.assertEquals(botEnvTest.getServerAddress().getPort(),
+		Assert.assertEquals(botEnvTest.getServerAddresses().get(0).getPort(),
 				2000);
+		Assert.assertEquals(botEnvTest.getClientAddresses().get(1).getHostString(), 
+				"255.255.255.254");
+		Assert.assertEquals(botEnvTest.getClientAddresses().get(1).getPort(), 
+				1001);
+		
+		Assert.assertEquals(botEnvTest.getServerAddresses().get(1).getHostString(), 
+				"126.124.123.11");
+		Assert.assertEquals(botEnvTest.getServerAddresses().get(1).getPort(),
+				2001);
 		Assert.assertEquals(botEnvTest.isProxy(), true);
 		Assert.assertEquals(botEnvTest.isRawData(), true);	
 		

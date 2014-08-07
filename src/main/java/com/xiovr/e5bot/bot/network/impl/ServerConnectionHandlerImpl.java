@@ -21,8 +21,9 @@ public class ServerConnectionHandlerImpl extends
 	private static final Logger logger = LoggerFactory.getLogger(ServerConnectionHandlerImpl.class);
 	private BotContext botContext;
 	private RingBufferPool<Packet> readBufPool;
+	private int stage;
 
-	public ServerConnectionHandlerImpl(BotContext botContext) {
+	public ServerConnectionHandlerImpl(BotContext botContext, int stage) {
 //		super();
 		this.botContext = botContext;
 		this.readBufPool = botContext.getReadBuffer();
@@ -32,14 +33,16 @@ public class ServerConnectionHandlerImpl extends
 	@Override
 	public void channelRead(ChannelHandlerContext ctx, Object msg)
 			throws Exception {
-		PacketPool.free(readBufPool.put((Packet)msg));
+		final Packet pck = (Packet)msg;
+		pck.setConnStage(stage);
+		PacketPool.free(readBufPool.put(pck));
 		// See source code this class
 		//ReferenceCountUtil.release(msg); 
 	}
 
 	@Override
 	public void channelActive(ChannelHandlerContext ctx) throws Exception {
-		botContext.getServerConnection().setHandlerContext(ctx);
+		botContext.getServerConnections().get(stage).setHandlerContext(ctx);
 		final CryptorPlugin cp = botContext.getCryptorPlugin();
 		if (cp != null)
 			cp.onConnected(ScriptPlugin.CONN_TO_SERVER);
@@ -55,7 +58,7 @@ public class ServerConnectionHandlerImpl extends
 
 	@Override
 	public void channelInactive(ChannelHandlerContext ctx) throws Exception {
-		botContext.getServerConnection().setHandlerContext(null);
+		botContext.getServerConnections().get(stage).setHandlerContext(null);
 		final CryptorPlugin cp = botContext.getCryptorPlugin();
 		if (cp != null)
 			cp.onDisconnected(ScriptPlugin.DISCONN_FROM_SERVER);

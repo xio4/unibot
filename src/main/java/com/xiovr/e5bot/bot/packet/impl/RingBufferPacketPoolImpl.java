@@ -18,4 +18,5 @@ public class RingBufferPacketPoolImpl extends RingBufferPoolImpl<Packet> {
 	 */
 	private static final long serialVersionUID = 1L;
 
+
 }

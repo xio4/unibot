@@ -32,12 +32,14 @@ public class ScriptPluginRunnableImpl implements ScriptPluginRunnable {
 	private boolean bLogging;
 	private boolean bModifLogging;
 	private BotLogger botLogger;
+	private BotContext botContext;
 
 	public ScriptPluginRunnableImpl(BotContext botContext) {
 		bRawData = false;
 		cryptorCommand = null;
 		pck = PacketPool.obtain();
 		pck2 = PacketPool.obtain();
+		this.botContext = botContext;
 		oldTime = System.currentTimeMillis();
 		this.bLogging = botContext.getBotSettings().isLogging();
 		this.bModifLogging = botContext.getBotSettings().isModifLogging();
@@ -74,8 +76,19 @@ public class ScriptPluginRunnableImpl implements ScriptPluginRunnable {
 							script.onPck(pck2, time - oldTime);
 							if (bModifLogging)
 								botLogger.pckModifLog(pck2);
+							if (pck2.getPosition() > 0) {
 							cryptorPlugin.encryptToClient(pck2, pck);
 							pck.setType(Packet.RAW_PCK_TO_CLIENT);
+							cryptorCommand = cryptorPlugin
+									.getNextCommand(cryptorCommand);
+							if (cryptorCommand != null) {
+								cryptorCommand.execute(pck, pck2);
+							}
+							else {
+								botContext.getClientConnections().get(pck.getConnStage()).writeAndFlush(pck);
+							}
+							}
+ 
 						} else if (pck.getType() == Packet.RAW_PCK_FROM_CLIENT) {
 							cryptorPlugin.decryptFromClient(pck, pck2);
 							pck2.setTime(pck.getTime());
@@ -85,10 +98,19 @@ public class ScriptPluginRunnableImpl implements ScriptPluginRunnable {
 							script.onPck(pck2, time - oldTime);
 							if (bModifLogging)
 								botLogger.pckModifLog(pck2);
+
+							if (pck2.getPosition() > 0) {
 							cryptorPlugin.encryptToServer(pck2, pck);
 							pck.setType(Packet.RAW_PCK_TO_SERVER);
-							if (bRawData)
-								script.onPck(pck, time - oldTime);
+							cryptorCommand = cryptorPlugin
+									.getNextCommand(cryptorCommand);
+							if (cryptorCommand != null) {
+								cryptorCommand.execute(pck, pck2);
+							}
+							else {
+								botContext.getServerConnections().get(pck.getConnStage()).writeAndFlush(pck);
+							}
+							}
 						}
 						if (bRawData)
 							script.onPck(pck, time - oldTime);
@@ -101,6 +123,11 @@ public class ScriptPluginRunnableImpl implements ScriptPluginRunnable {
 						script.onPck(pck2, time - oldTime);
 						if (bModifLogging)
 							botLogger.pckModifLog(pck2);
+						
+                        cryptorCommand = cryptorPlugin
+							.getNextCommand(cryptorCommand);
+                        if (pck2.getPosition() > 0 && cryptorCommand != null)
+                        	cryptorCommand.execute(pck, pck2);
 
 					} else if (botType == BotSettings.INGAME_TYPE) {
 						if (bLogging)
@@ -111,16 +138,12 @@ public class ScriptPluginRunnableImpl implements ScriptPluginRunnable {
 
 						cryptorCommand = cryptorPlugin
 								.getNextCommand(cryptorCommand);
-						if (pck2.getBuf().limit() > 0)
-							cryptorCommand.execute(pck2);
-						oldTime = time;
-						return;
+						if (pck2.getPosition() > 0 && cryptorCommand != null)
+							cryptorCommand.execute(pck, pck);
 					}
-					cryptorCommand = cryptorPlugin
-							.getNextCommand(cryptorCommand);
-					if (pck2.getBuf().limit() > 0)
-						cryptorCommand.execute(pck2);
 					oldTime = time;
+
+
 				}
 			}
 		} catch (InterruptedException ie) {

@@ -22,6 +22,9 @@ public interface Packet extends Poolable {
 	public static final int RAW_PCK_FROM_SERVER = 0x06;
 	public static final int RAW_PCK_TO_CLIENT = 0x07;
 	public static final int RAW_PCK_TO_SERVER = 0x08;
+	
+	public int getConnStage();
+	public void setConnStage(int stage);
 
 	public void clear();
 

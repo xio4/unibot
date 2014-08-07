@@ -26,7 +26,6 @@ public class BotGameConfigImpl implements BotGameConfig {
 				.getLocation().toString().substring(6);
 	}
 
-
 	@Override
 	public void saveBotSettings(BotSettings settings, String botFn,
 			String comments) {
@@ -56,8 +55,7 @@ public class BotGameConfigImpl implements BotGameConfig {
 	}
 
 	@Override
-	public Properties createBotSettings(String botFn,
-			String comments) {
+	public Properties createBotSettings(String botFn, String comments) {
 		try {
 			File fn = new File("/" + DIR_PATH + "/" + botFn);
 			Properties props = new Properties();
@@ -95,8 +93,8 @@ public class BotGameConfigImpl implements BotGameConfig {
 			// "127.0.0.1"));
 		} catch (IOException e) {
 			// e.printStackTrace();
-			logger.warn("Can't load settings /" + DIR_PATH + "/"
-					+ botFn + ". Create new settings file.");
+			logger.warn("Can't load settings /" + DIR_PATH + "/" + botFn
+					+ ". Create new settings file.");
 			props = createEnvironmentProps(fn);
 
 		}
@@ -124,16 +122,24 @@ public class BotGameConfigImpl implements BotGameConfig {
 				"bot.modif_logging", "false")));
 		logger.info("Bot settings " + botFn + " has been loaded");
 	}
-	
+
 	private Properties createEnvironmentProps(File fn) {
 		try {
 			Properties props = new Properties();
 
-			props.setProperty("client.ip", DEFAULT_CLIENT_IP);
-			props.setProperty("server.ip", DEFAULT_SERVER_IP);
-			props.setProperty("client.port",
+			props.setProperty("bot.connect_stages_count",
+					String.valueOf(2));
+			props.setProperty("client.0.ip", DEFAULT_CLIENT_IP);
+			props.setProperty("server.0.ip", DEFAULT_SERVER_IP);
+			props.setProperty("client.0.port",
 					String.valueOf(DEFAULT_CLIENT_PORT));
-			props.setProperty("server.port",
+			props.setProperty("server.0.port",
+					String.valueOf(DEFAULT_SERVER_PORT));
+			props.setProperty("client.1.ip", DEFAULT_CLIENT_IP);
+			props.setProperty("server.1.ip", DEFAULT_SERVER_IP);
+			props.setProperty("client.1.port",
+					String.valueOf(DEFAULT_CLIENT_PORT));
+			props.setProperty("server.1.port",
 					String.valueOf(DEFAULT_SERVER_PORT));
 			props.setProperty("script.update_interval", "100");
 			props.setProperty("bot.next_connection_interval", "5");
@@ -158,15 +164,26 @@ public class BotGameConfigImpl implements BotGameConfig {
 			File fn = new File("/" + DIR_PATH + "/" + ENVIRONMENT_CFG_FN);
 			Properties props = new Properties();
 
-			props.setProperty("client.ip", botEnvironment.getClientAddress()
-					.getAddress().getHostAddress());
-			props.setProperty("server.ip", botEnvironment.getServerAddress()
-					.getAddress().getHostAddress());
-			props.setProperty("client.port",
-					String.valueOf(botEnvironment.getClientAddress().getPort()));
-			props.setProperty("server.port",
-					String.valueOf(botEnvironment.getServerAddress().getPort()));
+			int stagesCount = botEnvironment.getServerAddresses().size();
+			props.setProperty("bot.connect_stages_count",
+					String.valueOf(stagesCount));
 
+			for (int i = 0; i < stagesCount; ++i) {
+				props.setProperty("client." + i + ".ip", botEnvironment
+						.getClientAddresses().get(i).getAddress()
+						.getHostAddress());
+				props.setProperty("server." + i + ".ip", botEnvironment
+						.getServerAddresses().get(i).getAddress()
+						.getHostAddress());
+				props.setProperty(
+						"client." + i + ".port",
+						String.valueOf(botEnvironment.getClientAddresses()
+								.get(i).getPort()));
+				props.setProperty(
+						"server." + i + ".port",
+						String.valueOf(botEnvironment.getServerAddresses()
+								.get(i).getPort()));
+			}
 			props.setProperty("script.update_interval",
 					String.valueOf(botEnvironment.getUpdateInterval()));
 			props.setProperty("bot.next_connection_interval", String
@@ -203,16 +220,24 @@ public class BotGameConfigImpl implements BotGameConfig {
 			logger.error("Error create properties. Terminate load.");
 			return;
 		}
-		InetSocketAddress sAddr = new InetSocketAddress(props.getProperty(
-				"client.ip", DEFAULT_CLIENT_IP),
-				Integer.parseInt(props.getProperty("client.port",
-						String.valueOf(DEFAULT_CLIENT_PORT))));
-		botEnvironment.setClientAddress(sAddr);
-		InetSocketAddress cAddr = new InetSocketAddress(props.getProperty(
-				"server.ip", DEFAULT_SERVER_IP),
-				Integer.parseInt(props.getProperty("server.port",
-						String.valueOf(DEFAULT_SERVER_PORT))));
-		botEnvironment.setServerAddress(cAddr);
+
+
+		int stagesCount = Integer.parseInt(props.getProperty("bot.connect_stages_count",
+				String.valueOf(0)));
+
+		for (int i = 0; i < stagesCount; ++i) {
+			InetSocketAddress cAddr = new InetSocketAddress(props.getProperty("client." + i + ".ip", DEFAULT_CLIENT_IP),
+			Integer.parseInt(props.getProperty(
+					"client." + i + ".port",
+					String.valueOf(DEFAULT_CLIENT_PORT))));
+			botEnvironment.addClientAddress(cAddr);
+
+			InetSocketAddress sAddr = new InetSocketAddress(props.getProperty("server." + i + ".ip", DEFAULT_SERVER_IP),
+			Integer.parseInt(props.getProperty(
+					"server." + i + ".port",
+					String.valueOf(DEFAULT_SERVER_PORT))));
+			botEnvironment.addServerAddress(sAddr);
+		}
 
 		botEnvironment.setUpdateInterval(Long.parseLong(props.getProperty(
 				"script.update_interval", "100")));
@@ -221,8 +246,8 @@ public class BotGameConfigImpl implements BotGameConfig {
 
 		botEnvironment.setProxy(Boolean.parseBoolean(props.getProperty(
 				"client.proxy", "false")));
-		
-        botEnvironment.setRawData(Boolean.parseBoolean(props.getProperty(
+
+		botEnvironment.setRawData(Boolean.parseBoolean(props.getProperty(
 				"bot.raw_data", "false")));
 		logger.info("Environment config loaded");
 	}

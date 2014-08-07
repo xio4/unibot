@@ -49,9 +49,10 @@ public class ClientConnectionRunnableImpl implements ClientConnectionRunnable {
 //			childOption(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT).
 			childOption(ChannelOption.SO_KEEPALIVE, true);
 			
-			ChannelFuture cf = sb.bind(botEnvironment.getClientAddress()).sync();
+			//FIXME Only for test!
+			//ChannelFuture cf = sb.bind(botEnvironment.getClientAddresses().get(0)).sync();
 			
-			cf.channel().closeFuture().sync();
+			//cf.channel().closeFuture().sync();
 		}
 		catch (Exception e) {
 			e.printStackTrace();

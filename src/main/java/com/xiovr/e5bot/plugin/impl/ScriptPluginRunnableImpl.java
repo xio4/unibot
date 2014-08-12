@@ -77,18 +77,19 @@ public class ScriptPluginRunnableImpl implements ScriptPluginRunnable {
 							if (bModifLogging)
 								botLogger.pckModifLog(pck2);
 							if (pck2.getPosition() > 0) {
-							cryptorPlugin.encryptToClient(pck2, pck);
-							pck.setType(Packet.RAW_PCK_TO_CLIENT);
-							cryptorCommand = cryptorPlugin
-									.getNextCommand(cryptorCommand);
-							if (cryptorCommand != null) {
-								cryptorCommand.execute(pck, pck2);
+								cryptorPlugin.encryptToClient(pck2, pck);
+								pck.setType(Packet.RAW_PCK_TO_CLIENT);
+								cryptorCommand = cryptorPlugin
+										.getNextCommand(cryptorCommand);
+								if (cryptorCommand != null) {
+									cryptorCommand.execute(pck, pck2);
+								} else {
+									botContext.getClientConnections()
+											.get(pck.getConnStage())
+											.writeAndFlush(pck);
+								}
 							}
-							else {
-								botContext.getClientConnections().get(pck.getConnStage()).writeAndFlush(pck);
-							}
-							}
- 
+
 						} else if (pck.getType() == Packet.RAW_PCK_FROM_CLIENT) {
 							cryptorPlugin.decryptFromClient(pck, pck2);
 							pck2.setTime(pck.getTime());
@@ -100,16 +101,17 @@ public class ScriptPluginRunnableImpl implements ScriptPluginRunnable {
 								botLogger.pckModifLog(pck2);
 
 							if (pck2.getPosition() > 0) {
-							cryptorPlugin.encryptToServer(pck2, pck);
-							pck.setType(Packet.RAW_PCK_TO_SERVER);
-							cryptorCommand = cryptorPlugin
-									.getNextCommand(cryptorCommand);
-							if (cryptorCommand != null) {
-								cryptorCommand.execute(pck, pck2);
-							}
-							else {
-								botContext.getServerConnections().get(pck.getConnStage()).writeAndFlush(pck);
-							}
+								cryptorPlugin.encryptToServer(pck2, pck);
+								pck.setType(Packet.RAW_PCK_TO_SERVER);
+								cryptorCommand = cryptorPlugin
+										.getNextCommand(cryptorCommand);
+								if (cryptorCommand != null) {
+									cryptorCommand.execute(pck, pck2);
+								} else {
+									botContext.getServerConnections()
+											.get(pck.getConnStage())
+											.writeAndFlush(pck);
+								}
 							}
 						}
 						if (bRawData)
@@ -123,11 +125,11 @@ public class ScriptPluginRunnableImpl implements ScriptPluginRunnable {
 						script.onPck(pck2, time - oldTime);
 						if (bModifLogging)
 							botLogger.pckModifLog(pck2);
-						
-                        cryptorCommand = cryptorPlugin
-							.getNextCommand(cryptorCommand);
-                        if (pck2.getPosition() > 0 && cryptorCommand != null)
-                        	cryptorCommand.execute(pck, pck2);
+
+						cryptorCommand = cryptorPlugin
+								.getNextCommand(cryptorCommand);
+						if (pck2.getPosition() > 0 && cryptorCommand != null)
+							cryptorCommand.execute(pck, pck2);
 
 					} else if (botType == BotSettings.INGAME_TYPE) {
 						if (bLogging)
@@ -142,8 +144,6 @@ public class ScriptPluginRunnableImpl implements ScriptPluginRunnable {
 							cryptorCommand.execute(pck, pck);
 					}
 					oldTime = time;
-
-
 				}
 			}
 		} catch (InterruptedException ie) {
@@ -153,19 +153,6 @@ public class ScriptPluginRunnableImpl implements ScriptPluginRunnable {
 			logger.error("Script " + script.getName() + " exception");
 			e.printStackTrace();
 		}
-
-	}
-
-	@Override
-	public void notifyUpdate() {
-		try {
-			script.update();
-		} catch (Exception e) {
-			// TODO It need sets service locator web-logger
-			logger.error("Error update script " + script.getName());
-			e.printStackTrace();
-		}
-
 	}
 
 	@Override

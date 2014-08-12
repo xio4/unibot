@@ -12,15 +12,37 @@ public class BotUpdaterImpl implements BotUpdater {
 
 	private Timer timer;
 	private TimerTask timerTask;
-	private List<BotContext> botContexts;
-	public BotUpdaterImpl(List<BotContext> botContexts) {
-		this.botContexts = botContexts;
+	private List<BotContext> ingameBots;
+	private List<BotContext> outgameBots;
+	private List<BotContext> proxyBots;
+	public BotUpdaterImpl(final List<BotContext> ingameBots, final List<BotContext> outgameBots,
+			final List<BotContext> proxyBots) {
+		this.ingameBots = ingameBots;
+		this.outgameBots = outgameBots;
+		this.proxyBots = proxyBots;
 		this.timerTask = new TimerTask() {
 
 			@Override
 			public void run() {
-				List<BotContext> botContexts = BotUpdaterImpl.this.botContexts;
-				for (BotContext botContext: botContexts) {
+//				List<BotContext> botContexts = BotUpdaterImpl.this.botContexts;
+				for (BotContext botContext: ingameBots) {
+					if (botContext != null && 
+							botContext.getStatus() == BotContext.INWORLD_STATUS) {
+						ScriptPlugin script = botContext.getScript();
+						if (script != null)
+							botContext.getScript().update();
+					}
+				}
+				for (BotContext botContext: outgameBots) {
+					if (botContext != null && 
+							botContext.getStatus() == BotContext.INWORLD_STATUS) {
+						ScriptPlugin script = botContext.getScript();
+						if (script != null)
+							botContext.getScript().update();
+					}
+				}
+
+				for (BotContext botContext: proxyBots) {
 					if (botContext != null && 
 							botContext.getStatus() == BotContext.INWORLD_STATUS) {
 						ScriptPlugin script = botContext.getScript();

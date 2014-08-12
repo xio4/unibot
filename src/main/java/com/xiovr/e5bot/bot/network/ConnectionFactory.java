@@ -9,7 +9,7 @@ import com.xiovr.e5bot.bot.BotEnvironment;
 
 public interface ConnectionFactory {
 
-	public void createProxyConnections(
+	public void createProxyListeners(
 			@NonNull List<BotContext> proxyBots);
 
 	public void createBotConnectionServer(@NonNull BotContext botContext);

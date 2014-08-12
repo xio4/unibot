@@ -84,7 +84,7 @@ public class BotGameConfigImpl implements BotGameConfig {
 
 	@Override
 	public void loadBotSettings(BotSettings botSettings, String botFn) {
-		File fn = new File("/" + DIR_PATH + "/" + botFn);
+		File fn = new File("/" + DIR_PATH + "/" + SETTINGS_CFG_DIR + "/" + botFn);
 		Properties props = null;
 		try {
 			props = BotUtils.loadProperties(fn);

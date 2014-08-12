@@ -16,6 +16,8 @@ public interface BotSettings {
 	public void setName(String name);
 	public int getServerId();
 	public void setServerId(int id);
+	public void setScriptPath(String path);
+	public String getScriptPath();
 	
 	public boolean isAutoConnect();
 	public void setAutoConnect(boolean bConnect);

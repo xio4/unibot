@@ -2,7 +2,7 @@ package com.xiovr.e5bot.bot;
 
 import com.xiovr.e5bot.plugin.ScriptPluginRunnable;
 
-public interface BotThreadFacade {
+public interface ScriptPluginFacade {
 
 	public ScriptPluginRunnable getScriptPluginRunnable();
 	public void setScriptPluginRunnable(ScriptPluginRunnable spr);

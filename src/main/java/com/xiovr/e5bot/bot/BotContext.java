@@ -42,7 +42,7 @@ public interface BotContext {
 	public void sendToServerAndFlush(Packet pck) throws InterruptedException;
 	public void sendToClientAndFlush(Packet pck) throws InterruptedException;
 	public boolean sendMsgToBot(String name, String msg);
-	public void setScript(@NonNull ScriptPlugin script);
+	public void setScript(ScriptPlugin script);
 	public ScriptPlugin getScript();
 	public void setCryptorPlugin(@NonNull CryptorPlugin cryptor);
 	public CryptorPlugin getCryptorPlugin();
@@ -58,8 +58,8 @@ public interface BotContext {
 	public void setWriteServerBuffer(@NonNull RingBufferPool<Packet> sendBuf);
 	public RingBufferPool<Packet> getReadBuffer();
 	public void setReadBuffer(@NonNull RingBufferPool<Packet> sendBuf);
-	public void setBotThreadFacade(@NonNull BotThreadFacade botThread);
-	public BotThreadFacade getBotThreadFacade();
+	public void setScriptPluginFacade(@NonNull ScriptPluginFacade botThread);
+	public ScriptPluginFacade getScriptPluginFacade();
 	public void setBotSettings(@NonNull BotSettings botSettings);
 	public BotSettings getBotSettings();
 	public void setBotLogger(BotLogger botLogger);

@@ -12,7 +12,7 @@ import com.xiovr.e5bot.bot.BotContext;
 import com.xiovr.e5bot.bot.BotEnvironment;
 import com.xiovr.e5bot.bot.BotLogger;
 import com.xiovr.e5bot.bot.BotSettings;
-import com.xiovr.e5bot.bot.BotThreadFacade;
+import com.xiovr.e5bot.bot.ScriptPluginFacade;
 import com.xiovr.e5bot.bot.network.BotConnection;
 import com.xiovr.e5bot.bot.packet.Packet;
 import com.xiovr.e5bot.bot.packet.PacketPool;
@@ -36,7 +36,7 @@ public class BotContextImpl implements BotContext {
 	private List<BotConnection> clientConnections;
 	private BotSettings botSettings;
 	private ScriptPlugin script;
-	private BotThreadFacade botThreadFacade;
+	private ScriptPluginFacade scriptPluginFacade;
 	private CryptorCommand cryptorCommand;
 	private BotLogger botLogger;
 	private volatile int connStage;
@@ -135,7 +135,7 @@ public class BotContextImpl implements BotContext {
 	}
 
 	@Override
-	public void setScript(@NonNull ScriptPlugin script) {
+	public void setScript(ScriptPlugin script) {
 		this.script = script;
 	}
 
@@ -188,14 +188,14 @@ public class BotContextImpl implements BotContext {
 	}
 
 	@Override
-	public void setBotThreadFacade(@NonNull BotThreadFacade botThread) {
-		this.botThreadFacade = botThread;
+	public void setScriptPluginFacade(@NonNull ScriptPluginFacade scriptPlugin) {
+		this.scriptPluginFacade = scriptPlugin;
 
 	}
 
 	@Override
-	public BotThreadFacade getBotThreadFacade() {
-		return botThreadFacade;
+	public ScriptPluginFacade getScriptPluginFacade() {
+		return scriptPluginFacade;
 	}
 
 	@Override

@@ -8,6 +8,7 @@ import java.util.TimerTask;
 import com.xiovr.e5bot.bot.BotAutoconnectRunnable;
 import com.xiovr.e5bot.bot.BotContext;
 import com.xiovr.e5bot.bot.BotManager;
+import com.xiovr.e5bot.bot.BotSettings;
 import com.xiovr.e5bot.plugin.ScriptPlugin;
 
 public class BotAutoconnectRunnableImpl implements BotAutoconnectRunnable {
@@ -24,7 +25,7 @@ public class BotAutoconnectRunnableImpl implements BotAutoconnectRunnable {
 		for (int i=0; i < curTime.size(); ++i) {
 			curTime.set(i, 0);
 		}
-		this.botContexts = botManager.getBots();
+		this.botContexts = botManager.getBots(BotSettings.OUTGAME_TYPE);
 		this.timerTask = new TimerTask() {
 			private int skipTime = 0;
 			@Override
@@ -46,7 +47,7 @@ public class BotAutoconnectRunnableImpl implements BotAutoconnectRunnable {
 							curTime.set(i, tm);
 						else {
 							curTime.set(i, 0);
-							botManager.connect(botContext.getBotId());
+							botManager.connect(botContext.getBotId(), BotSettings.OUTGAME_TYPE);
 						}
 
 					}

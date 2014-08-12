@@ -19,7 +19,6 @@
 				<!-- <executions> <execution> <phase>default</phase> <goals> <goal>compile</goal> 
 					</goals> </execution> </executions> -->
 			</plugin>
-
 		</plugins>
 	</build>
 
@@ -141,7 +140,7 @@
 			<artifactId>netty-all</artifactId>
 			<version>${netty.version}</version>
 		</dependency>
-		<!--  NonNull annotations support -->
+		<!-- NonNull annotations support -->
 	</dependencies>
 
 </project>

@@ -14,6 +14,7 @@ public class BotSettingsImpl implements BotSettings {
 	private boolean bDisabled;
 	private boolean bLogging;
 	private boolean bModifLogging;
+	private String scriptPath;
 	public BotSettingsImpl()
 	{
 		botType = BotSettings.INGAME_TYPE;
@@ -102,6 +103,15 @@ public class BotSettingsImpl implements BotSettings {
 	public void setModifLogging(boolean bLogging) {
 		this.bModifLogging = bLogging;
 		
+	}
+	@Override
+	public void setScriptPath(String path) {
+		this.scriptPath = path;
+		
+	}
+	@Override
+	public String getScriptPath() {
+		return this.scriptPath;
 	}
 
 }

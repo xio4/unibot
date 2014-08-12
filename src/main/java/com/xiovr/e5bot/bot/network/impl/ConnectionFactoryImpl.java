@@ -40,14 +40,14 @@ public class ConnectionFactoryImpl implements ConnectionFactory {
 	}
 
 	@Override
-	public void createProxyConnections(
+	public void createProxyListeners(
 			@NonNull List<BotContext> proxyBots) {
 		this.proxyBots = proxyBots;
 
 
 
 		// Start boss client listeners
-		for (int stage = 0; stage < botEnvironment.getServerAddresses().size(); ++stage) {
+		for (int stage = 0; stage < botEnvironment.getClientAddresses().size(); ++stage) {
 			bs = new ServerBootstrap();
 			bs.group(bossClientEventGroup, clientEventGroup);
 			bs.channel(NioServerSocketChannel.class);
@@ -89,5 +89,10 @@ public class ConnectionFactoryImpl implements ConnectionFactory {
 			serverEventGroup.shutdownGracefully();
 			bossClientEventGroup.shutdownGracefully();
 		}
+	}
+
+	@Override
+	public void finalize() {
+		dispose();
 	}
 }

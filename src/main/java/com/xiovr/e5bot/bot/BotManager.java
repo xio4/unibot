@@ -17,28 +17,30 @@ import com.xiovr.e5bot.bot.packet.RingBufferPool;
 
 public interface BotManager {
 	public static final int BOT_MAX_COUNT = 1000;
+
 	public BotEnvironment getBotEnvironment();
 	public void setBotEnvironment(BotEnvironment botEnvironment);
-	public ConnectionFactory getConnectionContext();
-	public void setConnectionContext(@NonNull ConnectionFactory connContext);
+	public ConnectionFactory getConnectionFactory();
+	public void setConnectionFactory(@NonNull ConnectionFactory connContext);
+	public void setBotGameConfig(@NonNull BotGameConfig botGameConfig);
+	public BotGameConfig getBotGameConfig();
+	public void setBotLogger(@NonNull BotLogger botLogger);
+	public BotLogger getBotLogger();
 	public void clear();
-	public @NonNull BotContext createBot();
-	public void destroyBot(int botId);
-	public BotContext getBot(int botId);
-	public boolean loadScript(int botId, ScriptPlugin script);
-	public void stopScript(int botId);
-	public void startScript(int botId);
-	public void removeScript(int botId);
+	public BotContext createBot(int botType, @NonNull String configName);
+	public void destroyBot(int botId, int botType);
+	public BotContext getBot(int botId, int botType);
+	public void loadScript(int botId, int botType, @NonNull String scriptPath) throws Exception;
+	public void removeScript(int botId, int botType);
+	@Deprecated
 	public void loadBots();
-	public List<BotContext> getBots();
-	public int botsCount();
-	public void connect(int botId);
-	public void disconnect(int botId);
+	public List<BotContext> getBots(int botType);
+	public int botsCount(int botType);
+	public void connect(int botId, int botType);
+	public void disconnect(int botId, int botType);
 	public BotMessageTransferRunnable getBotMessageTransfer();
 	public void setBotMessageTransfer(@NonNull BotMessageTransferRunnable bmtt);
 	public void setPluginLoader(@NonNull PluginLoader pluginLoader);
 	public PluginLoader getPluginLoader();
-	public RingBufferPool<Packet> getSendBuffer();
-	public void setSendBuffer(RingBufferPool<Packet> sendBuf);
 
 }

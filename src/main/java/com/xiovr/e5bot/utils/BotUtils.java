@@ -70,27 +70,5 @@ public class BotUtils {
     	fos.close();
     }
     
-	public static Properties getPluginProps(File file) throws IOException {
-		Properties result = null;
-		JarFile jar = new JarFile(file);
-		Enumeration<JarEntry> entries = jar.entries();
 
-		while (entries.hasMoreElements()) {
-			JarEntry entry = entries.nextElement();
-			if (entry.getName().equals("plugin.properties")) {
-				// That's it! Load props
-				InputStream is = null;
-				try {
-					is = jar.getInputStream(entry);
-					result = new Properties();
-					result.load(is);
-				} finally {
-					if (is != null)
-						is.close();
-				}
-			}
-		}
-		jar.close();
-		return result;
-	}
 }

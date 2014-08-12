@@ -7,6 +7,5 @@ import com.xiovr.e5bot.bot.packet.Packet;
 import com.xiovr.e5bot.bot.packet.RingBufferPool;
 
 public interface ScriptPluginRunnable extends Runnable {
-	public void notifyUpdate();
 	public void setScript(@NonNull ScriptPlugin script);
 }

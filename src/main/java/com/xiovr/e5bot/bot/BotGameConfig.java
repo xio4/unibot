@@ -9,6 +9,8 @@ public interface BotGameConfig {
 	public static final int DEFAULT_CLIENT_PORT = 2308;
 	public static final String DEFAULT_SERVER_IP = "127.0.0.1";
 	public static final int DEFAULT_SERVER_PORT = 2308;
+	public static final int PORT_RANGE_MIN = 25000;
+	public static final int PORT_RANGE_MAX = 25500;
 
 	void saveBotSettings(BotSettings settings, String botFn, String comments);
 

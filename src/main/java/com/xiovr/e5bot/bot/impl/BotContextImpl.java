@@ -17,7 +17,6 @@ import com.xiovr.e5bot.bot.network.BotConnection;
 import com.xiovr.e5bot.bot.packet.Packet;
 import com.xiovr.e5bot.bot.packet.PacketPool;
 import com.xiovr.e5bot.bot.packet.RingBufferPool;
-import com.xiovr.e5bot.bot.packet.impl.PacketImpl;
 import com.xiovr.e5bot.plugin.CryptorCommand;
 import com.xiovr.e5bot.plugin.CryptorPlugin;
 import com.xiovr.e5bot.plugin.ScriptPlugin;

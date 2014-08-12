@@ -13,7 +13,7 @@ import com.xiovr.e5bot.bot.BotMessageTransferRunnable;
 import com.xiovr.e5bot.bot.BotSettings;
 import com.xiovr.e5bot.bot.BotManager;
 import com.xiovr.e5bot.bot.network.BotConnection;
-import com.xiovr.e5bot.bot.network.ConnectionContext;
+import com.xiovr.e5bot.bot.network.ConnectionFactory;
 import com.xiovr.e5bot.bot.packet.Packet;
 import com.xiovr.e5bot.bot.packet.RingBufferPool;
 import com.xiovr.e5bot.plugin.PluginLoader;
@@ -43,13 +43,13 @@ public class BotManagerImpl implements BotManager {
 	}
 
 	@Override
-	public ConnectionContext getConnectionContext() {
+	public ConnectionFactory getConnectionContext() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public void setConnectionContext(@NonNull ConnectionContext connContext) {
+	public void setConnectionContext(@NonNull ConnectionFactory connContext) {
 		// TODO Auto-generated method stub
 		
 	}

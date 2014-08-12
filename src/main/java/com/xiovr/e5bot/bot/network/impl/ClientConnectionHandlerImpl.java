@@ -1,6 +1,9 @@
 package com.xiovr.e5bot.bot.network.impl;
 
 
+import java.util.List;
+
+import org.eclipse.jdt.annotation.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,29 +23,48 @@ public class ClientConnectionHandlerImpl extends
 //		SimpleChannelInboundHandler<Packet> implements ServerConnectionHandler {
 {
 	private static final Logger logger = LoggerFactory.getLogger(ClientConnectionHandlerImpl.class);
+	private List<BotContext> proxyBots;
 	private BotContext botContext;
 	private RingBufferPool<Packet> readBufPool;
 	private int stage;
 
-	public ClientConnectionHandlerImpl(BotContext botContext, int stage) {
-//		super();
-		this.botContext = botContext;
-		this.readBufPool = botContext.getReadBuffer();
+//	public ClientConnectionHandlerImpl(@NonNull List<BotContext> proxyBots, int stage) {
+	public ClientConnectionHandlerImpl(@NonNull List<BotContext> proxyBots, int stage) {
+		this.proxyBots = proxyBots;
 		this.stage = stage;
+		this.botContext = null;
+
 	}
 
-	@SuppressWarnings("null")
 	@Override
 	public void channelRead(ChannelHandlerContext ctx, Object msg)
 			throws Exception {
-		PacketPool.free(readBufPool.put((Packet)msg));
+		if (readBufPool != null) {
+			final Packet pck = (Packet)msg;
+			pck.setConnStage(stage);
+			pck.setTime(System.currentTimeMillis());
+			pck.setType(Packet.RAW_PCK_FROM_CLIENT);
+			PacketPool.free(readBufPool.put(pck));
+		}
 		// See source code this class
 		//ReferenceCountUtil.release(msg); 
 	}
 
+	@SuppressWarnings("null")
 	@Override
 	public void channelActive(ChannelHandlerContext ctx) throws Exception {
-		botContext.getServerConnections().get(stage).setHandlerContext(ctx);
+		// find free proxy bot
+		for (BotContext bot: proxyBots) {
+			if (bot.setStatus(BotContext.CONN_STATUS)) {
+				this.botContext = bot;
+				break;
+			}
+		}
+		if (botContext == null) {
+			throw new RuntimeException("Cannot find proxy bot to connect");
+		}
+		botContext.getClientConnections().get(stage).setHandlerContext(ctx);
+        this.readBufPool = botContext.getReadBuffer();
 		final CryptorPlugin cp = botContext.getCryptorPlugin();
 		if (cp != null)
 			cp.onConnected(ScriptPlugin.CONN_TO_CLIENT);
@@ -54,11 +76,14 @@ public class ClientConnectionHandlerImpl extends
 			if (endTime - startTime > ScriptPlugin.MAX_WORK_TIME)
 				logger.error("Script method onConnected with name "+script.getName() + " works " + (endTime - startTime) + "ms");
 		}
+
+		botContext.getServerConnections().get(stage).connect(
+				botContext.getBotEnvironment().getServerAddresses().get(stage));
 	}
 
 	@Override
 	public void channelInactive(ChannelHandlerContext ctx) throws Exception {
-		botContext.getServerConnections().get(stage).setHandlerContext(null);
+		botContext.getClientConnections().get(stage).setHandlerContext(null);
 		final CryptorPlugin cp = botContext.getCryptorPlugin();
 		if (cp != null)
 			cp.onDisconnected(ScriptPlugin.DISCONN_FROM_CLIENT);

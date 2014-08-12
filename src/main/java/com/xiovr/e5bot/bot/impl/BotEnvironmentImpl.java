@@ -23,10 +23,14 @@ public class BotEnvironmentImpl implements BotEnvironment {
 	private boolean bRawData;
 	private List<InetSocketAddress> clientAddresses;
 	private List<InetSocketAddress> serverAddresses;
+	private int portRangeMin;
+	private int portRangeMax;
+	private int freePort;
 
 	public BotEnvironmentImpl() {
 		clientAddresses = new ArrayList<InetSocketAddress>();
 		serverAddresses = new ArrayList<InetSocketAddress>();
+		freePort = -1;
 	}
 
 	@Override
@@ -104,6 +108,36 @@ public class BotEnvironmentImpl implements BotEnvironment {
 	public void addServerAddress(@NonNull InetSocketAddress address) {
 		this.serverAddresses.add(address);
 		
+	}
+
+	@Override
+	public int getPortRangeMin() {
+		return this.portRangeMin;
+	}
+
+	@Override
+	public int getPortRangeMax() {
+		return this.portRangeMax;
+	}
+
+	@Override
+	public void setPortRangeMin(int port) {
+		freePort = port;
+		this.portRangeMin = port;
+		
+	}
+
+	@Override
+	public void setPortRangeMax(int port) {
+		this.portRangeMax = port;
+	}
+
+	@Override
+	public int getNextFreePort() {
+		if (freePort >= portRangeMax) {
+			throw new RuntimeException("Cannot get next free port");
+		}
+		return this.freePort++;
 	}
 
 

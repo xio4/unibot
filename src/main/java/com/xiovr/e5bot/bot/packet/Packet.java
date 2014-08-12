@@ -96,7 +96,7 @@ public interface Packet extends Poolable {
 	public long readQ();
 
 	/**
-	 * pad to checksum
+	 * padding to mod8 for checksum
 	 */
 	public void pad();
 

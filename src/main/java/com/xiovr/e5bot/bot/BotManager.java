@@ -8,7 +8,7 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.xiovr.e5bot.bot.analize.AnalizeManager;
 import com.xiovr.e5bot.bot.network.BotConnection;
-import com.xiovr.e5bot.bot.network.ConnectionContext;
+import com.xiovr.e5bot.bot.network.ConnectionFactory;
 import com.xiovr.e5bot.plugin.CryptorPlugin;
 import com.xiovr.e5bot.plugin.PluginLoader;
 import com.xiovr.e5bot.plugin.ScriptPlugin;
@@ -19,8 +19,8 @@ public interface BotManager {
 	public static final int BOT_MAX_COUNT = 1000;
 	public BotEnvironment getBotEnvironment();
 	public void setBotEnvironment(BotEnvironment botEnvironment);
-	public ConnectionContext getConnectionContext();
-	public void setConnectionContext(@NonNull ConnectionContext connContext);
+	public ConnectionFactory getConnectionContext();
+	public void setConnectionContext(@NonNull ConnectionFactory connContext);
 	public void clear();
 	public @NonNull BotContext createBot();
 	public void destroyBot(int botId);

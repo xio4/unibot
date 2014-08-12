@@ -14,12 +14,9 @@ import com.xiovr.e5bot.plugin.ScriptPluginRunnable;
 
 public interface BotContext {
 	public static final int OFFLINE_STATUS = 0x00;
-	public static final int CONN_TO_LS_STATUS = 0x01;
-	public static final int LOGIN_STATUS = 0x02;
-	public static final int DISCONN_FROM_LS_STATUS = 0x03;
-	public static final int CONN_TO_GS_STATUS = 0x04;
+	public static final int CONN_STATUS = 0x01;
+	public static final int DISCONN_STATUS = 0x03;
 	public static final int INWORLD_STATUS = 0x05;
-	public static final int DISCONN_FROM_GS_STATUS = 0x06;
 	
 	public static final int LOG_INFO_TYPE = 0x01;
 	public static final int LOG_WARN_TYPE = 0x02;

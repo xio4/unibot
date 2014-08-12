@@ -145,6 +145,8 @@ public class BotGameConfigImpl implements BotGameConfig {
 			props.setProperty("bot.next_connection_interval", "5");
 			props.setProperty("client.proxy", "false");
 			props.setProperty("bot.raw_data", "false");
+			props.setProperty("bot.port_range_min", String.valueOf(PORT_RANGE_MIN));
+			props.setProperty("bot.port_range_max", String.valueOf(PORT_RANGE_MAX));
 
 			BotUtils.saveProperties(fn, props, "Autogeneratied file. Bot v"
 					+ VERSION);
@@ -192,6 +194,10 @@ public class BotGameConfigImpl implements BotGameConfig {
 					String.valueOf(botEnvironment.isProxy()));
 			props.setProperty("bot.raw_data",
 					String.valueOf(botEnvironment.isRawData()));
+			props.setProperty("bot.port_range_min", String.valueOf(
+					botEnvironment.getPortRangeMin()));
+			props.setProperty("bot.port_range_max", String.valueOf(
+					botEnvironment.getPortRangeMax()));
 			BotUtils.saveProperties(fn, props, "Autogeneratied file. Bot v"
 					+ VERSION);
 
@@ -249,6 +255,12 @@ public class BotGameConfigImpl implements BotGameConfig {
 
 		botEnvironment.setRawData(Boolean.parseBoolean(props.getProperty(
 				"bot.raw_data", "false")));
+		botEnvironment.setPortRangeMin(Integer.parseInt(props.getProperty(
+				"bot.port_range_min", String.valueOf(PORT_RANGE_MIN)
+				)));
+		botEnvironment.setPortRangeMax(Integer.parseInt(props.getProperty(
+				"bot.port_range_max", String.valueOf(PORT_RANGE_MAX)
+				)));
 		logger.info("Environment config loaded");
 	}
 }

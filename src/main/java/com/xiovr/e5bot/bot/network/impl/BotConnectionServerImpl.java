@@ -13,6 +13,8 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 import java.net.InetSocketAddress;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.xiovr.e5bot.bot.BotContext;
 import com.xiovr.e5bot.bot.network.BotConnection;
@@ -23,6 +25,7 @@ import com.xiovr.e5bot.bot.packet.Packet;
  * Major controller for server connection
  */
 public class BotConnectionServerImpl implements BotConnection {
+	private static final Logger logger = LoggerFactory.getLogger(BotConnectionServerImpl.class);
 	private BotContext botContext;
 	private NioEventLoopGroup workerGroup;
 	private Bootstrap bs;

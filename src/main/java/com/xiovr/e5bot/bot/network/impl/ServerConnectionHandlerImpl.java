@@ -35,6 +35,8 @@ public class ServerConnectionHandlerImpl extends
 			throws Exception {
 		final Packet pck = (Packet)msg;
 		pck.setConnStage(stage);
+		pck.setTime(System.currentTimeMillis());
+		pck.setType(Packet.RAW_PCK_FROM_SERVER);
 		PacketPool.free(readBufPool.put(pck));
 		// See source code this class
 		//ReferenceCountUtil.release(msg); 

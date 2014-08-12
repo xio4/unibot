@@ -21,6 +21,13 @@ public interface BotEnvironment {
 	 */
 	public boolean isRawData();
 	public void setRawData(boolean bRawData);
+	
+	public int getPortRangeMin();
+	public int getPortRangeMax();
+	public void setPortRangeMin(int port);
+	public void setPortRangeMax(int port);
+
+	public int getNextFreePort();
 
 	/**
 	 * @return true if wait then plugin handled packet and false else

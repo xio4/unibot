@@ -107,8 +107,16 @@ public class BotGameConfigImpl implements BotGameConfig {
 							props.setProperty(param.name(), param.values()[0]);
 
 						} else if (String.class.isAssignableFrom(paramClazz)) {
+
 							props.setProperty(param.name(), param.values()[0]);
 
+						} else {
+							throw new RuntimeException(
+									"Settings param in class "
+											+ clazz.getCanonicalName()
+											+ " with method "
+											+ method.getName()
+											+ " not implemented yet");
 						}
 
 					}
@@ -272,34 +280,6 @@ public class BotGameConfigImpl implements BotGameConfig {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					// if (Integer.class.isAssignableFrom(paramClazz)) {
-					// method.invoke(instance, Integer
-					// .parseInt(props.getProperty(
-					// param.name(),
-					// param.values()[0])));
-
-					// }
-					// else if (Long.class.isAssignableFrom(paramClazz)) {
-					// method.invoke(instance, Long
-					// .parseLong(props.getProperty(
-					// param.name(),
-					// param.values()[0])));
-
-					// }
-					// else if (Double.class.isAssignableFrom(paramClazz)) {
-					// method.invoke(instance, Double
-					// .parseDouble(props.getProperty(
-					// param.name(),
-					// param.values()[0])));
-
-					// }
-					// else if (Float.class.isAssignableFrom(paramClazz)) {
-					// method.invoke(instance, Float
-					// .parseFloat(props.getProperty(
-					// param.name(),
-					// param.values()[0])));
-
-					// }
 				}
 			}
 		}
@@ -383,48 +363,23 @@ public class BotGameConfigImpl implements BotGameConfig {
 								props.setProperty(param.name(), String.valueOf(
 										invocableClazz.getMethod("get"+method.getName().substring(3))
 											.invoke(instance)));
-//								if (int.class.isAssignableFrom(paramClazz)) {
-//									props.setProperty(param.name(), String.valueOf(
-//											invocableClazz.getMethod("get"+method.getName().substring(3))
-//											.invoke(instance)));
-//								}
-//								if (long.class.isAssignableFrom(paramClazz)) {
-//									method.invoke(instance, Long.parseLong(props
-//											.getProperty(param.name(),
-//													param.values()[0])));
-//								} else if (boolean.class
-//										.isAssignableFrom(paramClazz)) {
-//									method.invoke(
-//											instance,
-//											Boolean.parseBoolean(props.getProperty(
-//													param.name(), param.values()[0])));
-//								} else if (double.class
-//										.isAssignableFrom(paramClazz)) {
-//									method.invoke(
-//											instance,
-//											Double.parseDouble(props.getProperty(
-//													param.name(), param.values()[0])));
-//								}
-//
-//						} else if (String.class.isAssignableFrom(paramClazz)) {
-//							method.invoke(
-//									instance,
-//									props.getProperty(param.name(),
-//											param.values()[0]));
-//						} else {
-//							throw new RuntimeException(
-//									"Settings param in class "
-//											+ clazz.getCanonicalName()
-//											+ " with method "
-//											+ method.getName()
-//											+ " not implemented yet");
+						} else if (String.class.isAssignableFrom(paramClazz)) {
+								props.setProperty(param.name(), (String)(
+										invocableClazz.getMethod("get"+method.getName().substring(3))
+											.invoke(instance)));
+						} else {
+							throw new RuntimeException(
+									"Settings param in class "
+											+ clazz.getCanonicalName()
+											+ " with method "
+											+ method.getName()
+											+ " not implemented yet");
 						}
 						BotUtils.saveProperties(file, props, "Bot v" + VERSION);
 					} catch (IllegalAccessException | IllegalArgumentException
 							| InvocationTargetException | NoSuchMethodException
 							| IOException
 							e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				}
@@ -432,59 +387,59 @@ public class BotGameConfigImpl implements BotGameConfig {
 		}
 	}
 
-	private void saveBotSettings(BotSettings settings, String botFn,
-			String comments) {
-		try {
-			File fn = new File("/" + DIR_PATH + "/" + botFn);
-			Properties props = new SortedProperties();
-			props.setProperty("bot.type", String.valueOf(settings.getType()));
-			props.setProperty("bot.login", settings.getLogin());
-			props.setProperty("bot.password", settings.getPassword());
-			props.setProperty("bot.name", settings.getName());
-			props.setProperty("bot.serverId",
-					String.valueOf(settings.getServerId()));
-			props.setProperty("bot.autoconnect",
-					String.valueOf(settings.getAutoConnect()));
-			props.setProperty("bot.autoconnect_interval",
-					String.valueOf(settings.getAutoConnectInterval()));
-			props.setProperty("bot.disabled",
-					String.valueOf(settings.getDisabled()));
-			props.setProperty("bot.logging",
-					String.valueOf(settings.getLogging()));
-			props.setProperty("bot.modif_logging",
-					String.valueOf(settings.getModifLogging()));
-			BotUtils.saveProperties(fn, props, comments);
-		} catch (IOException e) {
-			logger.error("Error save file " + botFn);
-		}
-	}
+//	private void saveBotSettings(BotSettings settings, String botFn,
+//			String comments) {
+//		try {
+//			File fn = new File("/" + DIR_PATH + "/" + botFn);
+//			Properties props = new SortedProperties();
+//			props.setProperty("bot.type", String.valueOf(settings.getType()));
+//			props.setProperty("bot.login", settings.getLogin());
+//			props.setProperty("bot.password", settings.getPassword());
+//			props.setProperty("bot.name", settings.getName());
+//			props.setProperty("bot.serverId",
+//					String.valueOf(settings.getServerId()));
+//			props.setProperty("bot.autoconnect",
+//					String.valueOf(settings.getAutoConnect()));
+//			props.setProperty("bot.autoconnect_interval",
+//					String.valueOf(settings.getAutoConnectInterval()));
+//			props.setProperty("bot.disabled",
+//					String.valueOf(settings.getDisabled()));
+//			props.setProperty("bot.logging",
+//					String.valueOf(settings.getLogging()));
+//			props.setProperty("bot.modif_logging",
+//					String.valueOf(settings.getModifLogging()));
+//			BotUtils.saveProperties(fn, props, comments);
+//		} catch (IOException e) {
+//			logger.error("Error save file " + botFn);
+//		}
+//	}
 
-	private Properties createBotSettings(String botFn, String comments) {
-		try {
-			File fn = new File("/" + DIR_PATH + "/" + botFn);
-			Properties props = new SortedProperties();
-
-			props.setProperty("bot.type",
-					String.valueOf(BotSettings.OUTGAME_TYPE));
-			props.setProperty("bot.login", "");
-			props.setProperty("bot.password", "");
-			props.setProperty("bot.name", "");
-			props.setProperty("bot.serverId", String.valueOf(0));
-			props.setProperty("bot.client_proxy", String.valueOf(false));
-			props.setProperty("bot.autoconnect", String.valueOf(false));
-			props.setProperty("bot.autoconnect_interval", String.valueOf(10));
-			props.setProperty("bot.disabled", String.valueOf(false));
-			props.setProperty("bot.logging", String.valueOf(false));
-			props.setProperty("bot.modif_logging", String.valueOf(false));
-
-			BotUtils.saveProperties(fn, props, comments);
-			return props;
-		} catch (IOException e) {
-			logger.error("Error create file " + botFn);
-
-		}
-		return null;
-	}
+//	private Properties createBotSettings(String botFn, String comments) {
+//		try {
+//			File fn = new File("/" + DIR_PATH + "/" + botFn);
+//			Properties props = new SortedProperties();
+//
+//			props.setProperty("bot.type",
+//					String.valueOf(BotSettings.OUTGAME_TYPE));
+//			props.setProperty("bot.login", "");
+//			props.setProperty("bot.password", "");
+//			props.setProperty("bot.name", "");
+//			props.setProperty("bot.serverId", String.valueOf(0));
+//			props.setProperty("bot.client_proxy", String.valueOf(false));
+//			props.setProperty("bot.autoconnect", String.valueOf(false));
+//			props.setProperty("bot.autoconnect_interval", String.valueOf(10));
+//			props.setProperty("bot.disabled", String.valueOf(false));
+//			props.setProperty("bot.logging", String.valueOf(false));
+//			props.setProperty("bot.modif_logging", String.valueOf(false));
+//
+//			BotUtils.saveProperties(fn, props, comments);
+//			return props;
+//		} catch (IOException e) {
+//			logger.error("Error create file " + botFn);
+//
+//		}
+//		return null;
+//	}
 
 //	private void loadBotSettings(BotSettings botSettings, String botFn) {
 //		// File fn = new File("/" + DIR_PATH + "/" + SETTINGS_CFG_DIR + "/"

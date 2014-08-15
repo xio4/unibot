@@ -32,7 +32,7 @@ public interface BotSettings extends Settings {
 	@Param(name = "bot.autoconnect_interval", values = "10")
 	public void setAutoConnectInterval(int connectInterval);
 	public boolean getDisabled();
-	@Param(name = "bot.disabled", values = "true")
+	@Param(name = "bot.disabled", values = "false")
 	public void setDisabled(boolean bDisabled);
 	public boolean getLogging();
 	@Param(name = "bot.logging", values = "false")

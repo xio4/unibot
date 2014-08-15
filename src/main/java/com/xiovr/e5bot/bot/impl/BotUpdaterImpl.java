@@ -30,7 +30,7 @@ public class BotUpdaterImpl implements BotUpdater {
 							botContext.getStatus() == BotContext.INWORLD_STATUS) {
 						ScriptPlugin script = botContext.getScript();
 						if (script != null)
-							botContext.getScript().update();
+							script.update();
 					}
 				}
 				for (BotContext botContext: outgameBots) {
@@ -38,7 +38,7 @@ public class BotUpdaterImpl implements BotUpdater {
 							botContext.getStatus() == BotContext.INWORLD_STATUS) {
 						ScriptPlugin script = botContext.getScript();
 						if (script != null)
-							botContext.getScript().update();
+							script.update();
 					}
 				}
 
@@ -47,7 +47,7 @@ public class BotUpdaterImpl implements BotUpdater {
 							botContext.getStatus() == BotContext.INWORLD_STATUS) {
 						ScriptPlugin script = botContext.getScript();
 						if (script != null)
-							botContext.getScript().update();
+							script.update();
 					}
 				}
 			}

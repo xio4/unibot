@@ -23,4 +23,6 @@ public interface BotGameConfig {
 
 	void loadPropsToBotEnvironment(BotEnvironment botEnvironment);
 
+	void createSettings(Class<?> clazz, String fn, String comment);
+
 }

@@ -129,5 +129,7 @@ public class BotGameConfigTest extends TestBase {
 		Assert.assertEquals(botSettings.isDisabled(), true);
 		Assert.assertEquals(botSettings.isLogging(), true);	
 		Assert.assertEquals(botSettings.isModifLogging(), true);
+		
+		botGameConfig.createSettings(BotEnvironment.class, "test_annot.cfg", "Test");
 	}
 }

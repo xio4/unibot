@@ -25,12 +25,10 @@ public class BotEnvironmentImpl implements BotEnvironment {
 	private List<InetSocketAddress> serverAddresses;
 	private int portRangeMin;
 	private int portRangeMax;
-	private int freePort;
 
 	public BotEnvironmentImpl() {
 		clientAddresses = new ArrayList<InetSocketAddress>();
 		serverAddresses = new ArrayList<InetSocketAddress>();
-		freePort = -1;
 	}
 
 	@Override
@@ -122,7 +120,6 @@ public class BotEnvironmentImpl implements BotEnvironment {
 
 	@Override
 	public void setPortRangeMin(int port) {
-		freePort = port;
 		this.portRangeMin = port;
 		
 	}
@@ -133,11 +130,15 @@ public class BotEnvironmentImpl implements BotEnvironment {
 	}
 
 	@Override
-	public int getNextFreePort() {
-		if (freePort >= portRangeMax) {
-			throw new RuntimeException("Cannot get next free port");
-		}
-		return this.freePort++;
+	public void setClientAddresses(@NonNull List<InetSocketAddress> addresses) {
+		this.clientAddresses = addresses;
+		
+	}
+
+	@Override
+	public void setServerAddresses(@NonNull List<InetSocketAddress> addresses) {
+		this.serverAddresses = addresses;
+		
 	}
 
 

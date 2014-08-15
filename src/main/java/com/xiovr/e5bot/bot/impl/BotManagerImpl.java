@@ -3,19 +3,15 @@ package com.xiovr.e5bot.bot.impl;
 import org.eclipse.jdt.annotation.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import com.xiovr.e5bot.bot.BotContext;
 import com.xiovr.e5bot.bot.BotEnvironment;
 import com.xiovr.e5bot.bot.BotGameConfig;
-import com.xiovr.e5bot.bot.BotLauncher;
 import com.xiovr.e5bot.bot.BotLogger;
 import com.xiovr.e5bot.bot.BotMessageTransferRunnable;
 import com.xiovr.e5bot.bot.BotSettings;
 import com.xiovr.e5bot.bot.BotManager;
 import com.xiovr.e5bot.bot.ScriptPluginFacade;
-import com.xiovr.e5bot.bot.network.BotConnection;
 import com.xiovr.e5bot.bot.network.ConnectionFactory;
 import com.xiovr.e5bot.bot.packet.Packet;
 import com.xiovr.e5bot.bot.packet.RingBufferPool;
@@ -25,15 +21,9 @@ import com.xiovr.e5bot.plugin.ScriptPlugin;
 import com.xiovr.e5bot.plugin.ScriptPluginRunnable;
 import com.xiovr.e5bot.plugin.impl.ScriptPluginRunnableImpl;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.util.List;
-import java.util.Properties;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.atomic.AtomicReferenceArray;
 
 public class BotManagerImpl implements BotManager {
 	private Logger logger = LoggerFactory.getLogger(BotManagerImpl.class);
@@ -59,7 +49,7 @@ public class BotManagerImpl implements BotManager {
 	}
 
 	@Override
-	public void setBotEnvironment(BotEnvironment botEnvironment) {
+	public void setBotEnvironment(@NonNull BotEnvironment botEnvironment) {
 		this.botEnvironment = botEnvironment;
 
 	}
@@ -102,8 +92,9 @@ public class BotManagerImpl implements BotManager {
 		return this.pluginLoader;
 	}
 
+	@SuppressWarnings("null")
 	@Override
-	public @NonNull BotContext createBot(int botType, String configName) {
+	public @NonNull BotContext createBot(int botType, @NonNull String configName) {
 		BotContext botContext = new BotContextImpl();
 		botContext.setBotEnvironment(botEnvironment);
 		BotSettings botSettings = new BotSettingsImpl();

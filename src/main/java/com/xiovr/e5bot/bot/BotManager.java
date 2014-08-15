@@ -19,7 +19,7 @@ public interface BotManager {
 	public static final int BOT_MAX_COUNT = 1000;
 
 	public BotEnvironment getBotEnvironment();
-	public void setBotEnvironment(BotEnvironment botEnvironment);
+	public void setBotEnvironment(@NonNull BotEnvironment botEnvironment);
 	public ConnectionFactory getConnectionFactory();
 	public void setConnectionFactory(@NonNull ConnectionFactory connContext);
 	public void setBotGameConfig(@NonNull BotGameConfig botGameConfig);

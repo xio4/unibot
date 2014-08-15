@@ -5,8 +5,11 @@ import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
 
-public interface BotEnvironment {
-	@Param(name="script.update_interval", values = "200")
+public interface BotEnvironment extends Settings {
+
+	public static final String ENVIRONMENT_CFG_FN = "environment.cfg";
+
+	@Param(name="script.update_interval", values = "100")
 	public void setUpdateInterval(long updatInterval);
 	public long getUpdateInterval();
 
@@ -20,19 +23,19 @@ public interface BotEnvironment {
 	public List<InetSocketAddress> getServerAddresses();
 	public void addServerAddress(@NonNull InetSocketAddress address);
 
-	@Param(name="bot.next_connection_interval", values = { "10" })
+	@Param(name="bot.next_connection_interval", values = "10")
 	public void setNextBotConnectionInterval(int interval);
 	public int getNextBotConnectionInterval();
 
-	@Param(name="client.proxy", values = { "false" })
+	@Param(name="client.proxy", values = "false")
 	public void setProxy(boolean bProxy);
-	public boolean isProxy();
+	public boolean getProxy();
 	/**
 	 * @return true if raw data is set in script and false else
 	 */
-	@Param(name="bot.raw_data", values = { "false" } )
+	@Param(name="bot.raw_data", values = "false")
 	public void setRawData(boolean bRawData);
-	public boolean isRawData();
+	public boolean getRawData();
 	
 	@Param(name="bot.port_range_min", values = "25000")
 	public void setPortRangeMin(int port);

@@ -31,6 +31,7 @@ public class BotLauncher implements CommandLineRunner {
 	BotEnvironment botEnvironment;
 
 	public void run(String... args) {
-		botGameConfig.loadPropsToBotEnvironment(botEnvironment);
+//		botGameConfig.loadPropsToBotEnvironment(botEnvironment);
+		botGameConfig.loadSettings(botEnvironment, BotEnvironment.ENVIRONMENT_CFG_FN);
 	}	
 }

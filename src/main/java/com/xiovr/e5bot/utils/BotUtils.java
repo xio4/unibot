@@ -55,7 +55,7 @@ public class BotUtils {
      */
     public static Properties loadProperties(File propsFile) throws IOException 
     {
-        Properties props = new Properties();
+        Properties props = new SortedProperties();
         FileInputStream fis = new FileInputStream(propsFile);
         props.load(fis);    
         fis.close();

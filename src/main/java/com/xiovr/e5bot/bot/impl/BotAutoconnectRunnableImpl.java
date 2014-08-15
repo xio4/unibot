@@ -39,7 +39,7 @@ public class BotAutoconnectRunnableImpl implements BotAutoconnectRunnable {
 				for (int i=0; i < botContexts.size(); ++i) {
 					BotContext botContext = botContexts.get(i);
 					if (botContext != null && 
-							botContext.getBotSettings().isAutoConnect() && 
+							botContext.getBotSettings().getAutoConnect() && 
 							botContext.getStatus() == BotContext.OFFLINE_STATUS) {
 						Integer tm = curTime.get(i);
 						tm++;

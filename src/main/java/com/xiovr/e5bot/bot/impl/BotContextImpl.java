@@ -95,7 +95,7 @@ public class BotContextImpl implements BotContext {
 			return;
         long time = System.currentTimeMillis();
         pck.setType(Packet.PCK_TO_SERVER);
-        if (botSettings.isLogging())
+        if (botSettings.getLogging())
         	botLogger.pckLog(pck);
         bcPck = PacketPool.obtain(); 
         cryptorPlugin.encryptToServer(pck, bcPck);
@@ -115,7 +115,7 @@ public class BotContextImpl implements BotContext {
 			return;
         long time = System.currentTimeMillis();
         pck.setType(Packet.PCK_TO_CLIENT);
-        if (botSettings.isLogging())
+        if (botSettings.getLogging())
         	botLogger.pckLog(pck);
         bcPck = PacketPool.obtain(); 
         cryptorPlugin.encryptToClient(pck, bcPck);

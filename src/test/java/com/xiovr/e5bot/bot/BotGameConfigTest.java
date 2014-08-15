@@ -9,10 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import com.xiovr.e5bot.TestBase;
 import com.xiovr.e5bot.bot.impl.BotEnvironmentImpl;
 import com.xiovr.e5bot.bot.impl.BotGameConfigImpl;
 import com.xiovr.e5bot.bot.impl.BotSettingsImpl;
-import com.xiovr.e5bot.TestBase;
 
 /**
  * @author xio4
@@ -29,22 +29,24 @@ public class BotGameConfigTest extends TestBase {
 	@Test()
 	public void testBotEnvironment_load_and_save()
 	{
-		File fn = new File(((BotGameConfigImpl)botGameConfig).DIR_PATH + "/" + BotGameConfig.ENVIRONMENT_CFG_FN);
+		File fn = new File(((BotGameConfigImpl)botGameConfig).DIR_PATH + "/" + BotEnvironment.ENVIRONMENT_CFG_FN);
 		fn.delete();
-		botGameConfig.loadPropsToBotEnvironment(botEnvironment);
-		Assert.assertEquals(botEnvironment.getNextBotConnectionInterval(), 5);
+//		botGameConfig.loadPropsToBotEnvironment(botEnvironment);
+		botGameConfig.loadSettings(botEnvironment, BotEnvironment.ENVIRONMENT_CFG_FN);
+
+		Assert.assertEquals(botEnvironment.getNextBotConnectionInterval(), 10 );
 		Assert.assertEquals(botEnvironment.getUpdateInterval(), 100);
 		Assert.assertEquals(botEnvironment.getClientAddresses().get(0).getHostString(), 
-				BotGameConfigImpl.DEFAULT_CLIENT_IP);
+				"127.0.0.1");
 		Assert.assertEquals(botEnvironment.getClientAddresses().get(0).getPort(), 
-				BotGameConfigImpl.DEFAULT_CLIENT_PORT);
+				3535);
 		
 		Assert.assertEquals(botEnvironment.getServerAddresses().get(0).getHostString(), 
-				BotGameConfigImpl.DEFAULT_SERVER_IP);
+				"127.0.0.1");
 		Assert.assertEquals(botEnvironment.getServerAddresses().get(0).getPort(),
-				BotGameConfigImpl.DEFAULT_SERVER_PORT);
-		Assert.assertEquals(botEnvironment.isProxy(), false);
-		Assert.assertEquals(botEnvironment.isRawData(), false);
+				3535);
+		Assert.assertEquals(botEnvironment.getProxy(), false);
+		Assert.assertEquals(botEnvironment.getRawData(), false);
 		
 		botEnvironment.setNextBotConnectionInterval(10);
 		botEnvironment.setUpdateInterval(200);
@@ -57,10 +59,12 @@ public class BotGameConfigTest extends TestBase {
 		botEnvironment.setProxy(true);
 		botEnvironment.setRawData(true);
 		
-		botGameConfig.savePropsFromBotEnvironment(botEnvironment);
+//		botGameConfig.savePropsFromBotEnvironment(botEnvironment);
+		botGameConfig.saveSettings(botEnvironment, BotEnvironment.ENVIRONMENT_CFG_FN, "Bot v"+BotGameConfig.VERSION);
 		BotEnvironment botEnvTest = new BotEnvironmentImpl();
 
-		botGameConfig.loadPropsToBotEnvironment(botEnvTest);
+//		botGameConfig.loadPropsToBotEnvironment(botEnvTest);
+		botGameConfig.loadSettings(botEnvTest, BotEnvironmentImpl.ENVIRONMENT_CFG_FN);
 		
         Assert.assertEquals(botEnvTest.getNextBotConnectionInterval(), 10);
 		Assert.assertEquals(botEnvTest.getUpdateInterval(), 200);
@@ -82,8 +86,8 @@ public class BotGameConfigTest extends TestBase {
 				"126.124.123.11");
 		Assert.assertEquals(botEnvTest.getServerAddresses().get(1).getPort(),
 				2001);
-		Assert.assertEquals(botEnvTest.isProxy(), true);
-		Assert.assertEquals(botEnvTest.isRawData(), true);	
+		Assert.assertEquals(botEnvTest.getProxy(), true);
+		Assert.assertEquals(botEnvTest.getRawData(), true);	
 		
 	}
 	
@@ -93,17 +97,18 @@ public class BotGameConfigTest extends TestBase {
 		BotSettings botSettings = new BotSettingsImpl();
 		File fn = new File(((BotGameConfigImpl)botGameConfig).DIR_PATH + "/" + "testBotSettings.cfg");
 		fn.delete();
-		botGameConfig.loadBotSettings(botSettings, "testBotSettings.cfg");
+//		botGameConfig.loadBotSettings(botSettings, "testBotSettings.cfg");
+		botGameConfig.loadSettings(botSettings, "testBotSettings.cfg");
 		Assert.assertEquals(botSettings.getAutoConnectInterval(), 10);
 		Assert.assertEquals(botSettings.getLogin(), "");
 		Assert.assertEquals(botSettings.getName(), "");
 		Assert.assertEquals(botSettings.getPassword(), "");
 		Assert.assertEquals(botSettings.getServerId(), 0);
 		Assert.assertEquals(botSettings.getType(), BotSettings.OUTGAME_TYPE);
-		Assert.assertEquals(botSettings.isAutoConnect(), false);
-		Assert.assertEquals(botSettings.isDisabled(), false);
-		Assert.assertEquals(botSettings.isLogging(), false);
-		Assert.assertEquals(botSettings.isModifLogging(), false);
+		Assert.assertEquals(botSettings.getAutoConnect(), false);
+		Assert.assertEquals(botSettings.getDisabled(), false);
+		Assert.assertEquals(botSettings.getLogging(), false);
+		Assert.assertEquals(botSettings.getModifLogging(), false);
 		
 		botSettings.setAutoConnectInterval(100);
 		botSettings.setLogin("test");
@@ -115,9 +120,11 @@ public class BotGameConfigTest extends TestBase {
 		botSettings.setDisabled(true);
 		botSettings.setLogging(true);
 		botSettings.setModifLogging(true);
-		botGameConfig.saveBotSettings(botSettings, "testBotSettings.cfg", "Test");
+		botGameConfig.saveSettings(botSettings, "testBotSettings.cfg", "Test");
+//		botGameConfig.saveBotSettings(botSettings, "testBotSettings.cfg", "Test");
 		botSettings = new BotSettingsImpl();
-		botGameConfig.loadBotSettings(botSettings, "testBotSettings.cfg");
+//		botGameConfig.loadBotSettings(botSettings, "testBotSettings.cfg");
+		botGameConfig.loadSettings(botSettings, "testBotSettings.cfg");
 
         Assert.assertEquals(botSettings.getAutoConnectInterval(), 100);
 		Assert.assertEquals(botSettings.getLogin(), "test");
@@ -125,11 +132,13 @@ public class BotGameConfigTest extends TestBase {
 		Assert.assertEquals(botSettings.getPassword(), "testtest");
 		Assert.assertEquals(botSettings.getServerId(), 300);
 		Assert.assertEquals(botSettings.getType(), BotSettings.OUTGAME_TYPE);
-		Assert.assertEquals(botSettings.isAutoConnect(), true);
-		Assert.assertEquals(botSettings.isDisabled(), true);
-		Assert.assertEquals(botSettings.isLogging(), true);	
-		Assert.assertEquals(botSettings.isModifLogging(), true);
+		Assert.assertEquals(botSettings.getAutoConnect(), true);
+		Assert.assertEquals(botSettings.getDisabled(), true);
+		Assert.assertEquals(botSettings.getLogging(), true);	
+		Assert.assertEquals(botSettings.getModifLogging(), true);
 		
-		botGameConfig.createSettings(BotEnvironment.class, "test_annot.cfg", "Test");
+//		botGameConfig.createSettings(BotEnvironment.class, "test_annot.cfg", "Test");
+//		botGameConfig.loadSettings(botEnvironment, "test_annot.cfg");
+//		Assert.assertEquals(botEnvironment.getClientAddresses().get(0).getPort(), 3535);
 	}
 }

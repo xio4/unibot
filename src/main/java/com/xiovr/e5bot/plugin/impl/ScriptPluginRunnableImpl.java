@@ -41,14 +41,14 @@ public class ScriptPluginRunnableImpl implements ScriptPluginRunnable {
 		pck2 = PacketPool.obtain();
 		this.botContext = botContext;
 		oldTime = System.currentTimeMillis();
-		this.bLogging = botContext.getBotSettings().isLogging();
-		this.bModifLogging = botContext.getBotSettings().isModifLogging();
+		this.bLogging = botContext.getBotSettings().getLogging();
+		this.bModifLogging = botContext.getBotSettings().getModifLogging();
 		this.botLogger = botContext.getBotLogger();
 		this.script = script;
 		// this.botContext = botContext;
 		this.buf = botContext.getReadBuffer();
 		BotEnvironment botEnvironment = botContext.getBotEnvironment();
-		this.bRawData = botEnvironment.isRawData();
+		this.bRawData = botEnvironment.getRawData();
 		this.botType = botContext.getBotSettings().getType();
 		this.cryptorPlugin = botContext.getCryptorPlugin();
 	}

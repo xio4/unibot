@@ -98,7 +98,7 @@ public class BotManagerImpl implements BotManager {
 		BotContext botContext = new BotContextImpl();
 		botContext.setBotEnvironment(botEnvironment);
 		BotSettings botSettings = new BotSettingsImpl();
-		botGameConfig.loadBotSettings(botSettings, configName);
+		botGameConfig.loadSettings(botSettings, configName);
 		botContext.setBotSettings(botSettings);
 		botContext.setCryptorPlugin(pluginLoader.createCryptorPlugin());
 		RingBufferPool<Packet> readBuf = new RingBufferPacketPoolImpl();

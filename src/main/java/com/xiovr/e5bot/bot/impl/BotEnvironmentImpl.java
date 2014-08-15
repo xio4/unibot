@@ -55,7 +55,7 @@ public class BotEnvironmentImpl implements BotEnvironment {
 	}
 
 	@Override
-	public boolean isProxy() {
+	public boolean getProxy() {
 		return this.bProxy;
 	}
 
@@ -65,7 +65,7 @@ public class BotEnvironmentImpl implements BotEnvironment {
 	}
 
 	@Override
-	public boolean isRawData() {
+	public boolean getRawData() {
 		return bRawData;
 	}
 

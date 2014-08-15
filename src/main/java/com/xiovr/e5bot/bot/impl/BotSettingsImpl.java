@@ -63,7 +63,7 @@ public class BotSettingsImpl implements BotSettings {
 		
 	}
 	@Override
-	public boolean isAutoConnect() {
+	public boolean getAutoConnect() {
 		return this.bAutoConnect;
 	}
 	@Override
@@ -80,7 +80,7 @@ public class BotSettingsImpl implements BotSettings {
 		
 	}
 	@Override
-	public boolean isDisabled() {
+	public boolean getDisabled() {
 		return this.bDisabled;
 	}
 	@Override
@@ -88,7 +88,7 @@ public class BotSettingsImpl implements BotSettings {
 		this.bDisabled = bDisabled;
 	}
 	@Override
-	public boolean isLogging() {
+	public boolean getLogging() {
 		return this.bLogging;
 	}
 	@Override
@@ -96,7 +96,7 @@ public class BotSettingsImpl implements BotSettings {
 		this.bLogging = bLogging;
 	}
 	@Override
-	public boolean isModifLogging() {
+	public boolean getModifLogging() {
 		return this.bModifLogging;
 	}
 	@Override

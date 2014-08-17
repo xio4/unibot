@@ -50,7 +50,7 @@ public class BotConnectionTest extends TestBase {
 			botContext.setReadBuffer(buffer);
 			BotConnection botConnection = new BotConnectionServerImpl();
 			botConnection.init(workerGroup, botContext, 0);
-			botContext.addServerConnectionStage(botConnection);
+			botContext.addServerConnection(botConnection);
 
 			// Check two times
 			for (int i = 0; i < 2; ++i) {
@@ -71,7 +71,8 @@ public class BotConnectionTest extends TestBase {
 				botConnection.flush();
 				Thread.sleep(100);
 				Assert.assertEquals(buffer.count(), 1);
-				Packet pck2 = buffer.poll(PacketPool.obtain());
+//				Packet pck2 = buffer.poll(PacketPool.obtain());
+				Packet pck2 = buffer.poll();
 
 				pck = PacketPool.obtain();
 				pck.clear();

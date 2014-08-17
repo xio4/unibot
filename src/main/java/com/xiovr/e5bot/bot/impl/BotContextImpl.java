@@ -276,13 +276,13 @@ public class BotContextImpl implements BotContext {
 
 
 	@Override
-	public void addServerConnectionStage(@NonNull BotConnection botConnection) {
+	public void addServerConnection(@NonNull BotConnection botConnection) {
 		this.serverConnections.add(botConnection);
 		
 	}
 
 	@Override
-	public void addClientConnectionStage(@NonNull BotConnection botConnection) {
+	public void addClientConnection(@NonNull BotConnection botConnection) {
 		this.clientConnections.add(botConnection);
 	}
 

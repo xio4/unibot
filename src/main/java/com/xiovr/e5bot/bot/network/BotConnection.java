@@ -23,6 +23,8 @@ public interface BotConnection {
 	public boolean isConnected();
 	public void connect(@NonNull InetSocketAddress address);
 	public void disconnect();
+	public boolean getDisconnectionPermit();
+	public void setDisconnectionPermit(boolean bPermit);
 	
 	public void write(Packet pck);
 	public void flush();

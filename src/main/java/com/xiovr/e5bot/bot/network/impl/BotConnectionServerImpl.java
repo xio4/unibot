@@ -32,10 +32,11 @@ public class BotConnectionServerImpl implements BotConnection {
 	private ChannelFuture cf;
 	private ChannelHandlerContext ctx;
 	private int stage;
+	private boolean bDisconnectPermit;
 
 	public BotConnectionServerImpl() {
-		super();
 		this.ctx = null;
+		this.bDisconnectPermit = true;
 	}
 
 	@Override
@@ -128,6 +129,16 @@ public class BotConnectionServerImpl implements BotConnection {
 	@Override
 	public int getStage() {
 		return this.stage;
+	}
+
+	@Override
+	public boolean getDisconnectionPermit() {
+		return this.bDisconnectPermit;
+	}
+
+	@Override
+	public void setDisconnectionPermit(boolean bPermit) {
+		this.bDisconnectPermit = bPermit;
 	}
 
 }

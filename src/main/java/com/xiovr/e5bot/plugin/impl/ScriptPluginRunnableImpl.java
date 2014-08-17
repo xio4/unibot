@@ -37,8 +37,9 @@ public class ScriptPluginRunnableImpl implements ScriptPluginRunnable {
 	public ScriptPluginRunnableImpl(BotContext botContext) {
 		bRawData = false;
 		cryptorCommand = null;
-		pck = PacketPool.obtain();
+		// pck = PacketPool.obtain();
 		pck2 = PacketPool.obtain();
+		pck2.clear();
 		this.botContext = botContext;
 		oldTime = System.currentTimeMillis();
 		this.bLogging = botContext.getBotSettings().getLogging();
@@ -59,92 +60,126 @@ public class ScriptPluginRunnableImpl implements ScriptPluginRunnable {
 		Thread curThread = Thread.currentThread();
 		try {
 			while (!curThread.isInterrupted()) {
-				pck = buf.poll(pck);
+
+				// pck = buf.poll(pck);
+				pck = buf.poll();
+//				System.out
+//						.println("Packet to script plugin has been read pck.len="
+//								+ pck.getPosition());
 				if (pck == null)
-					pck = PacketPool.obtain();
-				if (script != null) {
-					long time = System.currentTimeMillis();
-					if (bRawData)
-						script.onPck(pck, time - oldTime);
-					if (botType == BotSettings.PROXY_TYPE) {
-						if (pck.getType() == Packet.RAW_PCK_FROM_SERVER) {
-							cryptorPlugin.decryptFromServer(pck, pck2);
-							pck2.setTime(pck.getTime());
-							pck2.setType(Packet.PCK_FROM_SERVER);
-							if (bLogging)
-								botLogger.pckLog(pck2);
-							script.onPck(pck2, time - oldTime);
-							if (bModifLogging)
-								botLogger.pckModifLog(pck2);
-							if (pck2.getPosition() > 0) {
-								cryptorPlugin.encryptToClient(pck2, pck);
-								pck.setType(Packet.RAW_PCK_TO_CLIENT);
-								cryptorCommand = cryptorPlugin
-										.getNextCommand(cryptorCommand);
-								if (cryptorCommand != null) {
-									cryptorCommand.execute(pck, pck2);
-								} else {
-									botContext.getClientConnections()
-											.get(pck.getConnStage())
-											.writeAndFlush(pck);
-								}
-							}
+					continue;
+				// if (script != null) {
+				long time = System.currentTimeMillis();
+				if (bRawData && script != null)
+					script.onPck(pck, time - oldTime);
+				if (botType == BotSettings.PROXY_TYPE) {
+//					System.out.println("Proxy");
+					if (pck.getType() == Packet.RAW_PCK_FROM_SERVER) {
 
-						} else if (pck.getType() == Packet.RAW_PCK_FROM_CLIENT) {
-							cryptorPlugin.decryptFromClient(pck, pck2);
-							pck2.setTime(pck.getTime());
-							pck2.setType(Packet.PCK_FROM_CLIENT);
-							if (bLogging)
-								botLogger.pckLog(pck2);
-							script.onPck(pck2, time - oldTime);
-							if (bModifLogging)
-								botLogger.pckModifLog(pck2);
-
-							if (pck2.getPosition() > 0) {
-								cryptorPlugin.encryptToServer(pck2, pck);
-								pck.setType(Packet.RAW_PCK_TO_SERVER);
-								cryptorCommand = cryptorPlugin
-										.getNextCommand(cryptorCommand);
-								if (cryptorCommand != null) {
-									cryptorCommand.execute(pck, pck2);
-								} else {
-									botContext.getServerConnections()
-											.get(pck.getConnStage())
-											.writeAndFlush(pck);
-								}
-							}
-						}
-						if (bRawData)
-							script.onPck(pck, time - oldTime);
-					} else if (botType == BotSettings.OUTGAME_TYPE) {
 						cryptorPlugin.decryptFromServer(pck, pck2);
+						pck2.setConnStage(pck.getConnStage());
 						pck2.setTime(pck.getTime());
 						pck2.setType(Packet.PCK_FROM_SERVER);
+
+//						System.out.println("Packet from client decrypted size=" + pck2.getPosition());
 						if (bLogging)
 							botLogger.pckLog(pck2);
-						script.onPck(pck2, time - oldTime);
+						if (script != null)
+							script.onPck(pck2, time - oldTime);
+						if (bModifLogging)
+							botLogger.pckModifLog(pck2);
+						if (pck2.getPosition() > 2) {
+							cryptorPlugin.encryptToClient(pck2, pck);
+							pck.setType(Packet.RAW_PCK_TO_CLIENT);
+							if (bRawData && script != null)
+								script.onPck(pck, time - oldTime);
+							cryptorCommand = cryptorPlugin
+									.getNextCommand(cryptorCommand);
+							if (cryptorCommand != null) {
+								cryptorCommand.execute(pck, pck2);
+							} 
+							else {
+
+//					System.out.println("Its proxy type from server");
+								botContext.getClientConnections()
+										.get(pck.getConnStage())
+										.writeAndFlush(pck);
+							}
+						}
+
+					} else if (pck.getType() == Packet.RAW_PCK_FROM_CLIENT) {
+//						System.out.println("Packet from client");
+						cryptorPlugin.decryptFromClient(pck, pck2);
+						pck2.setConnStage(pck.getConnStage());
+						pck2.setTime(pck.getTime());
+						pck2.setType(Packet.PCK_FROM_CLIENT);
+
+//						System.out.println("Packet from client decrypted size=" + pck2.getPosition());
+						if (bLogging)
+							botLogger.pckLog(pck2);
+						if (script != null)
+							script.onPck(pck2, time - oldTime);
 						if (bModifLogging)
 							botLogger.pckModifLog(pck2);
 
-						cryptorCommand = cryptorPlugin
-								.getNextCommand(cryptorCommand);
-						if (pck2.getPosition() > 0 && cryptorCommand != null)
-							cryptorCommand.execute(pck, pck2);
+						if (pck2.getPosition() > 2) {
+							cryptorPlugin.encryptToServer(pck2, pck);
+							pck.setType(Packet.RAW_PCK_TO_SERVER);
+							if (bRawData && script != null)
+								script.onPck(pck, time - oldTime);
+							cryptorCommand = cryptorPlugin
+									.getNextCommand(cryptorCommand);
+							if (cryptorCommand != null) {
+								cryptorCommand.execute(pck, pck2);
+							} 
+							else {
 
-					} else if (botType == BotSettings.INGAME_TYPE) {
-						if (bLogging)
-							botLogger.pckLog(pck);
-						script.onPck(pck, time - oldTime);
-						if (bModifLogging)
-							botLogger.pckModifLog(pck);
-
-						cryptorCommand = cryptorPlugin
-								.getNextCommand(cryptorCommand);
-						if (pck2.getPosition() > 0 && cryptorCommand != null)
-							cryptorCommand.execute(pck, pck);
+//					System.out.println("Its proxy type from client");
+								botContext.getServerConnections()
+										.get(pck.getConnStage())
+										.writeAndFlush(pck);
+							}
+						}
 					}
-					oldTime = time;
+
+				} else if (botType == BotSettings.OUTGAME_TYPE) {
+					cryptorPlugin.decryptFromServer(pck, pck2);
+					pck2.setTime(pck.getTime());
+					pck2.setType(Packet.PCK_FROM_SERVER);
+					if (bLogging)
+						botLogger.pckLog(pck2);
+					if (script != null)
+						script.onPck(pck2, time - oldTime);
+					if (bModifLogging)
+						botLogger.pckModifLog(pck2);
+
+					cryptorCommand = cryptorPlugin
+							.getNextCommand(cryptorCommand);
+					if (pck2.getPosition() > 2 && cryptorCommand != null) {
+						cryptorCommand.execute(pck, pck2);
+					} else {
+						PacketPool.free(pck);
+					}
+
+				} else if (botType == BotSettings.INGAME_TYPE) {
+					if (bLogging)
+						botLogger.pckLog(pck);
+					if (script != null)
+						script.onPck(pck, time - oldTime);
+					if (bModifLogging)
+						botLogger.pckModifLog(pck);
+
+					cryptorCommand = cryptorPlugin
+							.getNextCommand(cryptorCommand);
+					if (pck2.getPosition() > 2 && cryptorCommand != null) {
+						cryptorCommand.execute(pck, pck);
+					} else {
+
+					}
 				}
+				oldTime = time;
+				// }
+
 			}
 		} catch (InterruptedException ie) {
 			curThread.interrupt();

@@ -262,6 +262,7 @@ public class PacketImpl implements Packet {
 		try {
 			if (array.length > barray.length + offset ) {
 				System.arraycopy(barray, 0, array, offset, barray.length);
+				offset += barray.length;
 			} else
 				return;
 		} catch (Exception e) {

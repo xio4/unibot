@@ -30,9 +30,9 @@ public interface BotContext {
 	public BotEnvironment getBotEnvironment();
 	public void setBotEnvironment(@NonNull BotEnvironment botEnvironment);
 	public List<BotConnection> getServerConnections();
-	public void addServerConnectionStage(@NonNull BotConnection botConnection);
+	public void addServerConnection(@NonNull BotConnection botConnection);
 	public List<BotConnection> getClientConnections();
-	public void addClientConnectionStage(@NonNull BotConnection botConnection);
+	public void addClientConnection(@NonNull BotConnection botConnection);
 	// TODO Not implemented yet
 	public void reconnect(int seconds);
 	public boolean setStatus(int status);

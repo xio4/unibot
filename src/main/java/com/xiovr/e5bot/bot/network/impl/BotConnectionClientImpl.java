@@ -15,11 +15,13 @@ import com.xiovr.e5bot.bot.packet.Packet;
 
 public class BotConnectionClientImpl implements BotConnection {
 	private int stage;
+	private boolean bDisconnectPermit;
 
 	private ChannelHandlerContext ctx;
 
 	public BotConnectionClientImpl() {
 		ctx = null;
+		bDisconnectPermit = true;
 	}
 	@Override
 	public void connect(@NonNull InetSocketAddress address) {
@@ -86,6 +88,14 @@ public class BotConnectionClientImpl implements BotConnection {
 	@Override
 	public int getStage() {
 		return this.stage;
+	}
+	@Override
+	public boolean getDisconnectionPermit() {
+		return this.bDisconnectPermit;
+	}
+	@Override
+	public void setDisconnectionPermit(boolean bPermit) {
+		this.bDisconnectPermit = bPermit;
 	}
 
 }

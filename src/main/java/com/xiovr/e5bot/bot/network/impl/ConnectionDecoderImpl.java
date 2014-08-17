@@ -27,23 +27,26 @@ public class ConnectionDecoderImpl extends ByteToMessageDecoder
 		if (in.readableBytes() < 2)
 			return;
 		
+//		System.out.println("Decoder size=" + in.readableBytes());
 		in.markReaderIndex();
-		int pckLen = in.readUnsignedShort() - 2;
-//		System.out.println("packet len =" + pckLen);
+		int dataLen = in.readUnsignedShort() - 2;
+//		System.out.println("packet len =" + dataLen);
 //		System.out.println("readable bytes =" + in.readableBytes());
-		if (in.readableBytes() < pckLen) {
+		if (in.readableBytes() < dataLen) {
 			in.resetReaderIndex();
 			return;
 		}
 		Packet pck = PacketPool.obtain();
+		pck.clear();
 
 		byte[] pckArr = pck.getBuf().array();
 //		byte[] inArr = in.array();
-		in.readBytes(pckArr, 2, pckLen);
-		pck.putHeader(pckLen+2);
+		in.readBytes(pckArr, 2, dataLen);
+		pck.putHeader(dataLen+2);
+		pck.setPosition(dataLen+2);
 //		int rIndex = in.readerIndex();
-//		System.arraycopy(inArr, rIndex-2, pckArr, 0, pckLen+2);
-//		in.readerIndex(rIndex+pckLen);
+//		System.arraycopy(inArr, rIndex-2, pckArr, 0, dataLen+2);
+//		in.readerIndex(rIndex+dataLen);
 		out.add(pck);
 	}
 

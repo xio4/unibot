@@ -22,7 +22,8 @@ public interface RingBufferPool<T> extends Serializable {
 	 * @return new T to use from cyclic buffer
 	 * @throws InterruptedException 
 	 */
-	public T put(@NonNull T t) throws InterruptedException;
+//	public T put(@NonNull T t) throws InterruptedException;
+	public void put(@NonNull T t) throws InterruptedException;
 
 	/**
 	 * Non block {@link put}
@@ -41,7 +42,8 @@ public interface RingBufferPool<T> extends Serializable {
 	 * @return head element and remove in ring buffer
 	 * @throws InterruptedException 
 	 */
-	public T poll(@NonNull T freeObj) throws InterruptedException;
+//	public T poll(@NonNull T freeObj) throws InterruptedException;
+	public T poll() throws InterruptedException;
 
 	/**
 	 * @return true if full by {@link putNb} and false else

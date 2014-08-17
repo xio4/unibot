@@ -26,6 +26,7 @@ public class ConnectionEncoderImpl extends ChannelOutboundHandlerAdapter
         }
 
 		final Packet pck = (Packet)msg;
+//		System.out.println("Encoded packet pck.len=" + pck.getPosition());
 
 		int size = pck.getPosition();
 

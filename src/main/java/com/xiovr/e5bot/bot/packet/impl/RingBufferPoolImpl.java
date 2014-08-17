@@ -47,16 +47,22 @@ public abstract class RingBufferPoolImpl<T> implements RingBufferPool<T> {
 	}
 
 	@Override
-	public T put(@NonNull T newObj) throws InterruptedException {
+//	public T put(@NonNull T newObj) throws InterruptedException {
+	public void put(@NonNull T newObj) throws InterruptedException {
 		lock.lockInterruptibly();
+//		System.out.println("PUT");
+//			System.out.flush();
 		try {
 			writeMarker = (++writeMarker) % ringSize;
+
+//			System.out.println("read=" + readMarker + " write = " + writeMarker);
+//			System.out.flush();
 			while (writeMarker == readMarker)
 				fullCond.await();
-			T free = ring[writeMarker];
+//			T free = ring[writeMarker];
 			ring[writeMarker] = newObj;
 			emptyCond.signal();
-			return free;
+//			return free;
 		}
 		finally {
 			lock.unlock();
@@ -64,14 +70,19 @@ public abstract class RingBufferPoolImpl<T> implements RingBufferPool<T> {
 	}
 
 	@Override
-	public T poll(@NonNull T freeObj) throws InterruptedException {
+//	public T poll(@NonNull T freeObj) throws InterruptedException {
+	public T poll() throws InterruptedException {
 		lock.lockInterruptibly();
+//		System.out.println("POLL");
+//			System.out.flush();
 		try {
 			while (writeMarker == readMarker)
 				emptyCond.await();
 			readMarker = (++readMarker) % ringSize;
+//			System.out.println("read=" + readMarker + " write = " + writeMarker);
+//			System.out.flush();
 			T data = ring[readMarker];
-			ring[readMarker] = freeObj;
+//			ring[readMarker] = freeObj;
 			fullCond.signal();
 			return data;
 		}
@@ -118,6 +129,8 @@ public abstract class RingBufferPoolImpl<T> implements RingBufferPool<T> {
 	@Override
 	public int count() throws InterruptedException {
 		lock.lockInterruptibly();
+//		System.out.println("COUNT write=" + writeMarker + " read=" + readMarker);
+//			System.out.flush();
 		try {
 		int cnt = writeMarker - readMarker;
 		if (cnt < 0) {

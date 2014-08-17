@@ -1,5 +1,6 @@
 package com.xiovr.e5bot.bot.network.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
@@ -33,10 +34,11 @@ public class ConnectionFactoryImpl implements ConnectionFactory {
 	public void init(@NonNull BotEnvironment botEnvironment)
 	{
 		// Create client and server nio events;
-		clientEventGroup = new NioEventLoopGroup();
-		bossClientEventGroup = new NioEventLoopGroup();
-		serverEventGroup = new NioEventLoopGroup(2);
+		this.clientEventGroup = new NioEventLoopGroup();
+		this.bossClientEventGroup = new NioEventLoopGroup();
+		this.serverEventGroup = new NioEventLoopGroup(2);
 		this.botEnvironment = botEnvironment;
+		this.bossFutures = new ArrayList<ChannelFuture>();
 	}
 
 	@Override
@@ -64,21 +66,23 @@ public class ConnectionFactoryImpl implements ConnectionFactory {
 	@Override
 	public void createBotConnectionServer(@NonNull BotContext botContext) {
 		BotConnection botConn = new BotConnectionServerImpl();
-		botContext.addServerConnectionStage(botConn);
+		botContext.addServerConnection(botConn);
 		botConn.init(serverEventGroup, botContext, botContext.getServerConnections().size() - 1);
 	}
 
 	@Override
 	public void createBotConnectionClient(@NonNull BotContext botContext) {
 		BotConnection botConn = new BotConnectionClientImpl();
-		botContext.addClientConnectionStage(botConn);
+		botContext.addClientConnection(botConn);
 		botConn.init(clientEventGroup, botContext, botContext.getClientConnections().size() - 1);
 	}
 	@Override
 	public void dispose() {
 		try {
-			for (ChannelFuture ch: bossFutures)
+			for (ChannelFuture ch: bossFutures) {
+				ch.channel().close();
 				ch.channel().closeFuture().sync();
+			}
 
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block

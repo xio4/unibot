@@ -27,8 +27,10 @@ public interface BotEnvironment extends Settings {
 	public void setNextBotConnectionInterval(int interval);
 	public int getNextBotConnectionInterval();
 
+	@Deprecated
 	@Param(name="client.proxy", values = "false")
 	public void setProxy(boolean bProxy);
+	@Deprecated
 	public boolean getProxy();
 	/**
 	 * @return true if raw data is set in script and false else

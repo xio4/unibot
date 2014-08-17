@@ -33,18 +33,19 @@ public class ClientConnectionHandlerImpl extends
 		this.proxyBots = proxyBots;
 		this.stage = stage;
 		this.botContext = null;
-
 	}
 
 	@Override
 	public void channelRead(ChannelHandlerContext ctx, Object msg)
 			throws Exception {
+//		System.out.println("Packet from client has been read pck.len="+((Packet)msg).getPosition());
 		if (readBufPool != null) {
 			final Packet pck = (Packet)msg;
 			pck.setConnStage(stage);
 			pck.setTime(System.currentTimeMillis());
 			pck.setType(Packet.RAW_PCK_FROM_CLIENT);
-			PacketPool.free(readBufPool.put(pck));
+//			PacketPool.free(readBufPool.put(pck));
+			readBufPool.put(pck);
 		}
 		// See source code this class
 		//ReferenceCountUtil.release(msg); 
@@ -57,11 +58,12 @@ public class ClientConnectionHandlerImpl extends
 		for (BotContext bot: proxyBots) {
 			if (bot.setStatus(BotContext.CONN_STATUS)) {
 				this.botContext = bot;
+
 				break;
 			}
 		}
 		if (botContext == null) {
-			throw new RuntimeException("Cannot find proxy bot to connect");
+			throw new RuntimeException("Can't find proxy bot to connect");
 		}
 		botContext.getClientConnections().get(stage).setHandlerContext(ctx);
         this.readBufPool = botContext.getReadBuffer();
@@ -95,6 +97,8 @@ public class ClientConnectionHandlerImpl extends
 			if (endTime - startTime > ScriptPlugin.MAX_WORK_TIME)
 				logger.error("Script method onDisconnected with name "+script.getName() + " works " + (endTime - startTime) + "ms");
 		}
+		if (botContext.getServerConnections().get(stage).getDisconnectionPermit())
+			botContext.getServerConnections().get(stage).disconnect();
 	}
 
 	@Override

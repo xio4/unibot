@@ -341,4 +341,29 @@ public class PacketImpl implements Packet {
 	public void setConnStage(int stage) {
 		this.stage = stage;
 	}
+	
+	@Override
+	public boolean equals(Object obj)
+	{
+		if (obj == null)
+			return false;
+		if (!(obj instanceof Packet))
+			return false;
+		final Packet pck = (Packet)obj;
+		if (this.getPosition() != pck.getPosition()) 
+			return false;
+		int size = offset;
+		byte[] objArr = pck.array();
+		for (int i=0; i < size; ++i) {
+			if (this.array[i] != objArr[i]) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	@Override
+	public byte[] array() {
+		return this.array;
+	}
 }

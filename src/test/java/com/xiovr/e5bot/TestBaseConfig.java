@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration;
 @ComponentScan(basePackages={"com.xiovr.e5bot.data",
 						     "com.xiovr.e5bot.utils",
 							 "com.xiovr.e5bot.bot",
+							 "com.xiovr.e5bot.bot.packet",
 								})
 public class TestBaseConfig {
 

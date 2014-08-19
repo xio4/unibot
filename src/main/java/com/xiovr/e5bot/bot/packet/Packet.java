@@ -26,6 +26,8 @@ public interface Packet extends Poolable {
 	public int getConnStage();
 	public void setConnStage(int stage);
 
+	public byte[] array();
+	
 	public void clear();
 
 	/**

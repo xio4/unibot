@@ -12,6 +12,7 @@ import com.xiovr.e5bot.bot.network.ConnectionFactory;
 import com.xiovr.e5bot.plugin.CryptorPlugin;
 import com.xiovr.e5bot.plugin.PluginLoader;
 import com.xiovr.e5bot.plugin.ScriptPlugin;
+import com.xiovr.e5bot.utils.exceptions.BotDoNotExistsException;
 import com.xiovr.e5bot.bot.packet.Packet;
 import com.xiovr.e5bot.bot.packet.RingBufferPool;
 
@@ -27,17 +28,17 @@ public interface BotManager {
 	public void setBotLogger(@NonNull BotLogger botLogger);
 	public BotLogger getBotLogger();
 	public void clear();
-	public BotContext createBot(int botType, @NonNull String configName);
-	public void destroyBot(int botId, int botType);
-	public BotContext getBot(int botId, int botType);
+	public BotContext createBot(int botType, @NonNull String configName) throws BotDoNotExistsException;
+	public void destroyBot(int botId, int botType) throws BotDoNotExistsException;
+	public BotContext getBot(int botId, int botType) throws BotDoNotExistsException;
 	public void loadScript(int botId, int botType, @NonNull String scriptPath) throws Exception;
-	public void removeScript(int botId, int botType);
+	public void removeScript(int botId, int botType) throws BotDoNotExistsException;
 	@Deprecated
 	public void loadBots();
 	public List<BotContext> getBots(int botType);
-	public int botsCount(int botType);
-	public void connect(int botId, int botType);
-	public void disconnect(int botId, int botType);
+	public int botsCount(int botType) throws BotDoNotExistsException;
+	public void connect(int botId, int botType) throws BotDoNotExistsException;
+	public void disconnect(int botId, int botType) throws BotDoNotExistsException;
 	public BotMessageTransferRunnable getBotMessageTransfer();
 	public void setBotMessageTransfer(@NonNull BotMessageTransferRunnable bmtt);
 	public void setPluginLoader(@NonNull PluginLoader pluginLoader);

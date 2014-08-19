@@ -16,10 +16,13 @@ import com.xiovr.e5bot.bot.network.ConnectionFactory;
 import com.xiovr.e5bot.bot.packet.Packet;
 import com.xiovr.e5bot.bot.packet.RingBufferPool;
 import com.xiovr.e5bot.bot.packet.impl.RingBufferPacketPoolImpl;
+import com.xiovr.e5bot.plugin.CryptorPlugin;
 import com.xiovr.e5bot.plugin.PluginLoader;
 import com.xiovr.e5bot.plugin.ScriptPlugin;
 import com.xiovr.e5bot.plugin.ScriptPluginRunnable;
 import com.xiovr.e5bot.plugin.impl.ScriptPluginRunnableImpl;
+import com.xiovr.e5bot.utils.exceptions.BotDoNotExistsException;
+import com.xiovr.e5bot.utils.exceptions.BotScriptNotFoundException;
 
 import java.net.InetSocketAddress;
 import java.util.List;
@@ -92,19 +95,58 @@ public class BotManagerImpl implements BotManager {
 		return this.pluginLoader;
 	}
 
+	private List<BotContext> getBotsListByType(int botType)
+			throws BotDoNotExistsException {
+		BotContext botContext = null;
+		List<BotContext> bots = null;
+		switch (botType) {
+		case BotSettings.INGAME_TYPE:
+			bots = ingameBots;
+			break;
+		case BotSettings.OUTGAME_TYPE:
+			bots = outgameBots;
+			break;
+		case BotSettings.PROXY_TYPE:
+			bots = proxyBots;
+			break;
+		default:
+			bots = null;
+		}
+		if (bots == null)
+			throw new BotDoNotExistsException(-1, botType);
+		return bots;
+	}
+	
+	private BotContext getBotContextByIdAndType(int botId, int botType) throws BotDoNotExistsException
+	{
+		BotContext botContext = null;
+        List<BotContext> bots = null;
+		bots = getBotsListByType(botType);	
+        if (bots.size() <= botId)
+			throw new BotDoNotExistsException(botId, botType);
+		botContext = bots.get(botId);	
+		if (botContext == null)
+			throw new BotDoNotExistsException(botId, botType);
+		
+		return botContext;
+	}
+
 	@SuppressWarnings("null")
 	@Override
-	public @NonNull BotContext createBot(int botType, @NonNull String configName) {
+	public @NonNull BotContext createBot(int botType, @NonNull String configName)
+			throws BotDoNotExistsException {
 		BotContext botContext = new BotContextImpl();
 		botContext.setBotEnvironment(botEnvironment);
 		BotSettings botSettings = new BotSettingsImpl();
 		botGameConfig.loadSettings(botSettings, configName);
 		botContext.setBotSettings(botSettings);
-		botContext.setCryptorPlugin(pluginLoader.createCryptorPlugin());
+		final CryptorPlugin cp = pluginLoader.createCryptorPlugin();
+		cp.init(botContext);
+		botContext.setCryptorPlugin(cp);
 		RingBufferPool<Packet> readBuf = new RingBufferPacketPoolImpl();
 		botContext.setReadBuffer(readBuf);
 
-		if (botType == BotSettings.INGAME_TYPE) {
+		if (botType == BotSettings.PROXY_TYPE) {
 			for (int i = 0; i < botEnvironment.getClientAddresses().size(); ++i) {
 				connectionFactory.createBotConnectionClient(botContext);
 			}
@@ -122,21 +164,11 @@ public class BotManagerImpl implements BotManager {
 		spf.setScriptPluginRunnable(spr);
 		spf.setScriptPluginThread(spt);
 
-		switch (botType) {
-		case BotSettings.INGAME_TYPE:
-			ingameBots.add(botContext);
-			botContext.setBotId(ingameBots.size() - 1);
-			break;
-		case BotSettings.OUTGAME_TYPE:
-			outgameBots.add(botContext);
-			botContext.setBotId(outgameBots.size() - 1);
-			break;
-		case BotSettings.PROXY_TYPE:
-			proxyBots.add(botContext);
-			botContext.setBotId(proxyBots.size() - 1);
-			break;
-		default:
-		}
+		botContext.setScriptPluginFacade(spf);
+		List<BotContext> bots = null;
+		bots = getBotsListByType(botType);
+		bots.add(botContext);
+		botContext.setBotId(bots.size() - 1);
 
 		// Start bot thread
 		spt.start();
@@ -144,91 +176,71 @@ public class BotManagerImpl implements BotManager {
 	}
 
 	@Override
-	public void destroyBot(int botId, int botType) {
+	public void destroyBot(int botId, int botType)
+			throws BotDoNotExistsException {
 		BotContext botContext = null;
-		;
-		switch (botType) {
-		case BotSettings.INGAME_TYPE:
-			botContext = ingameBots.get(botId);
-			ingameBots.remove(botId);
-			break;
-		case BotSettings.OUTGAME_TYPE:
-			botContext = outgameBots.get(botId);
-			outgameBots.remove(botId);
-			break;
-		case BotSettings.PROXY_TYPE:
-			botContext = proxyBots.get(botId);
-			proxyBots.remove(botId);
-			break;
-		default:
-		}
+		List<BotContext> bots = null;
+		bots = getBotsListByType(botType);
+		if (bots.size() <= botId)
+			throw new BotDoNotExistsException(botId, botType);
+		botContext = bots.get(botId);
 		if (botContext == null)
-			return;
-		ScriptPlugin script = botContext.getScript();
+			throw new BotDoNotExistsException(botId, botType);
+		bots.remove(botId);
+		final ScriptPlugin script = botContext.getScript();
 		if (script != null)
-			botContext.getScript().dispose();
+			script.dispose();
 		botContext.getScriptPluginFacade().getScriptPluginThread().interrupt();
 		// FIXME Need remove bot config!
 	}
 
 	@Override
-	public BotContext getBot(int botId, int botType) {
-		switch (botType) {
-		case BotSettings.INGAME_TYPE:
-			return ingameBots.get(botId);
-		case BotSettings.OUTGAME_TYPE:
-			return outgameBots.get(botId);
-		case BotSettings.PROXY_TYPE:
-			return proxyBots.get(botId);
-		default:
-			return null;
-		}
+	public BotContext getBot(int botId, int botType)
+			throws BotDoNotExistsException {
+//		List<BotContext> bots = null;
+//		bots = getBotsListByType(botType);
+//		if (bots.size() <= botId)
+//			throw new BotDoNotExistsException(botId, botType);
+//		return bots.get(botId);
+		
+		return getBotContextByIdAndType(botId, botType);
 	}
 
 	@Override
 	public void loadScript(int botId, int botType, @NonNull String scriptPath)
-			throws Exception {
+			throws BotDoNotExistsException, BotScriptNotFoundException {
 		ScriptPlugin script = pluginLoader.createScriptPlugin(scriptPath);
+
 		BotContext botContext = null;
-		switch (botType) {
-		case BotSettings.INGAME_TYPE:
-			botContext = ingameBots.get(botId);
-
-			break;
-		case BotSettings.OUTGAME_TYPE:
-
-			botContext = outgameBots.get(botId);
-			break;
-		case BotSettings.PROXY_TYPE:
-			botContext = proxyBots.get(botId);
-			break;
-		default:
-		}
-		if (botContext == null)
-			throw new RuntimeException("Can't find botContext by botId="
-					+ botId);
+//		List<BotContext> bots = null;
+//		bots = getBotsListByType(botType);
+//		if (bots.size() <= botId)
+//			throw new BotDoNotExistsException(botId, botType);
+//		botContext = bots.get(botId);
+//		if (botContext == null)
+//			throw new BotDoNotExistsException(botId, botType);
+		botContext = getBotContextByIdAndType(botId, botType);
 		botContext.setScript(script);
+		botContext.getBotSettings().setScriptPath(scriptPath);
 	}
 
 	@Override
-	public void removeScript(int botId, int botType) {
+	public void removeScript(int botId, int botType)
+			throws BotDoNotExistsException {
+
+//		List<BotContext> bots = null;
+
 		BotContext botContext = null;
-		switch (botType) {
-		case BotSettings.INGAME_TYPE:
-			botContext = ingameBots.get(botId);
-
-			break;
-		case BotSettings.OUTGAME_TYPE:
-
-			botContext = outgameBots.get(botId);
-			break;
-		case BotSettings.PROXY_TYPE:
-			botContext = proxyBots.get(botId);
-			break;
-		default:
-		}
-		if (botContext == null)
-			return;
+//		bots = getBotsListByType(botType);
+//		if (bots.size() <= botId)
+//			throw new BotDoNotExistsException(botId, botType);
+//		botContext = bots.get(botId);
+//		if (botContext == null)
+//			throw new BotDoNotExistsException(botId, botType);
+		botContext = getBotContextByIdAndType(botId, botType);
+		final ScriptPlugin script = botContext.getScript();
+		if (script != null)
+			script.dispose();
 		botContext.setScript(null);
 		botContext.getBotSettings().setScriptPath("");
 	}
@@ -248,7 +260,7 @@ public class BotManagerImpl implements BotManager {
 	}
 
 	@Override
-	public int botsCount(int botType) {
+	public int botsCount(int botType) throws BotDoNotExistsException {
 		switch (botType) {
 		case BotSettings.INGAME_TYPE:
 			return ingameBots.size();
@@ -257,21 +269,30 @@ public class BotManagerImpl implements BotManager {
 		case BotSettings.PROXY_TYPE:
 			return proxyBots.size();
 		default:
-			throw new RuntimeException("botType " + botType
-					+ " is not recognized");
+			throw new BotDoNotExistsException(-1, botType);
 		}
 	}
 
 	@SuppressWarnings("null")
 	@Override
-	public void connect(int botId, int botType) {
+	public void connect(int botId, int botType) throws BotDoNotExistsException {
+
+//		List<BotContext> bots = null;
+
+		BotContext botContext = null;
+//		bots = getBotsListByType(botType);
+//		if (bots.size() <= botId)
+//			throw new BotDoNotExistsException(botId, botType);
+//		botContext = bots.get(botId);
+//		if (botContext == null)
+//			throw new BotDoNotExistsException(botId, botType);
+		botContext = getBotContextByIdAndType(botId, botType);
 
 		switch (botType) {
 		case BotSettings.INGAME_TYPE:
 			// It works only outgame bot!
 			break;
 		case BotSettings.OUTGAME_TYPE:
-			BotContext botContext = ingameBots.get(botId);
 			InetSocketAddress address = botEnvironment.getServerAddresses()
 					.get(botContext.getConnectStage());
 			botContext.getServerConnections().get(botContext.getConnectStage())
@@ -285,26 +306,22 @@ public class BotManagerImpl implements BotManager {
 	}
 
 	@Override
-	public void disconnect(int botId, int botType) {
-		List<BotContext> bots = null;
-		switch (botType) {
-		case BotSettings.INGAME_TYPE:
-			bots = ingameBots;
-			break;
-		case BotSettings.OUTGAME_TYPE:
-			bots = outgameBots;
-			break;
-		case BotSettings.PROXY_TYPE:
-			bots = proxyBots;
-			break;
-		default:
-			return;
-		}
+	public void disconnect(int botId, int botType) throws BotDoNotExistsException {
+//		List<BotContext> bots = null;
+		BotContext botContext = null;
+//		bots = getBotsListByType(botType);
+//		if (bots.size() <= botId)
+//			throw new BotDoNotExistsException(botId, botType);
+//		botContext = bots.get(botId);
+//		if (botContext == null)
+//			throw new BotDoNotExistsException(botId, botType);
+
+		botContext = getBotContextByIdAndType(botId, botType);
 		for (int i = 0; i < botEnvironment.getServerAddresses().size(); ++i) {
-			bots.get(botId).getServerConnections().get(i).disconnect();
+			botContext.getServerConnections().get(i).disconnect();
 		}
 		for (int i = 0; i < botEnvironment.getClientAddresses().size(); ++i) {
-			bots.get(botId).getClientConnections().get(i).disconnect();
+			botContext.getClientConnections().get(i).disconnect();
 		}
 	}
 

@@ -1,14 +1,16 @@
 package com.xiovr.e5bot.data.model;
 
 import org.slf4j.Logger;
-
 import org.slf4j.LoggerFactory;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
+import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import com.xiovr.e5bot.TestBase;
+
+@TransactionConfiguration(transactionManager="transactionManager")
 public class ModelTest extends TestBase {
 	private static final Logger logger = LoggerFactory.getLogger(ModelTest.class);
 	@Test(dataProvider="getAbstractModelExtends", dataProviderClass=ModelTestData.class)

@@ -17,6 +17,8 @@ import com.xiovr.e5bot.data.model.NpcName;
 import com.xiovr.e5bot.data.model.SkillName;
 import com.xiovr.e5bot.data.model.SysString;
 import com.xiovr.e5bot.data.model.SystemMsg;
+
+@TransactionConfiguration(transactionManager="transactionManager")
 public class DaoTest extends TestBase {
 
 	private static final String CHECK_TEXT = "Check new value";

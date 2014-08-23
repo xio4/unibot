@@ -17,7 +17,6 @@ import com.xiovr.e5bot.config.JdbcConfigTest;
 classes={TestBaseConfig.class, JdbcConfigTest.class, HibernateConfig.class,
 	BotConfig.class})
 //@ActiveProfiles("test")
-@TransactionConfiguration(transactionManager="transactionManager")
 public abstract class TestBase extends   AbstractTransactionalTestNGSpringContextTests {
 //AbstractTestNGSpringContextTests {
 }

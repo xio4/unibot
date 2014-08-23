@@ -7,6 +7,7 @@ import java.util.TimerTask;
 
 import com.xiovr.e5bot.bot.BotAutoconnectRunnable;
 import com.xiovr.e5bot.bot.BotContext;
+import com.xiovr.e5bot.bot.BotEnvironment;
 import com.xiovr.e5bot.bot.BotManager;
 import com.xiovr.e5bot.bot.BotSettings;
 import com.xiovr.e5bot.plugin.ScriptPlugin;
@@ -18,14 +19,20 @@ public class BotAutoconnectRunnableImpl implements BotAutoconnectRunnable {
 	private BotManager botManager;
 	private Timer timer;
 	private TimerTask timerTask;
+	private BotEnvironment botEnvironment;
 
 	public BotAutoconnectRunnableImpl(BotManager botManager) {
 		this.botManager = botManager;
+
+		this.botEnvironment = botManager.getBotEnvironment();
 		curTime = new ArrayList<Integer>(BotManager.BOT_MAX_COUNT);
-		for (int i = 0; i < curTime.size(); ++i) {
-			curTime.set(i, 0);
+
+		for (int i = 0; i < BotManager.BOT_MAX_COUNT; ++i ) {
+			curTime.add(0);
 		}
+
 		this.botContexts = botManager.getBots(BotSettings.OUTGAME_TYPE);
+
 		this.timerTask = new TimerTask() {
 			private int skipTime = 0;
 
@@ -35,7 +42,7 @@ public class BotAutoconnectRunnableImpl implements BotAutoconnectRunnable {
 
 				List<BotContext> botContexts = BotAutoconnectRunnableImpl.this.botContexts;
 				BotManager botManager = BotAutoconnectRunnableImpl.this.botManager;
-				if (skipTime < botManager.getBotEnvironment()
+				if (skipTime < botEnvironment
 						.getNextBotConnectionInterval())
 					return;
 				for (int i = 0; i < botContexts.size(); ++i) {
@@ -50,18 +57,17 @@ public class BotAutoconnectRunnableImpl implements BotAutoconnectRunnable {
 							curTime.set(i, tm);
 						else {
 							curTime.set(i, 0);
+							skipTime = 0;
 							try {
 								botManager.connect(botContext.getBotId(),
 										BotSettings.OUTGAME_TYPE);
 							} catch (Exception e) {
-
+								e.printStackTrace();
 							}
 						}
-
 					}
 				}
 			}
-
 		};
 		timer = new Timer();
 	}
@@ -69,13 +75,11 @@ public class BotAutoconnectRunnableImpl implements BotAutoconnectRunnable {
 	@Override
 	public void start() {
 		timer.scheduleAtFixedRate(timerTask, 1000, 1000);
-
 	}
 
 	@Override
 	public void stop() {
 		timer.cancel();
-
 	}
 
 }

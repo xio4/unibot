@@ -197,12 +197,6 @@ public class BotManagerImpl implements BotManager {
 	@Override
 	public BotContext getBot(int botId, int botType)
 			throws BotDoNotExistsException {
-//		List<BotContext> bots = null;
-//		bots = getBotsListByType(botType);
-//		if (bots.size() <= botId)
-//			throw new BotDoNotExistsException(botId, botType);
-//		return bots.get(botId);
-		
 		return getBotContextByIdAndType(botId, botType);
 	}
 
@@ -212,13 +206,6 @@ public class BotManagerImpl implements BotManager {
 		ScriptPlugin script = pluginLoader.createScriptPlugin(scriptPath);
 
 		BotContext botContext = null;
-//		List<BotContext> bots = null;
-//		bots = getBotsListByType(botType);
-//		if (bots.size() <= botId)
-//			throw new BotDoNotExistsException(botId, botType);
-//		botContext = bots.get(botId);
-//		if (botContext == null)
-//			throw new BotDoNotExistsException(botId, botType);
 		botContext = getBotContextByIdAndType(botId, botType);
 		botContext.setScript(script);
 		botContext.getBotSettings().setScriptPath(scriptPath);
@@ -228,15 +215,7 @@ public class BotManagerImpl implements BotManager {
 	public void removeScript(int botId, int botType)
 			throws BotDoNotExistsException {
 
-//		List<BotContext> bots = null;
-
 		BotContext botContext = null;
-//		bots = getBotsListByType(botType);
-//		if (bots.size() <= botId)
-//			throw new BotDoNotExistsException(botId, botType);
-//		botContext = bots.get(botId);
-//		if (botContext == null)
-//			throw new BotDoNotExistsException(botId, botType);
 		botContext = getBotContextByIdAndType(botId, botType);
 		final ScriptPlugin script = botContext.getScript();
 		if (script != null)
@@ -280,12 +259,6 @@ public class BotManagerImpl implements BotManager {
 //		List<BotContext> bots = null;
 
 		BotContext botContext = null;
-//		bots = getBotsListByType(botType);
-//		if (bots.size() <= botId)
-//			throw new BotDoNotExistsException(botId, botType);
-//		botContext = bots.get(botId);
-//		if (botContext == null)
-//			throw new BotDoNotExistsException(botId, botType);
 		botContext = getBotContextByIdAndType(botId, botType);
 
 		switch (botType) {
@@ -307,15 +280,7 @@ public class BotManagerImpl implements BotManager {
 
 	@Override
 	public void disconnect(int botId, int botType) throws BotDoNotExistsException {
-//		List<BotContext> bots = null;
 		BotContext botContext = null;
-//		bots = getBotsListByType(botType);
-//		if (bots.size() <= botId)
-//			throw new BotDoNotExistsException(botId, botType);
-//		botContext = bots.get(botId);
-//		if (botContext == null)
-//			throw new BotDoNotExistsException(botId, botType);
-
 		botContext = getBotContextByIdAndType(botId, botType);
 		for (int i = 0; i < botEnvironment.getServerAddresses().size(); ++i) {
 			botContext.getServerConnections().get(i).disconnect();

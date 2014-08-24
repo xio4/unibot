@@ -46,7 +46,7 @@ public class BotAutoconnectTest extends TestBase {
 						.setStatus(BotContext.CONN_STATUS);
 					return null;
 				}
-			}).times(2, Integer.MAX_VALUE);
+			}).times(2);
 		} catch (BotDoNotExistsException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

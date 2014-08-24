@@ -251,7 +251,6 @@ public class ClientListenerTest extends TestBase {
 			echoServerThread.interrupt();
 			echoServerThread.join();
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 

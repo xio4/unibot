@@ -35,13 +35,19 @@ public class BotConnectionTest extends TestBase {
 
 		NioEventLoopGroup workerGroup = new NioEventLoopGroup();
 		try {
-			logger.info("Start echo server");
-			System.out.println("Start echo server");
+			logger.info("Start echo server for BotConnection test");
+			System.out.println("Start echo server for BotConnection test");
 			InetSocketAddress address = new InetSocketAddress("localhost", 8888);
 			EchoServer echoServer = new EchoServer(address);
-			Thread echoServerThread = new Thread(echoServer);
-			echoServerThread.start();
-			while (!echoServerThread.isAlive()) {
+			echoServer.startServer();
+
+			try {
+				while (!echoServer.getStarted()) {
+					Thread.sleep(100);
+				}
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 			logger.info("Echo server is started");
 			System.out.println("Echo server is started");
@@ -72,7 +78,7 @@ public class BotConnectionTest extends TestBase {
 				botConnection.flush();
 				Thread.sleep(100);
 				Assert.assertEquals(buffer.count(), 1);
-//				Packet pck2 = buffer.poll(PacketPool.obtain());
+				// Packet pck2 = buffer.poll(PacketPool.obtain());
 				Packet pck2 = buffer.poll();
 
 				pck = PacketPool.obtain();
@@ -100,8 +106,7 @@ public class BotConnectionTest extends TestBase {
 				botConnection.disconnect();
 				Thread.sleep(100);
 			}
-			echoServerThread.interrupt();
-			echoServerThread.join();
+			echoServer.close();
 			// } catch (Exception e) {
 			// e.printStackTrace();
 		} finally {

@@ -38,7 +38,7 @@ public class ServerConnectionHandlerImpl extends
 		pck.setTime(System.currentTimeMillis());
 		pck.setType(Packet.RAW_PCK_FROM_SERVER);
 //		PacketPool.free(readBufPool.put(pck));
-//		System.out.println("Packet readed");
+//		System.out.println("Packet read");
 		readBufPool.put(pck);
 		// See source code this class
 		//ReferenceCountUtil.release(msg); 

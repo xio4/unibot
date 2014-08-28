@@ -39,26 +39,35 @@ import com.xiovr.unibot.plugin.ScriptPluginRunnable;
 import com.xiovr.unibot.plugin.impl.PluginLoaderImpl;
 import com.xiovr.unibot.plugin.impl.ScriptPluginRunnableImpl;
 import com.xiovr.unibot.utils.EchoServer;
+import com.xiovr.unibot.utils._EchoServer;
 
 public class ClientListenerTest extends TestBase {
 
-	private Thread echoServerThread;
+	private EchoServer echoServer;
 	private BotContext clientEmulatorContext;
 	private NioEventLoopGroup clientEmulWorkerGroup;
 	private List<BotContext> proxyBots;
 	private ConnectionFactory connectFactory;
 	private BotEnvironment botEnvironment;
+	private static final int ECHO_SERVER_PORT = 8889;
 
 	@BeforeMethod
 	public void before() {
 		// Init echo server
-		logger.info("Start echo server");
-		System.out.println("Start echo server");
-		InetSocketAddress address = new InetSocketAddress("localhost", 8889);
-		EchoServer echoServer = new EchoServer(address);
-		echoServerThread = new Thread(echoServer);
-		echoServerThread.start();
-		while (!echoServerThread.isAlive()) {
+		logger.info("Start echo server for ClientListenerTest");
+		System.out.println("Start echo server for ClientListenerTest");
+		InetSocketAddress address = new InetSocketAddress("localhost",
+				ECHO_SERVER_PORT);
+		echoServer = new EchoServer(address);
+		echoServer.startServer();
+
+		try {
+			while (!echoServer.getStarted()) {
+				Thread.sleep(100);
+			}
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		logger.info("Echo server is started");
 		System.out.println("Echo server is started");
@@ -151,7 +160,8 @@ public class ClientListenerTest extends TestBase {
 		botEnv.setRawData(true);
 		botEnv.setUpdateInterval(100);
 		botEnv.setNextBotConnectionInterval(10);
-		InetSocketAddress isaS = new InetSocketAddress("localhost", 8889);
+		InetSocketAddress isaS = new InetSocketAddress("localhost",
+				ECHO_SERVER_PORT);
 		List<InetSocketAddress> lisaS = new ArrayList<InetSocketAddress>();
 		lisaS.add(isaS);
 		botEnv.setServerAddresses(lisaS);
@@ -205,8 +215,8 @@ public class ClientListenerTest extends TestBase {
 				pck.putHeader();
 				botConnection.write(pck);
 				botConnection.flush();
-//				Thread.sleep(500);
-//				Assert.assertEquals(buffer.count(), 1);
+				// Thread.sleep(500);
+				// Assert.assertEquals(buffer.count(), 1);
 				// Packet pck2 = buffer.poll(PacketPool.obtain());
 				Packet pck2 = buffer.poll();
 
@@ -250,8 +260,7 @@ public class ClientListenerTest extends TestBase {
 				bc.getScriptPluginFacade().getScriptPluginThread().join();
 			}
 			connectFactory.dispose();
-			echoServerThread.interrupt();
-			echoServerThread.join();
+			echoServer.close();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}

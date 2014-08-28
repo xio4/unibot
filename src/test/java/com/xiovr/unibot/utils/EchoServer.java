@@ -1,195 +1,104 @@
+/*
+ * Copyright 2012 The Netty Project
+ *
+ * The Netty Project licenses this file to you under the Apache License,
+ * version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License. You may obtain a copy of the License at:
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations
+ * under the License.
+ */
 package com.xiovr.unibot.utils;
 
-/*
- * Java NIO echo server example.
- * http://ishbits.googlecode.com/svn-history/r29/trunk/java.nio.EchoServer/EchoServer.java
- */
+import java.net.InetSocketAddress;
 
-import java.io.*;
-import java.nio.*;
-import java.nio.channels.*;
-import java.nio.channels.spi.*;
-import java.net.*;
-import java.util.*;
+import io.netty.bootstrap.ServerBootstrap;
+import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelFutureListener;
+import io.netty.channel.ChannelInitializer;
+import io.netty.channel.ChannelOption;
+import io.netty.channel.ChannelPipeline;
+import io.netty.channel.EventLoopGroup;
+import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.socket.SocketChannel;
+import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.handler.logging.LogLevel;
+import io.netty.handler.logging.LoggingHandler;
+import io.netty.handler.ssl.SslContext;
+import io.netty.handler.ssl.util.SelfSignedCertificate;
 
 /**
- * The client object. This is currently only used to queue the data waiting to
- * be written to the client.
+ * Echoes back any received data from a client.
  */
-class EchoClient {
-	private LinkedList<ByteBuffer> outq;
+public final class EchoServer {
 
-	EchoClient() {
-		outq = new LinkedList<ByteBuffer>();
+	private InetSocketAddress addr;
+	public EchoServer(InetSocketAddress addr) {
+		this.addr = addr;
 	}
+	private ChannelFuture cf;
+	private EventLoopGroup bossGroup ;
+	private EventLoopGroup workerGroup ;
+	private volatile boolean bStarted;
+    public void startServer() {
 
-	// Return the output queue.
-	public LinkedList<ByteBuffer> getOutputQueue() {
-		return outq;
-	}
+    	if (bStarted) {
+    		return;
+    	}
+        // Configure the server.
+        bossGroup = new NioEventLoopGroup(1);
+        workerGroup = new NioEventLoopGroup();
+        try {
+            ServerBootstrap b = new ServerBootstrap();
+            b.group(bossGroup, workerGroup)
+             .channel(NioServerSocketChannel.class)
+             .option(ChannelOption.SO_BACKLOG, 100)
+             .handler(new LoggingHandler(LogLevel.INFO))
+             .childHandler(new ChannelInitializer<SocketChannel>() {
+                 @Override
+                 public void initChannel(SocketChannel ch) throws Exception {
+                     ChannelPipeline p = ch.pipeline();
+                     p.addLast(new EchoServerHandler());
+                 }
+             });
 
-	// Enqueue a ByteBuffer on the output queue.
-	public void enqueue(ByteBuffer bb) {
-		outq.addFirst(bb);
-	}
-}
-
-public class EchoServer implements Runnable {
-
-	private InetSocketAddress address;
-	public EchoServer(InetSocketAddress address) {
-		this.address = address;
-	}
-
-	private Selector selector;
-
-	/**
-	 * Accept a new client and set it up for reading.
-	 */
-	private void doAccept(SelectionKey sk) {
-		ServerSocketChannel server = (ServerSocketChannel) sk.channel();
-		SocketChannel clientChannel;
-		try {
-			clientChannel = server.accept();
-			clientChannel.configureBlocking(false);
-
-			// Register this channel for reading.
-			SelectionKey clientKey = clientChannel.register(selector,
-					SelectionKey.OP_READ);
-
-			// Allocate an EchoClient instance and attach it to this selection
-			// key.
-			EchoClient echoClient = new EchoClient();
-			clientKey.attach(echoClient);
-
-			InetAddress clientAddress = clientChannel.socket().getInetAddress();
-			System.out.println("Accepted connection from "
-					+ clientAddress.getHostAddress() + ".");
-		} catch (Exception e) {
-			System.out.println("Failed to accept new client.");
-			e.printStackTrace();
-		}
-
-	}
-
-	/**
-	 * Read from a client. Enqueue the data on the clients output queue and set
-	 * the selector to notify on OP_WRITE.
-	 */
-	private void doRead(SelectionKey sk) {
-		SocketChannel channel = (SocketChannel) sk.channel();
-		ByteBuffer bb = ByteBuffer.allocate(8192);
-		int len;
-
-		try {
-			len = channel.read(bb);
-			if (len < 0) {
-				disconnect(sk);
-				return;
-			}
-		} catch (Exception e) {
-			System.out.println("Failed to read from client.");
-			e.printStackTrace();
-			return;
-		}
-
-		// Flip the buffer.
-		bb.flip();
-
-		EchoClient echoClient = (EchoClient) sk.attachment();
-		echoClient.enqueue(bb);
-
-		// We've enqueued data to be written to the client, we must
-		// not set interest in OP_WRITE.
-		sk.interestOps(SelectionKey.OP_READ | SelectionKey.OP_WRITE);
-	}
-
-	/**
-	 * Called when a SelectionKey is ready for writing.
-	 */
-	private void doWrite(SelectionKey sk) {
-		SocketChannel channel = (SocketChannel) sk.channel();
-		EchoClient echoClient = (EchoClient) sk.attachment();
-		LinkedList<ByteBuffer> outq = echoClient.getOutputQueue();
-
-		ByteBuffer bb = outq.getLast();
-		try {
-			int len = channel.write(bb);
-			if (len == -1) {
-				disconnect(sk);
-				return;
-			}
-
-			if (bb.remaining() == 0) {
-				// The buffer was completely written, remove it.
-				outq.removeLast();
-			}
-		} catch (Exception e) {
-			System.out.println("Failed to write to client.");
-			e.printStackTrace();
-		}
-
-		// If there is no more data to be written, remove interest in
-		// OP_WRITE.
-		if (outq.size() == 0) {
-			sk.interestOps(SelectionKey.OP_READ);
-		}
-	}
-
-	private void disconnect(SelectionKey sk) {
-		SocketChannel channel = (SocketChannel) sk.channel();
-
-		InetAddress clientAddress = channel.socket().getInetAddress();
-		System.out.println(clientAddress.getHostAddress() + " disconnected.");
-
-		try {
-			channel.close();
-		} catch (Exception e) {
-			System.out.println("Failed to close client socket channel.");
-			e.printStackTrace();
-		}
-	}
-
-	@Override
-	public void run() {
-		Thread curThread = Thread.currentThread();
-		try {
-			selector = SelectorProvider.provider().openSelector();
-
-			// Create non-blocking server socket.
-			ServerSocketChannel ssc = ServerSocketChannel.open();
-			ssc.configureBlocking(false);
-
-			// Bind the server socket to localhost.
-			ssc.socket().bind(address);
-
-			// Register the socket for select events.
-			SelectionKey acceptKey = ssc.register(selector,
-					SelectionKey.OP_ACCEPT);
-
-			while (!curThread.isInterrupted()){
-				selector.select();
-				Set readyKeys = selector.selectedKeys();
-				Iterator i = readyKeys.iterator();
-
-				while (i.hasNext()) {
-					SelectionKey sk = (SelectionKey) i.next();
-					i.remove();
-
-					if (sk.isAcceptable()) {
-						doAccept(sk);
-					}
-					if (sk.isValid() && sk.isReadable()) {
-						doRead(sk);
-					}
-					if (sk.isValid() && sk.isWritable()) {
-						doWrite(sk);
-					}
+            // Start the server.
+            cf = b.bind(addr).addListener(new ChannelFutureListener() {
+				@Override
+				public void operationComplete(ChannelFuture future)
+						throws Exception {
+//					System.out.println("Echo server started");
+					EchoServer.this.bStarted = true;
 				}
-			}
-		} catch (Exception e) {
+            });
+        }
+        catch (Exception e) {
+        	e.printStackTrace();
+        }
 
-		}
-
-	}
+    }
+    public void close() {
+             // Wait until the server socket is closed.
+    	assert cf != null;
+            try {
+				cf.channel().close().sync();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}   	
+        finally {
+            // Shut down all event loops to terminate all threads.
+            bossGroup.shutdownGracefully();
+            workerGroup.shutdownGracefully();
+        }
+            bStarted = false;
+    }
+    public boolean getStarted() {
+    	return bStarted;
+    }
 }

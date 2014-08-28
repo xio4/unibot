@@ -58,7 +58,7 @@ public interface BotContext {
 	public void setWriteServerBuffer(@NonNull RingBufferPool<Packet> sendBuf);
 	public RingBufferPool<Packet> getReadBuffer();
 	public void setReadBuffer(@NonNull RingBufferPool<Packet> sendBuf);
-	public void setScriptPluginFacade(@NonNull ScriptPluginFacade botThread);
+	public void setScriptPluginFacade(@NonNull ScriptPluginFacade botFacade);
 	public ScriptPluginFacade getScriptPluginFacade();
 	public void setBotSettings(@NonNull BotSettings botSettings);
 	public BotSettings getBotSettings();

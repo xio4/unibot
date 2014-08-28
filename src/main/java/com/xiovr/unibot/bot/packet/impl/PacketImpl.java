@@ -1,6 +1,7 @@
 package com.xiovr.unibot.bot.packet.impl;
 
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 
 import com.xiovr.unibot.bot.packet.Packet;
 
@@ -24,6 +25,7 @@ public class PacketImpl implements Packet {
 
 	public PacketImpl(int size) {
 		buf = ByteBuffer.allocate(size);
+        buf.order(ByteOrder.LITTLE_ENDIAN);
 		array = buf.array();
 		bufAllocateSize = size;
 		offset = 2;
@@ -34,15 +36,15 @@ public class PacketImpl implements Packet {
 	@Override
 	public void putHeader(int head)
 	{
-		array[0] = (byte) ((head << 8) & 0xFF);
-		array[1] = (byte) (head & 0xFF);
+		array[1] = (byte) ((head >>> 8) & 0xFF);
+		array[0] = (byte) (head & 0xFF);
 	}
 	@Override
 	public void putHeader()
 	{
 		int size = offset;
-		array[0] = (byte) ((size << 8) & 0xFF);	
-		array[1] = (byte) (size & 0xFF);
+		array[1] = (byte) ((size >>> 8) & 0xFF);	
+		array[0] = (byte) (size & 0xFF);
 	}
 
 	@Override
@@ -327,8 +329,8 @@ public class PacketImpl implements Packet {
 
 	@Override
 	public int getHeader() {
-		int header = array[1] & 0xff;
-		header |= (array[0] << 8) & 0xff00;
+		int header = array[0] & 0xff;
+		header |= (array[1] << 8) & 0xff00;
 		return header;
 	}
 

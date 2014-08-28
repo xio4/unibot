@@ -40,7 +40,7 @@ public abstract class AbstractIdNameDaoBase<T extends IdNameEntity, K extends Se
 	}
 
 	/* (non-Javadoc)
-	 * @see com.xiovr.e5bot.data.dao.IdNameDaoBase#save(com.xiovr.e5bot.data.model.IdNameEntity)
+	 * @see com.xiovr.unibot.data.dao.IdNameDaoBase#save(com.xiovr.unibot.data.model.IdNameEntity)
 	 */
 	@Override
 	public T save(T name) {
@@ -50,7 +50,7 @@ public abstract class AbstractIdNameDaoBase<T extends IdNameEntity, K extends Se
 	}
 
 	/* (non-Javadoc)
-	 * @see com.xiovr.e5bot.data.dao.IdNameDaoBase#find(java.io.Serializable)
+	 * @see com.xiovr.unibot.data.dao.IdNameDaoBase#find(java.io.Serializable)
 	 */
 	@Override
 	public T getById(K id) {
@@ -59,7 +59,7 @@ public abstract class AbstractIdNameDaoBase<T extends IdNameEntity, K extends Se
 
 	//FIXME Error findAll
 	/* (non-Javadoc)
-	 * @see com.xiovr.e5bot.data.dao.IdNameDaoBase#findAll()
+	 * @see com.xiovr.unibot.data.dao.IdNameDaoBase#findAll()
 	 */
 	@Override
 	@SuppressWarnings("unchecked")
@@ -70,7 +70,7 @@ public abstract class AbstractIdNameDaoBase<T extends IdNameEntity, K extends Se
 		return (List<T>) ht.findByCriteria(dc);
 	}
 	/* (non-Javadoc)
-	 * @see com.xiovr.e5bot.data.dao.IdNameDaoBase#delete(java.io.Serializable)
+	 * @see com.xiovr.unibot.data.dao.IdNameDaoBase#delete(java.io.Serializable)
 	 */
 	@Override
 	public void delete(K id)
@@ -81,7 +81,7 @@ public abstract class AbstractIdNameDaoBase<T extends IdNameEntity, K extends Se
 	}
 
 	/* (non-Javadoc)
-	 * @see com.xiovr.e5bot.data.dao.IdNameDaoBase#update(com.xiovr.e5bot.data.model.IdNameEntity)
+	 * @see com.xiovr.unibot.data.dao.IdNameDaoBase#update(com.xiovr.unibot.data.model.IdNameEntity)
 	 */
 	@Override
 	public void update(T t)

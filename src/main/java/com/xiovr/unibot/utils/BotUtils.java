@@ -22,6 +22,8 @@ public class BotUtils {
 	 */
 	public static String bytesToHex(byte[] bytes, char delim) {
 		char[] hexChars;
+		if (bytes == null)
+			return "";
 		if (delim == 0) {
 			hexChars = new char[bytes.length * 2];
 			for (int j = 0; j < bytes.length; j++) {

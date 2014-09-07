@@ -18,6 +18,9 @@ public interface BotSettings extends Settings {
 	public String getName();
 	@Param(name="bot.name" , values = "")
 	public void setName(String name);
+	public int getCharId();
+	@Param(name="bot.char_id" , values = "0")
+	public void setCharId(int charId);
 	public int getServerId();
 	@Param(name = "bot.server_id", values = "0")
 	public void setServerId(int id);

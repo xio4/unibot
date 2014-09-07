@@ -5,6 +5,7 @@ import java.util.TimerTask;
 
 import com.xiovr.unibot.bot.BotContext;
 import com.xiovr.unibot.bot.BotUpdater;
+import com.xiovr.unibot.plugin.CryptorPlugin;
 import com.xiovr.unibot.plugin.ScriptPlugin;
 
 import java.util.List;
@@ -21,37 +22,34 @@ public class BotUpdaterImpl implements BotUpdater {
 		this.outgameBots = outgameBots;
 		this.proxyBots = proxyBots;
 		this.timerTask = new TimerTask() {
+			private void updatePlugins(BotContext botContext) {
+				
+					if (botContext != null) {
+						CryptorPlugin crypt = botContext.getCryptorPlugin();
+						if (crypt != null)
+							crypt.update();
+					}
+					if (botContext != null && 
+							botContext.getStatus() == BotContext.INWORLD_STATUS) {
+						ScriptPlugin script = botContext.getScript();
+						if (script != null)
+							script.update();
+					}
+			}
 
 			@Override
 			public void run() {
 //				List<BotContext> botContexts = BotUpdaterImpl.this.botContexts;
 				for (BotContext botContext: ingameBots) {
-					if (botContext != null && 
-							botContext.getStatus() == BotContext.INWORLD_STATUS) {
-						ScriptPlugin script = botContext.getScript();
-						if (script != null)
-							script.update();
-					}
+					updatePlugins(botContext);
 				}
 				for (BotContext botContext: outgameBots) {
-					if (botContext != null && 
-							botContext.getStatus() == BotContext.INWORLD_STATUS) {
-						ScriptPlugin script = botContext.getScript();
-						if (script != null)
-							script.update();
-					}
+					updatePlugins(botContext);
 				}
-
 				for (BotContext botContext: proxyBots) {
-					if (botContext != null && 
-							botContext.getStatus() == BotContext.INWORLD_STATUS) {
-						ScriptPlugin script = botContext.getScript();
-						if (script != null)
-							script.update();
-					}
+					updatePlugins(botContext);
 				}
 			}
-			
 		};
 		timer = new Timer();
 	}

@@ -28,8 +28,8 @@ public class BotUtils {
 			hexChars = new char[bytes.length * 2];
 			for (int j = 0; j < bytes.length; j++) {
 				int v = bytes[j] & 0xFF;
-				hexChars[j * 3] = hexArray[v >>> 4];
-				hexChars[j * 3 + 1] = hexArray[v & 0x0F];
+				hexChars[j * 2] = hexArray[v >>> 4];
+				hexChars[j * 2 + 1] = hexArray[v & 0x0F];
 			}
 		} else {
 			hexChars = new char[bytes.length * 3];
@@ -40,15 +40,38 @@ public class BotUtils {
 				hexChars[j * 3 + 2] = delim;
 			}
 		}
-		for (int j = 0; j < bytes.length; j++) {
-			int v = bytes[j] & 0xFF;
-			hexChars[j * 3] = hexArray[v >>> 4];
-			hexChars[j * 3 + 1] = hexArray[v & 0x0F];
-			hexChars[j * 3 + 2] = delim;
-		}
 		return new String(hexChars);
 	}
+
+	public static String longToHex(long val, char delim)
+	{
+		byte[] bytes = new byte[8];
+		for (int i=7; i >= 0; i-=1) {
+			bytes[7-i] = (byte)((val >>> (i*8)) & 0xFF);
+		}
+		return bytesToHex(bytes, delim);
+	}
 	
+	public static String intToHex(int val, char delim)
+	{
+		byte[] bytes = new byte[4];
+		for (int i=3; i >= 0; i-=1) {
+			bytes[3-i] = (byte)((val >>> (i*8)) & 0xFF);
+		}
+		return bytesToHex(bytes, delim);
+	}
+	public static byte[] hexStringToByteArray(String s) {
+
+        s = s.replaceAll("\\s", "");
+	    int len = s.length();
+	    byte[] data = new byte[len / 2];
+	    for (int i = 0; i < len; i += 2) {
+	        data[i / 2] = (byte) ((Character.digit(s.charAt(i), 16) << 4)
+	                             + Character.digit(s.charAt(i+1), 16));
+	    }
+	    return data;
+	}
+
     /**
      * Load a Properties File
      * @param propsFile

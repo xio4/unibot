@@ -272,6 +272,17 @@ public class PacketImpl implements Packet {
 	}
 
 	@Override
+	public void writeB(byte[] barray, int start, int len) {
+		try {
+			if (array.length > len + offset ) {
+				System.arraycopy(barray, start, array, offset, len);
+				offset += barray.length;
+			} else
+				return;
+		} catch (Exception e) {
+		}
+	}
+	@Override
 	public void writeQ(long value) {
 		if (offset+8 > bufAllocateSize)
 			return;
@@ -367,5 +378,22 @@ public class PacketImpl implements Packet {
 	@Override
 	public byte[] array() {
 		return this.array;
+	}
+	
+	@Override
+	public void fill(int offset, int size, byte ch)
+	{
+		if (offset + size < array.length) {
+			for (int i=offset; i < offset + size; ++i) {
+				array[i] = ch;
+			}
+		}
+	}
+	
+	@Override
+	public void putPacketId(int pckId, int size) {
+		for (int i = 0; i < size; ++i) {
+			array[i+2] = (byte)((pckId >> i) & 0xFF);
+		}
 	}
 }

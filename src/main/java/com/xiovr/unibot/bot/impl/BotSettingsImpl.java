@@ -15,6 +15,7 @@ public class BotSettingsImpl implements BotSettings {
 	private boolean bLogging;
 	private boolean bModifLogging;
 	private String scriptPath;
+	private int charId;
 	public BotSettingsImpl()
 	{
 		botType = BotSettings.INGAME_TYPE;
@@ -112,6 +113,15 @@ public class BotSettingsImpl implements BotSettings {
 	@Override
 	public String getScriptPath() {
 		return this.scriptPath;
+	}
+	@Override
+	public int getCharId() {
+		return this.charId;
+	}
+	@Override
+	public void setCharId(int charId) {
+		this.charId = charId;
+		
 	}
 
 }

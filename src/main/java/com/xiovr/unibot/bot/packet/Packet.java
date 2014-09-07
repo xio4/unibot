@@ -108,6 +108,7 @@ public interface Packet extends Poolable {
 	public void writeQ(long value);
 
 	public void writeB(byte[] barray);
+	public void writeB(byte[] barray, int start, int len);
 
 	public void writeS(String text);
 
@@ -122,8 +123,11 @@ public interface Packet extends Poolable {
 	public int getMarkedSize();
 	public void markSize();
 
-	void putHeader(int head);
+	public void putHeader(int head);
 
-	void putHeader();
+	public void putHeader();
 	public int getHeader();
+
+	public void fill(int offset, int size, byte ch);
+	public void putPacketId(int pckId, int size);
 }

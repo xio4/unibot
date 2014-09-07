@@ -81,8 +81,7 @@ public class ClientListenerTest extends TestBase {
 		String dir = getClass().getProtectionDomain().getCodeSource()
 				.getLocation().toString().substring(6);
 		pluginLoader.loadCryptorPlugin("/" + dir + "cryptor_fake.jar");
-		CryptorPlugin cp = pluginLoader.createCryptorPlugin();
-		cp.init(null);
+
 
 		// Create bot environment
 		botEnvironment = createBotEnvironment();
@@ -95,6 +94,8 @@ public class ClientListenerTest extends TestBase {
 		connectFactory.createProxyListeners(proxyBots);
 
 		for (int i = 0; i < 2; ++i) {
+
+			CryptorPlugin cp = pluginLoader.createCryptorPlugin();
 			BotContext bc = createProxyBot(cp);
 			proxyBots.add(bc);
 			connectFactory.createBotConnectionClient(bc);
@@ -112,6 +113,7 @@ public class ClientListenerTest extends TestBase {
 	private @NonNull BotContext createProxyBot(CryptorPlugin cp) {
 		// Create proxy bot
 		BotContext bc = new BotContextImpl();
+        cp.init(bc);
 		bc.setConnectStage(0);
 		bc.setBotEnvironment(botEnvironment);
 		bc.setCryptorPlugin(cp);
@@ -184,6 +186,7 @@ public class ClientListenerTest extends TestBase {
 		return botContext;
 	}
 
+//	@Test(enabled = false)
 	@Test()
 	public void clientListener_create_listeners_and_send_packet_to_echo_server() {
 		try {

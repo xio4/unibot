@@ -13,7 +13,8 @@ public interface CryptorPlugin {
 	 * @return
 	 */
 	//ArrayBlockingQueue bq;
-	public CryptorCommand getNextCommand(CryptorCommand lastCommand);
+	public void execClientCommand(@NonNull Packet enc, @NonNull Packet dec);
+	public void execServerCommand(@NonNull Packet enc, @NonNull Packet dec);
 	// TODO Not implemented yet
 	public void update();
 	public Packet decryptFromServer(@NonNull Packet enc, @NonNull Packet dec);
@@ -23,4 +24,6 @@ public interface CryptorPlugin {
 	public void dispose();
 	public void onConnected(int type);
 	public void onDisconnected(int type);
+	public void modifyServerPacket(Packet pck2);
+	public void modifyClientPacket(Packet pck2);
 }

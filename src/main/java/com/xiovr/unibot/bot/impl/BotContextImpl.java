@@ -17,7 +17,6 @@ import com.xiovr.unibot.bot.network.BotConnection;
 import com.xiovr.unibot.bot.packet.Packet;
 import com.xiovr.unibot.bot.packet.PacketPool;
 import com.xiovr.unibot.bot.packet.RingBufferPool;
-import com.xiovr.unibot.plugin.CryptorCommand;
 import com.xiovr.unibot.plugin.CryptorPlugin;
 import com.xiovr.unibot.plugin.ScriptPlugin;
 
@@ -37,7 +36,6 @@ public class BotContextImpl implements BotContext {
 	private BotSettings botSettings;
 	private ScriptPlugin script;
 	private ScriptPluginFacade scriptPluginFacade;
-	private CryptorCommand cryptorCommand;
 	private BotLogger botLogger;
 	private volatile int connStage;
 
@@ -214,17 +212,6 @@ public class BotContextImpl implements BotContext {
 	public void log(int type, String msg) {
 		// TODO Auto-generated method stub
 
-	}
-
-	@Override
-	public CryptorCommand getCryptorCommand() {
-		return cryptorCommand;
-	}
-
-	@Override
-	public void setCryptorCommand(
-			@NonNull CryptorCommand cryptorCommand) {
-		this.cryptorCommand = cryptorCommand;
 	}
 
 	@Override

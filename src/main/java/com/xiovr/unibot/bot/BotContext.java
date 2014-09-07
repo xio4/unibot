@@ -7,7 +7,6 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.xiovr.unibot.bot.network.BotConnection;
 import com.xiovr.unibot.bot.packet.Packet;
 import com.xiovr.unibot.bot.packet.RingBufferPool;
-import com.xiovr.unibot.plugin.CryptorCommand;
 import com.xiovr.unibot.plugin.CryptorPlugin;
 import com.xiovr.unibot.plugin.ScriptPlugin;
 import com.xiovr.unibot.plugin.ScriptPluginRunnable;
@@ -46,8 +45,6 @@ public interface BotContext {
 	public ScriptPlugin getScript();
 	public void setCryptorPlugin(@NonNull CryptorPlugin cryptor);
 	public CryptorPlugin getCryptorPlugin();
-	public CryptorCommand getCryptorCommand();
-	public void setCryptorCommand(@NonNull CryptorCommand cryptorCommand);
 	@Deprecated
 	public RingBufferPool<Packet> getWriteClientBuffer();
 	@Deprecated

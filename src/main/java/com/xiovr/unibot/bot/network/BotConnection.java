@@ -10,7 +10,6 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.xiovr.unibot.bot.BotContext;
 import com.xiovr.unibot.bot.packet.Packet;
-import com.xiovr.unibot.plugin.CryptorCommand;
 
 public interface BotConnection {
 

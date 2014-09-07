@@ -12,7 +12,6 @@ import com.xiovr.unibot.bot.packet.Packet;
 import com.xiovr.unibot.bot.packet.PacketPool;
 import com.xiovr.unibot.bot.packet.RingBufferPool;
 import com.xiovr.unibot.bot.packet.impl.PacketImpl;
-import com.xiovr.unibot.plugin.CryptorCommand;
 import com.xiovr.unibot.plugin.CryptorPlugin;
 import com.xiovr.unibot.plugin.ScriptPlugin;
 import com.xiovr.unibot.plugin.ScriptPluginRunnable;
@@ -22,7 +21,6 @@ public class ScriptPluginRunnableImpl implements ScriptPluginRunnable {
 	private volatile ScriptPlugin script;
 	// private volatile BotContext botContext;
 	private CryptorPlugin cryptorPlugin;
-	private CryptorCommand cryptorCommand;
 	private RingBufferPool<Packet> buf;
 	private Packet pck;
 	private Packet pck2;
@@ -36,7 +34,6 @@ public class ScriptPluginRunnableImpl implements ScriptPluginRunnable {
 
 	public ScriptPluginRunnableImpl(BotContext botContext) {
 		bRawData = false;
-		cryptorCommand = null;
 		// pck = PacketPool.obtain();
 		pck2 = PacketPool.obtain();
 		pck2.clear();
@@ -73,7 +70,6 @@ public class ScriptPluginRunnableImpl implements ScriptPluginRunnable {
 				if (bRawData && script != null)
 					script.onPck(pck, time - oldTime);
 				if (botType == BotSettings.PROXY_TYPE) {
-//					System.out.println("Proxy");
 					if (pck.getType() == Packet.RAW_PCK_FROM_SERVER) {
 
 						cryptorPlugin.decryptFromServer(pck, pck2);
@@ -81,34 +77,22 @@ public class ScriptPluginRunnableImpl implements ScriptPluginRunnable {
 						pck2.setTime(pck.getTime());
 						pck2.setType(Packet.PCK_FROM_SERVER);
 
-//						System.out.println("Packet from client decrypted size=" + pck2.getPosition());
 						if (bLogging)
 							botLogger.pckLog(pck2);
 						if (script != null)
 							script.onPck(pck2, time - oldTime);
 						if (bModifLogging)
 							botLogger.pckModifLog(pck2);
+						cryptorPlugin.modifyServerPacket(pck2);
 						if (pck2.getPosition() > 2) {
 							cryptorPlugin.encryptToClient(pck2, pck);
 							pck.setType(Packet.RAW_PCK_TO_CLIENT);
 							if (bRawData && script != null)
 								script.onPck(pck, time - oldTime);
-							cryptorCommand = cryptorPlugin
-									.getNextCommand(cryptorCommand);
-							if (cryptorCommand != null) {
-								cryptorCommand.execute(pck, pck2);
-							} 
-							else {
-
-//					System.out.println("Its proxy type from server");
-								botContext.getClientConnections()
-										.get(pck.getConnStage())
-										.writeAndFlush(pck);
-							}
+							cryptorPlugin.execServerCommand(pck, pck2);
 						}
 
 					} else if (pck.getType() == Packet.RAW_PCK_FROM_CLIENT) {
-//						System.out.println("Packet from client");
 						cryptorPlugin.decryptFromClient(pck, pck2);
 						pck2.setConnStage(pck.getConnStage());
 						pck2.setTime(pck.getTime());
@@ -122,23 +106,13 @@ public class ScriptPluginRunnableImpl implements ScriptPluginRunnable {
 						if (bModifLogging)
 							botLogger.pckModifLog(pck2);
 
+						cryptorPlugin.modifyClientPacket(pck2);
 						if (pck2.getPosition() > 2) {
 							cryptorPlugin.encryptToServer(pck2, pck);
 							pck.setType(Packet.RAW_PCK_TO_SERVER);
 							if (bRawData && script != null)
 								script.onPck(pck, time - oldTime);
-							cryptorCommand = cryptorPlugin
-									.getNextCommand(cryptorCommand);
-							if (cryptorCommand != null) {
-								cryptorCommand.execute(pck, pck2);
-							} 
-							else {
-
-//					System.out.println("Its proxy type from client");
-								botContext.getServerConnections()
-										.get(pck.getConnStage())
-										.writeAndFlush(pck);
-							}
+								cryptorPlugin.execClientCommand(pck, pck2);
 						}
 					}
 
@@ -153,10 +127,8 @@ public class ScriptPluginRunnableImpl implements ScriptPluginRunnable {
 					if (bModifLogging)
 						botLogger.pckModifLog(pck2);
 
-					cryptorCommand = cryptorPlugin
-							.getNextCommand(cryptorCommand);
-					if (pck2.getPosition() > 2 && cryptorCommand != null) {
-						cryptorCommand.execute(pck, pck2);
+					if (pck2.getPosition() > 2) {
+						cryptorPlugin.execServerCommand(pck2, pck2);
 					} else {
 						PacketPool.free(pck);
 					}
@@ -169,10 +141,7 @@ public class ScriptPluginRunnableImpl implements ScriptPluginRunnable {
 					if (bModifLogging)
 						botLogger.pckModifLog(pck);
 
-					cryptorCommand = cryptorPlugin
-							.getNextCommand(cryptorCommand);
-					if (pck2.getPosition() > 2 && cryptorCommand != null) {
-						cryptorCommand.execute(pck, pck);
+					if (pck2.getPosition() > 2 ) {
 					} else {
 
 					}
@@ -185,8 +154,9 @@ public class ScriptPluginRunnableImpl implements ScriptPluginRunnable {
 			curThread.interrupt();
 		} catch (Exception e) {
 			// TODO Need set web-logger
-			logger.error("Script " + script.getName() + " exception");
 			e.printStackTrace();
+			if (script != null)
+				logger.error("Script " + script.getName() + " exception");
 		}
 	}
 

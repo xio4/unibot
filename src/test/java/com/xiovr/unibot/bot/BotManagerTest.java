@@ -23,9 +23,7 @@ import com.xiovr.unibot.bot.BotManager;
 import com.xiovr.unibot.bot.BotSettings;
 import com.xiovr.unibot.bot.impl.BotEnvironmentImpl;
 import com.xiovr.unibot.bot.impl.BotGameConfigImpl;
-import com.xiovr.unibot.bot.impl.BotSettingsImpl;
 import com.xiovr.unibot.bot.network.ConnectionFactory;
-import com.xiovr.unibot.plugin.CryptorPlugin;
 import com.xiovr.unibot.plugin.PluginLoader;
 import com.xiovr.unibot.plugin.impl.PluginLoaderImpl;
 import com.xiovr.unibot.utils.exceptions.BotDoNotExistsException;
@@ -35,11 +33,11 @@ import com.xiovr.unibot.utils.exceptions.BotDoNotExistsException;
  * TDD
  */
 public class BotManagerTest extends TestBase {
+	@SuppressWarnings("unused")
 	private static final Logger logger = LoggerFactory.getLogger(BotManagerTest.class);
 	@Autowired 
 	BotManager botManager;
 	
-	private BotEnvironment botEnvironment;
 	private PluginLoader pluginLoader;
 	private BotGameConfig botGameConfig;
 	
@@ -55,12 +53,16 @@ public class BotManagerTest extends TestBase {
 	@BeforeClass
 	public void before()
 	{
-		this.botEnvironment = createBotEnvironment();
 		// Load fake cryptor plugin
 		this.pluginLoader = new PluginLoaderImpl();
 		String dir = getClass().getProtectionDomain().getCodeSource()
 				.getLocation().toString().substring(6);
-		this.pluginLoader.loadCryptorPlugin("/" + dir + "cryptor_fake.jar");
+		try {
+			this.pluginLoader.loadCryptorPlugin("/" + dir + "cryptor_fake.jar");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		// Create fake game config
 		botGameConfig = new BotGameConfigImpl();
@@ -73,6 +75,7 @@ public class BotManagerTest extends TestBase {
 
 	}
 
+	@SuppressWarnings("deprecation")
 	private @NonNull BotEnvironment createBotEnvironment() {
 		BotEnvironment botEnv = new BotEnvironmentImpl();
 		botEnv.setPortRangeMin(10000);
@@ -93,6 +96,7 @@ public class BotManagerTest extends TestBase {
 
 	}
 	
+	@SuppressWarnings("null")
 	@Test(dataProvider="getTypes")
 	public void testBotManager_create_count_destroy_bot(Object reserved, int botType)
 	{

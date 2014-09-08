@@ -1,7 +1,5 @@
 package com.xiovr.unibot.bot.network.impl;
 
-import java.net.SocketAddress;
-
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelOutboundHandlerAdapter;

@@ -2,8 +2,6 @@ package com.xiovr.unibot.data.model;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -13,6 +11,7 @@ import com.xiovr.unibot.data.model.IdNameEntity;
 
 @TransactionConfiguration(transactionManager="transactionManager")
 public class ModelTest extends TestBase {
+	@SuppressWarnings("unused")
 	private static final Logger logger = LoggerFactory.getLogger(ModelTest.class);
 	@Test(dataProvider="getAbstractModelExtends", dataProviderClass=ModelTestData.class)
 	void testAbstractModelExtends_should_be_equal_(Object reserved, Class<?> model) throws InstantiationException, IllegalAccessException

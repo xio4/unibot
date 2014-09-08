@@ -8,12 +8,8 @@ import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.testng.Assert;
-import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;
-import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 import com.xiovr.unibot.TestBase;
@@ -39,7 +35,6 @@ import com.xiovr.unibot.plugin.ScriptPluginRunnable;
 import com.xiovr.unibot.plugin.impl.PluginLoaderImpl;
 import com.xiovr.unibot.plugin.impl.ScriptPluginRunnableImpl;
 import com.xiovr.unibot.utils.EchoServer;
-import com.xiovr.unibot.utils._EchoServer;
 
 public class ClientListenerTest extends TestBase {
 
@@ -51,6 +46,7 @@ public class ClientListenerTest extends TestBase {
 	private BotEnvironment botEnvironment;
 	private static final int ECHO_SERVER_PORT = 8889;
 
+	@SuppressWarnings("null")
 	@BeforeMethod
 	public void before() {
 		// Init echo server
@@ -80,7 +76,12 @@ public class ClientListenerTest extends TestBase {
 		PluginLoader pluginLoader = new PluginLoaderImpl();
 		String dir = getClass().getProtectionDomain().getCodeSource()
 				.getLocation().toString().substring(6);
-		pluginLoader.loadCryptorPlugin("/" + dir + "cryptor_fake.jar");
+		try {
+			pluginLoader.loadCryptorPlugin("/" + dir + "cryptor_fake.jar");
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 
 
 		// Create bot environment
@@ -110,6 +111,7 @@ public class ClientListenerTest extends TestBase {
 
 	}
 
+	@SuppressWarnings("null")
 	private @NonNull BotContext createProxyBot(CryptorPlugin cp) {
 		// Create proxy bot
 		BotContext bc = new BotContextImpl();
@@ -154,6 +156,7 @@ public class ClientListenerTest extends TestBase {
 		return bs;
 	}
 
+	@SuppressWarnings("deprecation")
 	private @NonNull BotEnvironment createBotEnvironment() {
 		BotEnvironment botEnv = new BotEnvironmentImpl();
 		botEnv.setPortRangeMin(10000);
@@ -187,6 +190,7 @@ public class ClientListenerTest extends TestBase {
 	}
 
 //	@Test(enabled = false)
+	@SuppressWarnings("null")
 	@Test()
 	public void clientListener_create_listeners_and_send_packet_to_echo_server() {
 		try {

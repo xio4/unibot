@@ -9,7 +9,6 @@ import com.xiovr.unibot.bot.packet.Packet;
 import com.xiovr.unibot.bot.packet.RingBufferPool;
 import com.xiovr.unibot.plugin.CryptorPlugin;
 import com.xiovr.unibot.plugin.ScriptPlugin;
-import com.xiovr.unibot.plugin.ScriptPluginRunnable;
 
 public interface BotContext {
 	public static final int OFFLINE_STATUS = 0x00;

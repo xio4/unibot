@@ -15,7 +15,12 @@ public class CryptorPluginTest extends TestBase {
 		PluginLoader pluginLoader = new PluginLoaderImpl();
 		String dir = getClass().getProtectionDomain().getCodeSource()
 				.getLocation().toString().substring(6);
-		pluginLoader.loadCryptorPlugin("/"+dir+"cryptor_fake.jar");
+		try {
+			pluginLoader.loadCryptorPlugin("/"+dir+"cryptor_fake.jar");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		CryptorPlugin cp = pluginLoader.createCryptorPlugin();
 		cp.init(null);
 		Assert.assertNotNull(cp.encryptToClient(new PacketImpl(), new PacketImpl()));

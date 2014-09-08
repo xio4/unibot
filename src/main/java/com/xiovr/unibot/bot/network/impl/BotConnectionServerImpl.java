@@ -25,6 +25,7 @@ import com.xiovr.unibot.bot.packet.Packet;
  * Major controller for server connection
  */
 public class BotConnectionServerImpl implements BotConnection {
+	@SuppressWarnings("unused")
 	private static final Logger logger = LoggerFactory.getLogger(BotConnectionServerImpl.class);
 	private BotContext botContext;
 	private NioEventLoopGroup workerGroup;

@@ -6,22 +6,18 @@ import java.net.InetSocketAddress;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import com.xiovr.unibot.TestBase;
 import com.xiovr.unibot.bot.BotContext;
-import com.xiovr.unibot.bot.BotEnvironment;
 import com.xiovr.unibot.bot.impl.BotContextImpl;
 import com.xiovr.unibot.bot.network.BotConnection;
 import com.xiovr.unibot.bot.network.impl.BotConnectionServerImpl;
 import com.xiovr.unibot.bot.packet.Packet;
 import com.xiovr.unibot.bot.packet.PacketPool;
 import com.xiovr.unibot.bot.packet.RingBufferPool;
-import com.xiovr.unibot.bot.packet.impl.PacketImpl;
 import com.xiovr.unibot.bot.packet.impl.RingBufferPacketPoolImpl;
-import com.xiovr.unibot.bot.packet.impl.RingBufferPoolImpl;
 import com.xiovr.unibot.utils.EchoServer;
 
 public class BotConnectionTest extends TestBase {
@@ -29,6 +25,7 @@ public class BotConnectionTest extends TestBase {
 	private static final Logger logger = LoggerFactory
 			.getLogger(BotConnectionTest.class);
 
+	@SuppressWarnings("null")
 	@Test()
 	public void testBotConnection_check_connect_to_echo_server()
 			throws InterruptedException {

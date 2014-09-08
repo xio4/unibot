@@ -11,7 +11,6 @@ import com.xiovr.unibot.bot.BotSettings;
 import com.xiovr.unibot.bot.packet.Packet;
 import com.xiovr.unibot.bot.packet.PacketPool;
 import com.xiovr.unibot.bot.packet.RingBufferPool;
-import com.xiovr.unibot.bot.packet.impl.PacketImpl;
 import com.xiovr.unibot.plugin.CryptorPlugin;
 import com.xiovr.unibot.plugin.ScriptPlugin;
 import com.xiovr.unibot.plugin.ScriptPluginRunnable;
@@ -30,14 +29,14 @@ public class ScriptPluginRunnableImpl implements ScriptPluginRunnable {
 	private boolean bLogging;
 	private boolean bModifLogging;
 	private BotLogger botLogger;
-	private BotContext botContext;
+//	private BotContext botContext;
 
 	public ScriptPluginRunnableImpl(BotContext botContext) {
 		bRawData = false;
 		// pck = PacketPool.obtain();
 		pck2 = PacketPool.obtain();
 		pck2.clear();
-		this.botContext = botContext;
+//		this.botContext = botContext;
 		oldTime = System.currentTimeMillis();
 		this.bLogging = botContext.getBotSettings().getLogging();
 		this.bModifLogging = botContext.getBotSettings().getModifLogging();
@@ -134,6 +133,7 @@ public class ScriptPluginRunnableImpl implements ScriptPluginRunnable {
 					}
 
 				} else if (botType == BotSettings.INGAME_TYPE) {
+					// FIXME Ingame type not implemented yet
 					if (bLogging)
 						botLogger.pckLog(pck);
 					if (script != null)
@@ -141,9 +141,9 @@ public class ScriptPluginRunnableImpl implements ScriptPluginRunnable {
 					if (bModifLogging)
 						botLogger.pckModifLog(pck);
 
-					if (pck2.getPosition() > 2 ) {
+					if (pck.getPosition() > 2 ) {
 					} else {
-
+						PacketPool.free(pck);
 					}
 				}
 				oldTime = time;

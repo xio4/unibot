@@ -13,14 +13,14 @@ public class BotUpdaterImpl implements BotUpdater {
 
 	private Timer timer;
 	private TimerTask timerTask;
-	private List<BotContext> ingameBots;
-	private List<BotContext> outgameBots;
-	private List<BotContext> proxyBots;
+//	private List<BotContext> ingameBots;
+//	private List<BotContext> outgameBots;
+//	private List<BotContext> proxyBots;
 	public BotUpdaterImpl(final List<BotContext> ingameBots, final List<BotContext> outgameBots,
 			final List<BotContext> proxyBots) {
-		this.ingameBots = ingameBots;
-		this.outgameBots = outgameBots;
-		this.proxyBots = proxyBots;
+//		this.ingameBots = ingameBots;
+//		this.outgameBots = outgameBots;
+//		this.proxyBots = proxyBots;
 		this.timerTask = new TimerTask() {
 			private void updatePlugins(BotContext botContext) {
 				

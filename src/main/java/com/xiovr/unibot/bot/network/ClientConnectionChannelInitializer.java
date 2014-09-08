@@ -25,6 +25,7 @@ public class ClientConnectionChannelInitializer extends
 
 	}
 
+	@SuppressWarnings("null")
 	@Override
 	protected void initChannel(SocketChannel ch) throws Exception {
 		// TODO Auto-generated method stub

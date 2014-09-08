@@ -1,6 +1,5 @@
 package com.xiovr.unibot.data.dao;
 
-import java.io.Serializable;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.transaction.TransactionConfiguration;
@@ -19,7 +18,6 @@ import com.xiovr.unibot.data.dao.SysStringDao;
 import com.xiovr.unibot.data.dao.SystemMsgDao;
 import com.xiovr.unibot.data.model.IdNameEntity;
 import com.xiovr.unibot.data.model.ItemName;
-import com.xiovr.unibot.data.model.Model;
 import com.xiovr.unibot.data.model.NpcName;
 import com.xiovr.unibot.data.model.SkillName;
 import com.xiovr.unibot.data.model.SysString;

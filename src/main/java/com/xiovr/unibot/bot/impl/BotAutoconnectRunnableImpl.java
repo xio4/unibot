@@ -10,7 +10,6 @@ import com.xiovr.unibot.bot.BotContext;
 import com.xiovr.unibot.bot.BotEnvironment;
 import com.xiovr.unibot.bot.BotManager;
 import com.xiovr.unibot.bot.BotSettings;
-import com.xiovr.unibot.plugin.ScriptPlugin;
 
 public class BotAutoconnectRunnableImpl implements BotAutoconnectRunnable {
 

@@ -2,14 +2,9 @@ package com.xiovr.unibot.utils;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.Enumeration;
 import java.util.Properties;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
 
 public class BotUtils {
 	final protected static char[] hexArray = "0123456789ABCDEF".toCharArray();

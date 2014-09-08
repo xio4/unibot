@@ -1,19 +1,11 @@
 package com.xiovr.unibot.bot;
 
-import java.io.File;
 import java.util.List;
-import java.util.Properties;
 
 import org.eclipse.jdt.annotation.NonNull;
 
-import com.xiovr.unibot.bot.analize.AnalizeManager;
-import com.xiovr.unibot.bot.network.BotConnection;
 import com.xiovr.unibot.bot.network.ConnectionFactory;
-import com.xiovr.unibot.bot.packet.Packet;
-import com.xiovr.unibot.bot.packet.RingBufferPool;
-import com.xiovr.unibot.plugin.CryptorPlugin;
 import com.xiovr.unibot.plugin.PluginLoader;
-import com.xiovr.unibot.plugin.ScriptPlugin;
 import com.xiovr.unibot.utils.exceptions.BotDoNotExistsException;
 
 public interface BotManager {

@@ -3,7 +3,6 @@ package com.xiovr.unibot.bot.impl;
 import java.io.File;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
@@ -17,9 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import com.xiovr.unibot.bot.BotEnvironment;
 import com.xiovr.unibot.bot.BotGameConfig;
-import com.xiovr.unibot.bot.BotSettings;
 import com.xiovr.unibot.bot.Param;
 import com.xiovr.unibot.bot.Settings;
 import com.xiovr.unibot.utils.BotUtils;
@@ -41,7 +38,8 @@ public class BotGameConfigImpl implements BotGameConfig {
 
 		Properties props = new SortedProperties();
 		try {
-			File file = new File("/" + DIR_PATH + "/" + fn);
+//			File file = new File("/" + DIR_PATH + "/" + fn);
+			File file = new File(fn);
 			Method[] methods = clazz.getMethods();
 			for (Method method : methods) {
 				// Find setters
@@ -135,7 +133,8 @@ public class BotGameConfigImpl implements BotGameConfig {
 	public void loadSettings(Settings instance, String fn) {
 
 		Class<?> clazz = instance.getClass().getInterfaces()[0];
-		File file = new File("/" + DIR_PATH + "/" + fn);
+//		File file = new File("/" + DIR_PATH + "/" + fn);
+		File file = new File(fn);
 		Properties props = null;
 		try {
 			props = BotUtils.loadProperties(file);
@@ -144,7 +143,9 @@ public class BotGameConfigImpl implements BotGameConfig {
 			// "127.0.0.1"));
 		} catch (IOException e) {
 			// e.printStackTrace();
-			logger.warn("Can't load settings /" + DIR_PATH + "/" + fn
+//			logger.warn("Can't load settings /" + DIR_PATH + "/" + fn
+//					+ ". Create new settings file.");
+			logger.warn("Can't load settings " + fn
 					+ ". Create new settings file.");
 			props = createSettings(clazz, fn, "Bot v" + VERSION);
 
@@ -285,11 +286,13 @@ public class BotGameConfigImpl implements BotGameConfig {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void saveSettings(Settings instance, String fn, String comment) {
 		Class<?> clazz = instance.getClass().getInterfaces()[0];
 		Class<?> invocableClazz = instance.getClass();
-		File file = new File("/" + DIR_PATH + "/" + fn);
+//		File file = new File("/" + DIR_PATH + "/" + fn);
+		File file = new File(fn);
 		Properties props = new SortedProperties();
 
 		Method[] methods = clazz.getMethods();

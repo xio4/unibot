@@ -1,7 +1,5 @@
 package com.xiovr.unibot.bot;
 
-import java.util.Properties;
-
 public interface BotGameConfig {
 //	public static final String ENVIRONMENT_CFG_FN = "environment.cfg";
 //	public static final String SETTINGS_CFG_DIR = "bot_settings";

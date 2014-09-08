@@ -24,7 +24,7 @@
 
 	<properties>
 		<java.version>1.7</java.version>
-		<start-class>com.xiovr.e5bot.Application</start-class>
+		<start-class>com.xiovr.unibot.Application</start-class>
 		<spring.version>4.0.6.RELEASE</spring.version>
 		<spring_oauth.version>2.0.1.RELEASE</spring_oauth.version>
 		<hibernate.version>4.3.5.Final</hibernate.version>

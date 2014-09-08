@@ -1,9 +1,6 @@
 package com.xiovr.unibot.bot.packet;
 
 import java.nio.ByteBuffer;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.atomic.AtomicReferenceArray;
-
 import com.xiovr.unibot.utils.Pool.Poolable;
 
 public interface Packet extends Poolable {

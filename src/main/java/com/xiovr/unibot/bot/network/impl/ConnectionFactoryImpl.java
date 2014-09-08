@@ -5,13 +5,10 @@ import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
 
-import io.netty.bootstrap.Bootstrap;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.nio.NioEventLoopGroup;
-import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 
 import com.xiovr.unibot.bot.BotContext;
@@ -28,7 +25,6 @@ public class ConnectionFactoryImpl implements ConnectionFactory {
 	private BotEnvironment botEnvironment;
 	private ServerBootstrap bs;
 	private List<ChannelFuture> bossFutures;
-	private List<BotContext> proxyBots;
 	
 	@Override
 	public void init(@NonNull BotEnvironment botEnvironment)
@@ -44,9 +40,6 @@ public class ConnectionFactoryImpl implements ConnectionFactory {
 	@Override
 	public void createProxyListeners(
 			@NonNull List<BotContext> proxyBots) {
-		this.proxyBots = proxyBots;
-
-
 
 		// Start boss client listeners
 		for (int stage = 0; stage < botEnvironment.getClientAddresses().size(); ++stage) {
@@ -70,6 +63,7 @@ public class ConnectionFactoryImpl implements ConnectionFactory {
 		botConn.init(serverEventGroup, botContext, botContext.getServerConnections().size() - 1);
 	}
 
+	@SuppressWarnings("null")
 	@Override
 	public void createBotConnectionClient(@NonNull BotContext botContext) {
 		BotConnection botConn = new BotConnectionClientImpl();

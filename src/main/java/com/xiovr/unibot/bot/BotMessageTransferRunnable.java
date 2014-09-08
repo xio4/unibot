@@ -1,7 +1,5 @@
 package com.xiovr.unibot.bot;
 
-import java.util.List;
-
 import org.eclipse.jdt.annotation.NonNull;
 
 public interface BotMessageTransferRunnable extends Runnable {

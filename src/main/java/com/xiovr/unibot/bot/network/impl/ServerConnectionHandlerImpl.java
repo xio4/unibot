@@ -9,7 +9,6 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
 import com.xiovr.unibot.bot.BotContext;
 import com.xiovr.unibot.bot.network.ServerConnectionHandler;
 import com.xiovr.unibot.bot.packet.Packet;
-import com.xiovr.unibot.bot.packet.PacketPool;
 import com.xiovr.unibot.bot.packet.RingBufferPool;
 import com.xiovr.unibot.plugin.CryptorPlugin;
 import com.xiovr.unibot.plugin.ScriptPlugin;
@@ -29,7 +28,6 @@ public class ServerConnectionHandlerImpl extends
 		this.readBufPool = botContext.getReadBuffer();
 	}
 
-	@SuppressWarnings("null")
 	@Override
 	public void channelRead(ChannelHandlerContext ctx, Object msg)
 			throws Exception {

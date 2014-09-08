@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.easymock.EasyMock;
 import org.easymock.IAnswer;
-import org.eclipse.jdt.annotation.NonNull;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -64,6 +63,7 @@ public class BotMessageTransferTest extends TestBase {
 		return bot;
 	}
 
+	@SuppressWarnings("null")
 	@BeforeClass
 	public void before() {
 		botMessageTransfer = new BotMessageTransferRunnableImpl();

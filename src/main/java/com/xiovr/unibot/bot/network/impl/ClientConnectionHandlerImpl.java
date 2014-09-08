@@ -13,7 +13,6 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
 import com.xiovr.unibot.bot.BotContext;
 import com.xiovr.unibot.bot.network.ClientConnectionHandler;
 import com.xiovr.unibot.bot.packet.Packet;
-import com.xiovr.unibot.bot.packet.PacketPool;
 import com.xiovr.unibot.bot.packet.RingBufferPool;
 import com.xiovr.unibot.plugin.CryptorPlugin;
 import com.xiovr.unibot.plugin.ScriptPlugin;

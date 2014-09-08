@@ -9,7 +9,6 @@ import org.hsqldb.server.ServerAcl.AclFormatException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.SmartLifecycle;
-import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
 public class HyperSqlDbServer implements SmartLifecycle {
 	private final Logger logger = LoggerFactory
 			.getLogger(HyperSqlDbServer.class);

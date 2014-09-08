@@ -22,13 +22,13 @@ import com.xiovr.unibot.plugin.ScriptPlugin;
 import com.xiovr.unibot.plugin.ScriptPluginRunnable;
 import com.xiovr.unibot.plugin.impl.ScriptPluginRunnableImpl;
 import com.xiovr.unibot.utils.exceptions.BotDoNotExistsException;
-import com.xiovr.unibot.utils.exceptions.BotScriptNotFoundException;
 
 import java.net.InetSocketAddress;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class BotManagerImpl implements BotManager {
+	@SuppressWarnings("unused")
 	private Logger logger = LoggerFactory.getLogger(BotManagerImpl.class);
 	private List<BotContext> proxyBots;
 	private List<BotContext> ingameBots;
@@ -95,6 +95,7 @@ public class BotManagerImpl implements BotManager {
 		return this.pluginLoader;
 	}
 
+	@SuppressWarnings("unused")
 	private List<BotContext> getBotsListByType(int botType)
 			throws BotDoNotExistsException {
 		BotContext botContext = null;
@@ -140,7 +141,7 @@ public class BotManagerImpl implements BotManager {
 		BotSettings botSettings = new BotSettingsImpl();
 		botGameConfig.loadSettings(botSettings, configName);
 		botContext.setBotSettings(botSettings);
-		final CryptorPlugin cp = pluginLoader.createCryptorPlugin();
+		CryptorPlugin cp = pluginLoader.createCryptorPlugin();
 		cp.init(botContext);
 		botContext.setCryptorPlugin(cp);
 		RingBufferPool<Packet> readBuf = new RingBufferPacketPoolImpl();
@@ -202,7 +203,7 @@ public class BotManagerImpl implements BotManager {
 
 	@Override
 	public void loadScript(int botId, int botType, @NonNull String scriptPath)
-			throws BotDoNotExistsException, BotScriptNotFoundException {
+			throws Exception {
 		ScriptPlugin script = pluginLoader.createScriptPlugin(scriptPath);
 
 		BotContext botContext = null;

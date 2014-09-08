@@ -1,17 +1,14 @@
 package com.xiovr.unibot.bot.network.impl;
 
-import java.nio.ByteOrder;
 import java.util.List;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
 
-import com.xiovr.unibot.bot.BotContext;
 import com.xiovr.unibot.bot.network.ConnectionDecoder;
 import com.xiovr.unibot.bot.packet.Packet;
 import com.xiovr.unibot.bot.packet.PacketPool;
-import com.xiovr.unibot.bot.packet.impl.PacketImpl;
 
 public class ConnectionDecoderImpl extends ByteToMessageDecoder implements
 		ConnectionDecoder

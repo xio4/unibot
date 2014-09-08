@@ -3,7 +3,6 @@ package com.xiovr.unibot;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 import org.springframework.test.context.testng.AbstractTransactionalTestNGSpringContextTests;
-import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.testng.annotations.Test;
 
 import com.xiovr.unibot.bot.BotConfig;

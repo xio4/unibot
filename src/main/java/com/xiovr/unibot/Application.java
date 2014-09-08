@@ -1,7 +1,5 @@
 package com.xiovr.unibot;
 
-import java.util.Arrays;
-
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.ApplicationContext;
@@ -12,7 +10,6 @@ import org.springframework.context.annotation.Import;
 import com.xiovr.unibot.config.E5botConfig;
 import com.xiovr.unibot.config.HibernateConfig;
 import com.xiovr.unibot.config.JdbcConfig;
-import com.xiovr.unibot.config.MvcConfig;
 import com.xiovr.unibot.config.WebSecurityConfig;
 
 

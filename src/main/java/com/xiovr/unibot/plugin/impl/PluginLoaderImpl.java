@@ -94,8 +94,11 @@ public class PluginLoaderImpl implements PluginLoader {
 			}
 
 			URL jarURL = jarFile.toURI().toURL();
+//			URLClassLoader classLoader = new URLClassLoader(
+//					new URL[] { jarURL }, getClass().getClassLoader());
 			URLClassLoader classLoader = new URLClassLoader(
-					new URL[] { jarURL });
+					new URL[] { jarURL }, 
+org.springframework.util.ClassUtils.getDefaultClassLoader());
 			Class<?> pluginClass = classLoader.loadClass(pluginClassName);
 			classLoader.close();
 			return pluginClass;

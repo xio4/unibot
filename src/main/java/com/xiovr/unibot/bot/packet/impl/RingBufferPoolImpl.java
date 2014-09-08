@@ -6,7 +6,6 @@ import java.util.concurrent.locks.ReentrantLock;
 import com.xiovr.unibot.bot.packet.RingBufferPool;
 
 import java.lang.reflect.Array;
-import java.lang.reflect.ParameterizedType;
 
 import org.eclipse.jdt.annotation.NonNull;
 
@@ -19,6 +18,7 @@ public abstract class RingBufferPoolImpl<T> implements RingBufferPool<T> {
 	private Condition fullCond;
 	private Condition emptyCond;
 	private T[] ring;
+	@SuppressWarnings("unused")
 	private Class<?> clazz;
 	private int ringSize;
 	private int readMarker;

@@ -2,11 +2,7 @@ package com.xiovr.unibot.data.dao.impl;
 import java.io.Serializable;
 import java.util.List;
 
-import org.hibernate.Criteria;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.hibernate.criterion.DetachedCriteria;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.lang.reflect.ParameterizedType;
 
@@ -15,7 +11,6 @@ import com.xiovr.unibot.data.dao.IdNameDaoBase;
 import com.xiovr.unibot.data.model.IdNameEntity;
 
 import org.springframework.orm.hibernate4.HibernateTemplate;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 /**

@@ -3,7 +3,6 @@ package com.xiovr.unibot.bot.impl;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.atomic.AtomicReference;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.slf4j.Logger;
@@ -17,6 +16,7 @@ import com.xiovr.unibot.plugin.ScriptPlugin;
 
 public class BotMessageTransferRunnableImpl implements
 		BotMessageTransferRunnable {
+	@SuppressWarnings("unused")
 	private Logger logger = LoggerFactory
 			.getLogger(BotMessageTransferRunnableImpl.class);
 	private BotManager botManager;

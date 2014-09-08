@@ -23,19 +23,23 @@ import com.xiovr.unibot.bot.impl.BotSettingsImpl;
  */
 public class BotGameConfigTest extends TestBase {
 
+	@SuppressWarnings("unused")
 	private static final Logger logger = LoggerFactory.getLogger(BotGameConfigTest.class);
 	@Autowired
 	BotEnvironment botEnvironment;
 	@Autowired
 	BotGameConfig botGameConfig;
 
+	@SuppressWarnings("deprecation")
 	@Test()
 	public void testBotEnvironment_load_and_save()
 	{
+		String dir = getClass().getProtectionDomain().getCodeSource()
+				.getLocation().toString().substring(6);
 		File fn = new File(((BotGameConfigImpl)botGameConfig).DIR_PATH + "/" + BotEnvironment.ENVIRONMENT_CFG_FN);
 		fn.delete();
 //		botGameConfig.loadPropsToBotEnvironment(botEnvironment);
-		botGameConfig.loadSettings(botEnvironment, BotEnvironment.ENVIRONMENT_CFG_FN);
+		botGameConfig.loadSettings(botEnvironment, "/" + dir + "/" + BotEnvironment.ENVIRONMENT_CFG_FN);
 
 		Assert.assertEquals(botEnvironment.getNextBotConnectionInterval(), 10 );
 		Assert.assertEquals(botEnvironment.getUpdateInterval(), 100);
@@ -63,11 +67,11 @@ public class BotGameConfigTest extends TestBase {
 		botEnvironment.setRawData(true);
 		
 //		botGameConfig.savePropsFromBotEnvironment(botEnvironment);
-		botGameConfig.saveSettings(botEnvironment, BotEnvironment.ENVIRONMENT_CFG_FN, "Bot v"+BotGameConfig.VERSION);
+		botGameConfig.saveSettings(botEnvironment, "/" + dir + "/" +BotEnvironment.ENVIRONMENT_CFG_FN, "Bot v"+BotGameConfig.VERSION);
 		BotEnvironment botEnvTest = new BotEnvironmentImpl();
 
 //		botGameConfig.loadPropsToBotEnvironment(botEnvTest);
-		botGameConfig.loadSettings(botEnvTest, BotEnvironmentImpl.ENVIRONMENT_CFG_FN);
+		botGameConfig.loadSettings(botEnvTest, "/" + dir + "/" +BotEnvironmentImpl.ENVIRONMENT_CFG_FN);
 		
         Assert.assertEquals(botEnvTest.getNextBotConnectionInterval(), 10);
 		Assert.assertEquals(botEnvTest.getUpdateInterval(), 200);
@@ -97,11 +101,13 @@ public class BotGameConfigTest extends TestBase {
 	@Test()
 	public void testBotSettings_load_and_save()
 	{
+		String dir = getClass().getProtectionDomain().getCodeSource()
+				.getLocation().toString().substring(6);
 		BotSettings botSettings = new BotSettingsImpl();
 		File fn = new File(((BotGameConfigImpl)botGameConfig).DIR_PATH + "/" + "testBotSettings.cfg");
 		fn.delete();
 //		botGameConfig.loadBotSettings(botSettings, "testBotSettings.cfg");
-		botGameConfig.loadSettings(botSettings, "testBotSettings.cfg");
+		botGameConfig.loadSettings(botSettings, "/" + dir + "/" +"testBotSettings.cfg");
 		Assert.assertEquals(botSettings.getAutoConnectInterval(), 10);
 		Assert.assertEquals(botSettings.getLogin(), "");
 		Assert.assertEquals(botSettings.getName(), "");
@@ -123,11 +129,11 @@ public class BotGameConfigTest extends TestBase {
 		botSettings.setDisabled(true);
 		botSettings.setLogging(true);
 		botSettings.setModifLogging(true);
-		botGameConfig.saveSettings(botSettings, "testBotSettings.cfg", "Test");
+		botGameConfig.saveSettings(botSettings, "/" + dir + "/" +"testBotSettings.cfg", "Test");
 //		botGameConfig.saveBotSettings(botSettings, "testBotSettings.cfg", "Test");
 		botSettings = new BotSettingsImpl();
 //		botGameConfig.loadBotSettings(botSettings, "testBotSettings.cfg");
-		botGameConfig.loadSettings(botSettings, "testBotSettings.cfg");
+		botGameConfig.loadSettings(botSettings, "/" + dir + "/" +"testBotSettings.cfg");
 
         Assert.assertEquals(botSettings.getAutoConnectInterval(), 100);
 		Assert.assertEquals(botSettings.getLogin(), "test");

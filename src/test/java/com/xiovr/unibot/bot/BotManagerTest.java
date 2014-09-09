@@ -104,10 +104,10 @@ public class BotManagerTest extends TestBase {
 		// Mocking connection factory
 		ConnectionFactory connFactory = EasyMock.createMock(ConnectionFactory.class);
 		if (botType == BotSettings.PROXY_TYPE) {
-			connFactory.createBotConnectionClient(EasyMock.anyObject(BotContext.class));
+			connFactory.createBotConnectionClient(EasyMock.anyObject(BotContext.class), EasyMock.anyInt());
 			EasyMock.expectLastCall();
 		}
-		connFactory.createBotConnectionServer(EasyMock.anyObject(BotContext.class));
+		connFactory.createBotConnectionServer(EasyMock.anyObject(BotContext.class), EasyMock.anyInt());
 		EasyMock.expectLastCall();
 		EasyMock.replay(connFactory);
 		

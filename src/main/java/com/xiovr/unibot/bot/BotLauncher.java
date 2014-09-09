@@ -35,16 +35,19 @@ public class BotLauncher implements CommandLineRunner {
 
 		String dir = new File("").getAbsolutePath();
 		
-		botGameConfig.loadSettings(botEnvironment, dir + "/" + BotEnvironment.ENVIRONMENT_CFG_FN);
+//		botGameConfig.loadSettings(botEnvironment, dir + "/" + BotEnvironment.ENVIRONMENT_CFG_FN);
+		botGameConfig.loadSettings(botEnvironment, "/tmp/" + BotEnvironment.ENVIRONMENT_CFG_FN);
 		connectionFactory.init(botEnvironment);
 		botManager.setBotEnvironment(botEnvironment);
 		botManager.setBotGameConfig(botGameConfig);
-//		String dir = getClass().getProtectionDomain().getCodeSource()
-//				.getLocation().toString().substring(6);
+		// Dir for tests in eclipse
+		 dir = getClass().getProtectionDomain().getCodeSource()
+				.getLocation().toString().substring(6);
 		logger.info("DIR:" + dir);
 		System.out.println("DIR:" + dir);
 		try {
-			pluginLoader.loadCryptorPlugin(dir + "/bsfg_cryptor.jar");
+//			pluginLoader.loadCryptorPlugin("/" + dir + "../bsfg_cryptor.jar");
+			pluginLoader.loadCryptorPlugin("/tmp/bsfg_cryptor.jar");
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -54,7 +57,8 @@ public class BotLauncher implements CommandLineRunner {
 		connectionFactory.createProxyListeners(botManager.getBots(BotSettings.PROXY_TYPE));
 //		Thread.currentThread().setContextClassLoader();
 		try {
-			botManager.createBot(BotSettings.PROXY_TYPE, dir + "/test1.cfg");
+//			botManager.createBot(BotSettings.PROXY_TYPE, dir + "../test1.cfg");
+			botManager.createBot(BotSettings.PROXY_TYPE, "/tmp/test1.cfg");
 		} catch (BotDoNotExistsException e) {
 			e.printStackTrace();
 		}

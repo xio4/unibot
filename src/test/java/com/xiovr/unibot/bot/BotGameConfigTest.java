@@ -109,11 +109,11 @@ public class BotGameConfigTest extends TestBase {
 //		botGameConfig.loadBotSettings(botSettings, "testBotSettings.cfg");
 		botGameConfig.loadSettings(botSettings, "/" + dir + "/" +"testBotSettings.cfg");
 		Assert.assertEquals(botSettings.getAutoConnectInterval(), 10);
-		Assert.assertEquals(botSettings.getLogin(), "");
-		Assert.assertEquals(botSettings.getName(), "");
-		Assert.assertEquals(botSettings.getPassword(), "");
+		Assert.assertEquals(botSettings.getLogin(), "testtesttest");
+		Assert.assertEquals(botSettings.getName(), "adda");
+		Assert.assertEquals(botSettings.getPassword(), "testtest");
 		Assert.assertEquals(botSettings.getServerId(), 0);
-		Assert.assertEquals(botSettings.getType(), BotSettings.OUTGAME_TYPE);
+		Assert.assertEquals(botSettings.getType(), BotSettings.PROXY_TYPE);
 		Assert.assertEquals(botSettings.getAutoConnect(), false);
 		Assert.assertEquals(botSettings.getDisabled(), false);
 		Assert.assertEquals(botSettings.getLogging(), false);

@@ -99,8 +99,8 @@ public class ClientListenerTest extends TestBase {
 			CryptorPlugin cp = pluginLoader.createCryptorPlugin();
 			BotContext bc = createProxyBot(cp);
 			proxyBots.add(bc);
-			connectFactory.createBotConnectionClient(bc);
-			connectFactory.createBotConnectionServer(bc);
+			connectFactory.createBotConnectionClient(bc, 0);
+			connectFactory.createBotConnectionServer(bc, 0);
 		}
 
 		try {

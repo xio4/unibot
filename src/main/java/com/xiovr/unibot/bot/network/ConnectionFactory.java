@@ -12,13 +12,15 @@ public interface ConnectionFactory {
 	public void createProxyListeners(
 			@NonNull List<BotContext> proxyBots);
 
-	public void createBotConnectionServer(@NonNull BotContext botContext);
 
 	void dispose();
 
-	public void createBotConnectionClient(@NonNull BotContext botContext);
 
 	public void init(@NonNull BotEnvironment botEnvironment);
+
+	void createBotConnectionServer(@NonNull BotContext botContext, int stage);
+
+	void createBotConnectionClient(@NonNull BotContext botContext, int stage);
 
 
 }

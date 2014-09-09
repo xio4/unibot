@@ -65,6 +65,8 @@ public class ClientConnectionHandlerImpl extends
 			throw new RuntimeException("Can't find proxy bot to connect");
 		}
 		botContext.getClientConnections().get(stage).setHandlerContext(ctx);
+		botContext.setConnectStage(stage);
+
         this.readBufPool = botContext.getReadBuffer();
 		final CryptorPlugin cp = botContext.getCryptorPlugin();
 		if (cp != null)
@@ -77,7 +79,6 @@ public class ClientConnectionHandlerImpl extends
 			if (endTime - startTime > ScriptPlugin.MAX_WORK_TIME)
 				logger.error("Script method onConnected with name "+script.getName() + " works " + (endTime - startTime) + "ms");
 		}
-
 		botContext.getServerConnections().get(stage).connect(
 				botContext.getBotEnvironment().getServerAddresses().get(stage));
 	}

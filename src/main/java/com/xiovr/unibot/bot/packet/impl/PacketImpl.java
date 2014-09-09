@@ -276,7 +276,7 @@ public class PacketImpl implements Packet {
 		try {
 			if (array.length > len + offset ) {
 				System.arraycopy(barray, start, array, offset, len);
-				offset += barray.length;
+				offset += len;
 			} else
 				return;
 		} catch (Exception e) {
@@ -310,12 +310,10 @@ public class PacketImpl implements Packet {
 			return;
 		}
 		writeD(0x00); // reserve for checksum
-		offset+=4;
 
 		int padding = offset % 8;
 		if (padding != 0 && 8-padding+offset < bufAllocateSize) {
 			for (int i = padding; i < 8; i++) {
-				offset++;
 				writeC(0x00);
 			}
 		}

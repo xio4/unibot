@@ -26,6 +26,7 @@ public class ServerConnectionHandlerImpl extends
 //		super();
 		this.botContext = botContext;
 		this.readBufPool = botContext.getReadBuffer();
+		this.stage = stage;
 	}
 
 	@Override

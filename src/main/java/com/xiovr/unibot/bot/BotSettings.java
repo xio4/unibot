@@ -7,16 +7,16 @@ public interface BotSettings extends Settings {
 
 
 	public int getType();
-	@Param(name="bot.type", values= { "2" })
+	@Param(name="bot.type", values= { "3" })
 	public void setType(int type);
 	public String getLogin();
-	@Param(name="bot.login", values = { "" } )
+	@Param(name="bot.login", values = { "testtesttest" } )
 	public void setLogin(String login);
 	public String getPassword();
-	@Param(name="bot.password", values= { "" })
+	@Param(name="bot.password", values= { "testtest" })
 	public void setPassword(String password);
 	public String getName();
-	@Param(name="bot.name" , values = "")
+	@Param(name="bot.name" , values = "adda")
 	public void setName(String name);
 	public int getCharId();
 	@Param(name="bot.char_id" , values = "0")

@@ -83,6 +83,9 @@ public class BotConnectionClientImpl implements BotConnection {
 		if (ctx != null) {
 			ctx.writeAndFlush(pck);
 		}
+		else {
+			System.out.println("Client ctx is null!");
+		}
 	}
 
 	@Override

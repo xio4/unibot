@@ -14,7 +14,7 @@ import org.eclipse.jdt.annotation.NonNull;
  */
 public interface RingBufferPool<T> extends Serializable {
 
-	public static final int DEFAULT_SIZE = 10;
+	public static final int DEFAULT_SIZE = 10000;
 	/**
 	 * Put element in ring buffer. If return is null then need create new
 	 * element for use

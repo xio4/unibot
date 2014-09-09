@@ -149,12 +149,12 @@ public class BotManagerImpl implements BotManager {
 
 		if (botType == BotSettings.PROXY_TYPE) {
 			for (int i = 0; i < botEnvironment.getClientAddresses().size(); ++i) {
-				connectionFactory.createBotConnectionClient(botContext);
+				connectionFactory.createBotConnectionClient(botContext, i);
 			}
 		}
 
 		for (int i = 0; i < botEnvironment.getServerAddresses().size(); ++i) {
-			connectionFactory.createBotConnectionServer(botContext);
+			connectionFactory.createBotConnectionServer(botContext, i);
 		}
 
 		botContext.setConnectStage(0);

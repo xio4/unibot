@@ -125,6 +125,9 @@ public class BotConnectionServerImpl implements BotConnection {
 		if (ctx != null) {
 			ctx.writeAndFlush(pck);
 		}
+		else {
+			System.out.println("Server ctx is null!");
+		}
 	}
 
 	@Override

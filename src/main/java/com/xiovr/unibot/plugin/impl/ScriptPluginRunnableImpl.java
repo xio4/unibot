@@ -126,6 +126,7 @@ public class ScriptPluginRunnableImpl implements ScriptPluginRunnable {
 					if (bModifLogging)
 						botLogger.pckModifLog(pck2);
 
+					cryptorPlugin.modifyServerPacket(pck2);
 					if (pck2.getPosition() > 2) {
 						cryptorPlugin.execServerCommand(pck2, pck2);
 					} else {

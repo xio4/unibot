@@ -8,4 +8,6 @@ public interface PluginLoader {
 	public void loadCryptorPlugin(String fileName) throws Exception;
 	public CryptorPlugin createCryptorPlugin();
 	public ScriptPlugin createScriptPlugin(String fileName) throws Exception;
+	public void unloadPlugin(Class<?> _class);
+
 }

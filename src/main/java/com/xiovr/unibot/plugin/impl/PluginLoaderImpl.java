@@ -39,6 +39,16 @@ public class PluginLoaderImpl implements PluginLoader {
 	}
 
 	@Override
+	public void unloadPlugin(Class<?> _class) {
+		try {
+			URLClassLoader cl = (URLClassLoader)_class.getClass().getClassLoader();
+			cl.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	@Override
 	public CryptorPlugin createCryptorPlugin() {
 		CryptorPlugin cp = null;
 		assert cpClazz != null;
@@ -100,7 +110,7 @@ public class PluginLoaderImpl implements PluginLoader {
 					new URL[] { jarURL }, 
 org.springframework.util.ClassUtils.getDefaultClassLoader());
 			Class<?> pluginClass = classLoader.loadClass(pluginClassName);
-			classLoader.close();
+//			classLoader.close();
 			return pluginClass;
 		} catch (Exception e) {
 			e.printStackTrace();

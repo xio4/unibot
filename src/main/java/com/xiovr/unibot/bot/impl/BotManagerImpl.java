@@ -204,10 +204,15 @@ public class BotManagerImpl implements BotManager {
 	@Override
 	public void loadScript(int botId, int botType, @NonNull String scriptPath)
 			throws Exception {
-		ScriptPlugin script = pluginLoader.createScriptPlugin(scriptPath);
 
 		BotContext botContext = null;
 		botContext = getBotContextByIdAndType(botId, botType);
+
+		if (botContext.getScript() != null) {
+			pluginLoader.unloadPlugin(botContext.getScript().getClass());
+			botContext.setScript(null);
+		}
+		ScriptPlugin script = pluginLoader.createScriptPlugin(scriptPath);
 		botContext.setScript(script);
 		botContext.getBotSettings().setScriptPath(scriptPath);
 	}

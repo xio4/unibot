@@ -115,7 +115,6 @@ public class ClientListenerTest extends TestBase {
 	private @NonNull BotContext createProxyBot(CryptorPlugin cp) {
 		// Create proxy bot
 		BotContext bc = new BotContextImpl();
-        cp.init(bc);
 		bc.setConnectStage(0);
 		bc.setBotEnvironment(botEnvironment);
 		bc.setCryptorPlugin(cp);
@@ -134,6 +133,7 @@ public class ClientListenerTest extends TestBase {
 		spt.start();
 		bc.setScriptPluginFacade(spf);
 
+        cp.init(bc);
 		return bc;
 
 	}

@@ -34,7 +34,7 @@ public class BotContextImpl implements BotContext {
 	private List<BotConnection> serverConnections;
 	private List<BotConnection> clientConnections;
 	private BotSettings botSettings;
-	private ScriptPlugin script;
+	private volatile ScriptPlugin script;
 	private ScriptPluginFacade scriptPluginFacade;
 	private BotLogger botLogger;
 	private volatile int connStage;
@@ -101,7 +101,7 @@ public class BotContextImpl implements BotContext {
         bcPck.setTime(time);
         PacketPool.free(pck);
 //        final Packet chPck = writeServerBuf.put(bcPck);
-        serverConnections.get(connStage).write(bcPck);
+        serverConnections.get(connStage).writeAndFlush(bcPck);
  //       PacketPool.free(chPck);
         	
 	}
@@ -121,7 +121,7 @@ public class BotContextImpl implements BotContext {
         bcPck.setTime(time);
         PacketPool.free(pck);
 //        final Packet chPck = writeClientBuf.put(bcPck);
-        clientConnections.get(connStage).write(bcPck);
+        clientConnections.get(connStage).writeAndFlush(bcPck);
  //       PacketPool.free(chPck);
 	}
 

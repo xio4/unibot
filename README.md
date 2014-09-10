@@ -11,7 +11,7 @@ git clone https://github.com/xio4/unibot
 Compilation
 ===========
 
-mvn package clean
+mvn clean package 
 
 Wiki
 ====
@@ -21,6 +21,6 @@ On development
 License
 =======
 
-Copyright 2014 Petr Shalkov mApostol@yandex.ru
+Copyright(C) 2014 Petr Shalkov mApostol@yandex.ru
 
 [GNUv3 license](https://github.com/xio4/unibot/blob/master/LICENSE)

@@ -1,3 +1,24 @@
+<!--
+
+    Copyright (c) 2014 xio4
+    Universal bot for lineage-like games (Archeage, Lineage2 etc)
+
+    This file is part of Unibot.
+
+    Unibot is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+-->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
@@ -18,6 +39,40 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<!-- <executions> <execution> <phase>default</phase> <goals> <goal>compile</goal> 
 					</goals> </execution> </executions> -->
+			</plugin>
+			<!-- Using mvn license:check,format,remove -->
+			<plugin>
+				<groupId>com.mycila</groupId>
+				<artifactId>license-maven-plugin</artifactId>
+				<version>2.6</version>
+				<configuration>
+					<header>LICENSE</header>
+					<properties>
+						<owner>xio4</owner>
+						<email>mApostol@yandex.ru</email>
+					</properties>
+					<excludes>
+						<exclude>**/README</exclude>
+						<exclude>LICENSE</exclude>
+						<exclude>README.md</exclude>
+						<exclude>db/**</exclude>
+						<exclude>l2/**</exclude>
+						<exclude>sketches/**</exclude>
+						<exclude>target/**</exclude>
+						<exclude>src/test/resources/**</exclude>
+						<exclude>src/main/resources/**</exclude>
+						<exclude>.settings/**</exclude>
+						<exclude>**/*.cfg</exclude>
+						<exclude>**/*.properties</exclude>
+					</excludes>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>check</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>

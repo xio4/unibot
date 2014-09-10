@@ -1,3 +1,22 @@
+/**
+ * Copyright (c) 2014 xio4
+ * Universal bot for lineage-like games (Archeage, Lineage2 etc)
+ *
+ * This file is part of Unibot.
+ *
+ * Unibot is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package com.xiovr.unibot.plugin.impl;
 
 import org.eclipse.jdt.annotation.NonNull;
@@ -29,11 +48,9 @@ public class ScriptPluginRunnableImpl implements ScriptPluginRunnable {
 	private boolean bLogging;
 	private boolean bModifLogging;
 	private BotLogger botLogger;
-//	private BotContext botContext;
 
 	public ScriptPluginRunnableImpl(BotContext botContext) {
 		bRawData = false;
-		// pck = PacketPool.obtain();
 		pck2 = PacketPool.obtain();
 		pck2.clear();
 //		this.botContext = botContext;
@@ -42,7 +59,6 @@ public class ScriptPluginRunnableImpl implements ScriptPluginRunnable {
 		this.bModifLogging = botContext.getBotSettings().getModifLogging();
 		this.botLogger = botContext.getBotLogger();
 		this.script = script;
-		// this.botContext = botContext;
 		this.buf = botContext.getReadBuffer();
 		BotEnvironment botEnvironment = botContext.getBotEnvironment();
 		this.bRawData = botEnvironment.getRawData();
@@ -59,9 +75,6 @@ public class ScriptPluginRunnableImpl implements ScriptPluginRunnable {
 
 				// pck = buf.poll(pck);
 				pck = buf.poll();
-//				System.out
-//						.println("Packet to script plugin has been read pck.len="
-//								+ pck.getPosition());
 				if (pck == null)
 					continue;
 				// if (script != null) {
@@ -97,7 +110,6 @@ public class ScriptPluginRunnableImpl implements ScriptPluginRunnable {
 						pck2.setTime(pck.getTime());
 						pck2.setType(Packet.PCK_FROM_CLIENT);
 
-//						System.out.println("Packet from client decrypted size=" + pck2.getPosition());
 						if (bLogging)
 							botLogger.pckLog(pck2);
 						if (script != null)

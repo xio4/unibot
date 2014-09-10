@@ -44,7 +44,8 @@ Thumbs.db
 
 # Eclipse config files #
 ########################
-.project
+!.project
+!.config
 
 
 # Maven build artifacts files #
@@ -65,3 +66,4 @@ tomcat
 db
 l2
 sketches
+.cfg

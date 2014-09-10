@@ -49,6 +49,9 @@ public class BotConnectionClientImpl implements BotConnection {
 
 	@Override
 	public void disconnect() {
+		if (ctx == null) {
+			return;
+		}
 		ctx.channel().close().addListener(new ChannelFutureListener() {
 			@Override
 			public void operationComplete(ChannelFuture future) throws Exception {

@@ -41,6 +41,7 @@ import com.xiovr.unibot.plugin.ScriptPlugin;
 import com.xiovr.unibot.plugin.ScriptPluginRunnable;
 import com.xiovr.unibot.plugin.impl.ScriptPluginRunnableImpl;
 import com.xiovr.unibot.utils.exceptions.BotDoNotExistsException;
+import com.xiovr.unibot.utils.exceptions.BotScriptCannotStopException;
 
 import java.net.InetSocketAddress;
 import java.util.List;
@@ -136,26 +137,27 @@ public class BotManagerImpl implements BotManager {
 			throw new BotDoNotExistsException(-1, botType);
 		return bots;
 	}
-	
-	private BotContext getBotContextByIdAndType(int botId, int botType) throws BotDoNotExistsException
-	{
+
+	private BotContext getBotContextByIdAndType(int botId, int botType)
+			throws BotDoNotExistsException {
 		BotContext botContext = null;
-        List<BotContext> bots = null;
-		bots = getBotsListByType(botType);	
-        if (bots.size() <= botId)
+		List<BotContext> bots = null;
+		bots = getBotsListByType(botType);
+		if (bots.size() <= botId)
 			throw new BotDoNotExistsException(botId, botType);
-		botContext = bots.get(botId);	
+		botContext = bots.get(botId);
 		if (botContext == null)
 			throw new BotDoNotExistsException(botId, botType);
-		
+
 		return botContext;
 	}
 
 	@SuppressWarnings("null")
 	@Override
 	public @NonNull BotContext createBot(int botType, @NonNull String configName)
-			throws BotDoNotExistsException {
+			throws BotDoNotExistsException, BotScriptCannotStopException {
 		BotContext botContext = new BotContextImpl();
+		botContext.setManager(this);
 		botContext.setBotEnvironment(botEnvironment);
 		BotSettings botSettings = new BotSettingsImpl();
 		botGameConfig.loadSettings(botSettings, configName);
@@ -176,13 +178,7 @@ public class BotManagerImpl implements BotManager {
 			connectionFactory.createBotConnectionServer(botContext, i);
 		}
 
-		botContext.setConnectStage(0);
-
 		ScriptPluginFacade spf = new ScriptPluginFacadeImpl();
-		ScriptPluginRunnable spr = new ScriptPluginRunnableImpl(botContext);
-		Thread spt = new Thread(spr);
-		spf.setScriptPluginRunnable(spr);
-		spf.setScriptPluginThread(spt);
 
 		botContext.setScriptPluginFacade(spf);
 		List<BotContext> bots = null;
@@ -190,8 +186,8 @@ public class BotManagerImpl implements BotManager {
 		bots.add(botContext);
 		botContext.setBotId(bots.size() - 1);
 
-		// Start bot thread
-		spt.start();
+		resetBot(botContext.getBotId(), botType);
+
 		return botContext;
 	}
 
@@ -281,7 +277,7 @@ public class BotManagerImpl implements BotManager {
 	@Override
 	public void connect(int botId, int botType) throws BotDoNotExistsException {
 
-//		List<BotContext> bots = null;
+		// List<BotContext> bots = null;
 
 		BotContext botContext = null;
 		botContext = getBotContextByIdAndType(botId, botType);
@@ -304,7 +300,8 @@ public class BotManagerImpl implements BotManager {
 	}
 
 	@Override
-	public void disconnect(int botId, int botType) throws BotDoNotExistsException {
+	public void disconnect(int botId, int botType)
+			throws BotDoNotExistsException {
 		BotContext botContext = null;
 		botContext = getBotContextByIdAndType(botId, botType);
 		for (int i = 0; i < botEnvironment.getServerAddresses().size(); ++i) {
@@ -341,4 +338,50 @@ public class BotManagerImpl implements BotManager {
 		return this.botLogger;
 	}
 
+	private Thread createScriptThreadBot(BotContext botContext)
+			throws BotScriptCannotStopException {
+		ScriptPluginFacade spf = botContext.getScriptPluginFacade();
+		Thread oldSpt = spf.getScriptPluginThread();
+		if (oldSpt != null) {
+			try {
+				if (oldSpt.isAlive()) {
+					oldSpt.interrupt();
+				}
+				oldSpt.join(100);
+				if (oldSpt.isAlive()) {
+					throw new BotScriptCannotStopException(
+							botContext.getBotId(), botContext.getBotSettings()
+									.getType());
+				}
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+
+		ScriptPluginRunnable spr = new ScriptPluginRunnableImpl(botContext);
+		Thread newSpt = new Thread(spr);
+		spf.setScriptPluginRunnable(spr);
+		spf.setScriptPluginThread(newSpt);
+
+		return newSpt;
+	}
+
+	@Override
+	public void resetBot(int botId, int botType)
+			throws BotDoNotExistsException, BotScriptCannotStopException {
+		BotContext botContext = getBot(botId, botType);
+		botContext.setConnectStage(0);
+		Thread spt = createScriptThreadBot(botContext);
+
+		try {
+			// Start bot thread
+			spt.start();
+			// Wait while thread is started
+			while (!spt.isAlive()) {
+				Thread.sleep(50);
+			}
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
 }

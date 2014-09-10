@@ -30,6 +30,7 @@ import org.springframework.stereotype.Component;
 import com.xiovr.unibot.bot.network.ConnectionFactory;
 import com.xiovr.unibot.plugin.PluginLoader;
 import com.xiovr.unibot.utils.exceptions.BotDoNotExistsException;
+import com.xiovr.unibot.utils.exceptions.BotScriptCannotStopException;
 
 /**
  * @author xio4 E5bot launcher bean
@@ -78,7 +79,7 @@ public class BotLauncher implements CommandLineRunner {
 		try {
 //			botManager.createBot(BotSettings.PROXY_TYPE, dir + "../test1.cfg");
 			botManager.createBot(BotSettings.PROXY_TYPE, "/tmp/test1.cfg");
-		} catch (BotDoNotExistsException e) {
+		} catch (BotDoNotExistsException | BotScriptCannotStopException e) {
 			e.printStackTrace();
 		}
 	}	

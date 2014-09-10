@@ -30,6 +30,7 @@ import org.slf4j.LoggerFactory;
 import com.xiovr.unibot.bot.BotContext;
 import com.xiovr.unibot.bot.BotEnvironment;
 import com.xiovr.unibot.bot.BotLogger;
+import com.xiovr.unibot.bot.BotManager;
 import com.xiovr.unibot.bot.BotSettings;
 import com.xiovr.unibot.bot.ScriptPluginFacade;
 import com.xiovr.unibot.bot.network.BotConnection;
@@ -57,6 +58,7 @@ public class BotContextImpl implements BotContext {
 	private ScriptPluginFacade scriptPluginFacade;
 	private BotLogger botLogger;
 	private volatile int connStage;
+	private BotManager botManager;
 
 	public BotContextImpl() {
 		super();
@@ -290,6 +292,16 @@ public class BotContextImpl implements BotContext {
 	@Override
 	public void addClientConnection(@NonNull BotConnection botConnection) {
 		this.clientConnections.add(botConnection);
+	}
+
+	@Override
+	public BotManager getManager() {
+		return this.botManager;
+	}
+
+	@Override
+	public void setManager(@NonNull BotManager botManager) {
+		this.botManager = botManager;
 	}
 
 }

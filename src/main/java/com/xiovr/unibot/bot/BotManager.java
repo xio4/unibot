@@ -26,6 +26,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.xiovr.unibot.bot.network.ConnectionFactory;
 import com.xiovr.unibot.plugin.PluginLoader;
 import com.xiovr.unibot.utils.exceptions.BotDoNotExistsException;
+import com.xiovr.unibot.utils.exceptions.BotScriptCannotStopException;
 
 public interface BotManager {
 	public static final int BOT_MAX_COUNT = 1000;
@@ -39,7 +40,9 @@ public interface BotManager {
 	public void setBotLogger(@NonNull BotLogger botLogger);
 	public BotLogger getBotLogger();
 	public void clear();
-	public BotContext createBot(int botType, @NonNull String configName) throws BotDoNotExistsException;
+	public BotContext createBot(int botType, @NonNull String configName) throws BotDoNotExistsException, BotScriptCannotStopException;
+	// Reset only botContext, botConnection isn't reset!
+	public void resetBot(int botId, int botType) throws BotDoNotExistsException, BotScriptCannotStopException;
 	public void destroyBot(int botId, int botType) throws BotDoNotExistsException;
 	public BotContext getBot(int botId, int botType) throws BotDoNotExistsException;
 	public void loadScript(int botId, int botType, @NonNull String scriptPath) throws Exception;

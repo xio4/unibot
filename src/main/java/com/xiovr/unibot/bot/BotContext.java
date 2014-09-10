@@ -80,4 +80,6 @@ public interface BotContext {
 	public void setBotLogger(BotLogger botLogger);
 	public BotLogger getBotLogger();
 	public void log(int type, String msg);
+	public BotManager getManager();
+	public void setManager(@NonNull BotManager botManager);
 }

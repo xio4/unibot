@@ -57,6 +57,11 @@ public class BotConnectionServerImpl implements BotConnection {
 	public BotConnectionServerImpl() {
 		this.ctx = null;
 		this.bDisconnectPermit = true;
+		this.cf = null;
+		this.stage = 0;
+		this.botContext = null;
+		this.workerGroup = null;
+		this.bs = null;
 	}
 
 	@Override
@@ -91,6 +96,9 @@ public class BotConnectionServerImpl implements BotConnection {
 
 	@Override
 	public void disconnect() {
+		if (cf == null) {
+			return;
+		}
 		cf.channel().close().addListener(new ChannelFutureListener() {
 			@Override
 			public void operationComplete(ChannelFuture future) throws Exception {
@@ -98,6 +106,7 @@ public class BotConnectionServerImpl implements BotConnection {
 //				final ScriptPlugin sp = botContext.getScript();
 //				if (sp != null)
 //					sp.onDisconnected(ScriptPlugin.DISCONN_FROM_SERVER);
+				cf = null;
 			}
 		});
 	}

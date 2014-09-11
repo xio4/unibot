@@ -67,4 +67,5 @@ db
 l2
 sketches
 **/.cfg 
+.cfg 
 !**/cryptor_fake.jar

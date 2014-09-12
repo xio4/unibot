@@ -58,7 +58,7 @@ public class ScriptPluginRunnableImpl implements ScriptPluginRunnable {
 		this.bLogging = botContext.getBotSettings().getLogging();
 		this.bModifLogging = botContext.getBotSettings().getModifLogging();
 		this.botLogger = botContext.getBotLogger();
-		this.script = script;
+		this.script = botContext.getScript();
 		this.buf = botContext.getReadBuffer();
 		BotEnvironment botEnvironment = botContext.getBotEnvironment();
 		this.bRawData = botEnvironment.getRawData();

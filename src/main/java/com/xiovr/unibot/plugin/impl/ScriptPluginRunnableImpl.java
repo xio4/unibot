@@ -131,6 +131,7 @@ public class ScriptPluginRunnableImpl implements ScriptPluginRunnable {
 					cryptorPlugin.decryptFromServer(pck, pck2);
 					pck2.setTime(pck.getTime());
 					pck2.setType(Packet.PCK_FROM_SERVER);
+					pck2.setConnStage(pck.getConnStage());
 					if (bLogging)
 						botLogger.pckLog(pck2);
 					if (script != null)

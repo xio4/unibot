@@ -161,6 +161,11 @@ public class BotManagerImpl implements BotManager {
 		botContext.setBotEnvironment(botEnvironment);
 		BotSettings botSettings = new BotSettingsImpl();
 		botGameConfig.loadSettings(botSettings, configName);
+		if (botSettings.getType() != botType) {
+			logger.info("Bot type in config {} and then create bot type {} is several",
+					botSettings.getType(), botType);
+			botSettings.setType(botType);
+		}
 		botContext.setBotSettings(botSettings);
 		CryptorPlugin cp = pluginLoader.createCryptorPlugin();
 		cp.init(botContext);

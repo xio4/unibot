@@ -75,12 +75,16 @@ public class BotLauncher implements CommandLineRunner {
 		botManager.setPluginLoader(pluginLoader);
 		botManager.setConnectionFactory(connectionFactory);
 		connectionFactory.createProxyListeners(botManager.getBots(BotSettings.PROXY_TYPE));
+		BotContext bot = null;
 //		Thread.currentThread().setContextClassLoader();
 		try {
-//			botManager.createBot(BotSettings.PROXY_TYPE, dir + "../test1.cfg");
-			botManager.createBot(BotSettings.PROXY_TYPE, "/tmp/test1.cfg");
+//			botManager.createBot(BotSettings.PROXY_TYPE, "/tmp/test1.cfg");
+			bot = botManager.createBot(BotSettings.OUTGAME_TYPE, "/tmp/test1.cfg");
+
+			botManager.connect(bot.getBotId(), bot.getBotSettings().getType());
 		} catch (BotDoNotExistsException | BotScriptCannotStopException e) {
 			e.printStackTrace();
 		}
+
 	}	
 }

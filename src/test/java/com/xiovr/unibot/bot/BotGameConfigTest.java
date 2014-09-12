@@ -131,7 +131,7 @@ public class BotGameConfigTest extends TestBase {
 		Assert.assertEquals(botSettings.getLogin(), "testtesttest");
 		Assert.assertEquals(botSettings.getName(), "adda");
 		Assert.assertEquals(botSettings.getPassword(), "testtest");
-		Assert.assertEquals(botSettings.getServerId(), 0);
+		Assert.assertEquals(botSettings.getServerId(), 1);
 		Assert.assertEquals(botSettings.getType(), BotSettings.PROXY_TYPE);
 		Assert.assertEquals(botSettings.getAutoConnect(), false);
 		Assert.assertEquals(botSettings.getDisabled(), false);

@@ -41,7 +41,7 @@ public interface BotSettings extends Settings {
 	@Param(name="bot.char_id" , values = "0")
 	public void setCharId(int charId);
 	public int getServerId();
-	@Param(name = "bot.server_id", values = "0")
+	@Param(name = "bot.server_id", values = "01")
 	public void setServerId(int id);
 	@Param(name = "bot.script_path", values = "")
 	public void setScriptPath(String path);

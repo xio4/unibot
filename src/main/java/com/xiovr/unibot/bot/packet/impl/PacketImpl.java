@@ -410,7 +410,7 @@ public class PacketImpl implements Packet {
 	@Override
 	public void putPacketId(int pckId, int size) {
 		for (int i = 0; i < size; ++i) {
-			array[i+2] = (byte)((pckId >> i) & 0xFF);
+			array[i+2] = (byte)((pckId >>> i) & 0xFF);
 		}
 	}
 }

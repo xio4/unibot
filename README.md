@@ -1,17 +1,12 @@
 Unibot
 ==============
 
-Unibot is universal bot for lineage-like games (Archeage, Lineage2 etc) and for stress tests MMO-games. It supports scripts on pure java and plugins for encrypt and decrypt packets.
-
-
-Installation
-============
-
-git clone https://github.com/xio4/unibot
+Unibot is universal bot for stress tests MMO-games. It supports scripts on pure java and plugins for encrypt and decrypt packets.
 
 Compilation
 ===========
 
+git clone https://github.com/xio4/unibot
 mvn clean package 
 
 Wiki

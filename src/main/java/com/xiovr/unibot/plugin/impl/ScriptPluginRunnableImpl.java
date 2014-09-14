@@ -142,9 +142,8 @@ public class ScriptPluginRunnableImpl implements ScriptPluginRunnable {
 					cryptorPlugin.modifyServerPacket(pck2);
 					if (pck2.getPosition() > 2) {
 						cryptorPlugin.execServerCommand(pck2, pck2);
-					} else {
-						PacketPool.free(pck);
 					}
+					PacketPool.free(pck);
 
 				} else if (botType == BotSettings.INGAME_TYPE) {
 					// FIXME Ingame type not implemented yet
@@ -156,9 +155,8 @@ public class ScriptPluginRunnableImpl implements ScriptPluginRunnable {
 						botLogger.pckModifLog(pck);
 
 					if (pck.getPosition() > 2 ) {
-					} else {
-						PacketPool.free(pck);
-					}
+					} 
+                    PacketPool.free(pck);
 				}
 				oldTime = time;
 				// }

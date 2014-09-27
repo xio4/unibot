@@ -32,6 +32,10 @@ public interface BotEnvironment extends Settings {
 	public void setUpdateInterval(long updatInterval);
 	public long getUpdateInterval();
 
+	@Param(name="script.pathprefix", values = "scripts")
+	public void setScriptsPathPrefix(String scriptsPath);
+	public String getScriptsPathPrefix();
+
 	@Param(name="client", values = {"127.0.0.1", "2594", "127.0.0.1", "22273"})
 	public void setClientAddresses(@NonNull List<InetSocketAddress> addresses);
 	public List<InetSocketAddress> getClientAddresses();
@@ -64,6 +68,9 @@ public interface BotEnvironment extends Settings {
 	@Param(name="bot.port_range_max", values = "25500")
 	public void setPortRangeMax(int port);
 	public int getPortRangeMax();
+	@Param(name="bot.cryptor_path", values = "cryptor.jar")
+	public void setCryptorPath(String cryptorPath);
+	public String getCryptorPath();
 
 
 	/**

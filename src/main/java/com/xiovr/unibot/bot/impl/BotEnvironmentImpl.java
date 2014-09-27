@@ -44,6 +44,8 @@ public class BotEnvironmentImpl implements BotEnvironment {
 	private List<InetSocketAddress> serverAddresses;
 	private int portRangeMin;
 	private int portRangeMax;
+	private String scriptsPathPrefix;
+	private String cryptorPath;
 
 	public BotEnvironmentImpl() {
 		clientAddresses = new ArrayList<InetSocketAddress>();
@@ -158,6 +160,27 @@ public class BotEnvironmentImpl implements BotEnvironment {
 	public void setServerAddresses(@NonNull List<InetSocketAddress> addresses) {
 		this.serverAddresses = addresses;
 		
+	}
+
+	@Override
+	public void setScriptsPathPrefix(String scriptsPath) {
+		this.scriptsPathPrefix = scriptsPath;
+		
+	}
+
+	@Override
+	public String getScriptsPathPrefix() {
+		return this.scriptsPathPrefix;
+	}
+
+	@Override
+	public void setCryptorPath(String cryptorPath) {
+		this.cryptorPath = cryptorPath;
+	}
+
+	@Override
+	public String getCryptorPath() {
+		return this.cryptorPath;
 	}
 
 

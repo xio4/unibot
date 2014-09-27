@@ -3,10 +3,14 @@ Unibot
 
 Unibot is universal bot for stress tests MMO-games. It supports scripts on pure java and plugins for encrypt and decrypt packets.
 
+Installation
+============
+
+git clone https://github.com/xio4/unibot
+
 Compilation
 ===========
 
-git clone https://github.com/xio4/unibot
 mvn clean package 
 
 Wiki

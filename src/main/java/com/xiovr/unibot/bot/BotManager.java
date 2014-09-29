@@ -50,6 +50,7 @@ public interface BotManager {
 	@Deprecated
 	public void loadBots();
 	public List<BotContext> getBots(int botType);
+	public List<BotContext> getBotsAll();
 	public int botsCount(int botType) throws BotDoNotExistsException;
 	public void connect(int botId, int botType) throws BotDoNotExistsException;
 	public void disconnect(int botId, int botType) throws BotDoNotExistsException;

@@ -156,7 +156,7 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
 	public ThymeleafView getThymeleafView()
 	{
 		Map<String, String> map = new HashMap<String, String>();
-		map.put("copyright", "2014 @Xio4");
+		map.put("copyright", "@2014 Xio4");
 		
 		ThymeleafView tv = new ThymeleafView() {};
 		tv.setStaticVariables(map);

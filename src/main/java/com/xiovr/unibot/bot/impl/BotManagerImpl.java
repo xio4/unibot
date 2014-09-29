@@ -44,6 +44,7 @@ import com.xiovr.unibot.utils.exceptions.BotDoNotExistsException;
 import com.xiovr.unibot.utils.exceptions.BotScriptCannotStopException;
 
 import java.net.InetSocketAddress;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -388,5 +389,14 @@ public class BotManagerImpl implements BotManager {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public List<BotContext> getBotsAll() {
+		List<BotContext> bots = new ArrayList<BotContext>();
+		bots.addAll(proxyBots);
+		bots.addAll(ingameBots);
+		bots.addAll(outgameBots);
+		return bots;
 	}
 }

@@ -8,6 +8,9 @@ spring:
       encoding=UTF-8
       content-type=text/html 
       cache=false 
+   jpa:
+      hibernate:
+         dll-auto=none
 logging:
    file: global.log
 server:

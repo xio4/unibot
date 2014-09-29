@@ -27,6 +27,8 @@ import com.xiovr.unibot.bot.impl.BotGameConfigImpl;
 import com.xiovr.unibot.bot.impl.BotManagerImpl;
 import com.xiovr.unibot.bot.network.ConnectionFactory;
 import com.xiovr.unibot.bot.network.impl.ConnectionFactoryImpl;
+import com.xiovr.unibot.data.service.WebDtoService;
+import com.xiovr.unibot.data.service.impl.WebDtoServiceImpl;
 import com.xiovr.unibot.plugin.PluginLoader;
 import com.xiovr.unibot.plugin.impl.PluginLoaderImpl;
 
@@ -66,6 +68,13 @@ public class BotConfig {
 	{
 		ConnectionFactory cf = new ConnectionFactoryImpl();
 		return cf;
+	}
+	
+	@Bean(name="webDtoService")
+	public WebDtoService getWebDtoService()
+	{
+		WebDtoService wds = new WebDtoServiceImpl();
+		return wds;
 	}
 	
 }

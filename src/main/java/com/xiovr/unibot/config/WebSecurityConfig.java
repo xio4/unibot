@@ -53,8 +53,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	// In antMathcers is not required authentication
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests().antMatchers("/css/**", "/images/**")
-				.permitAll()
-				.anyRequest().authenticated();
+				.permitAll().anyRequest().authenticated();
 
 
 		http.formLogin().usernameParameter("username")

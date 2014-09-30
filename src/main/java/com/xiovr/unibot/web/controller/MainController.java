@@ -34,9 +34,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 class MainController {
 
     @RequestMapping(value ={"/error"}, method = RequestMethod.GET)
-    @ResponseStatus( HttpStatus.CREATED)
     public String error() {
-        return "Error access";
+        return "error";
     }
 
     @RequestMapping(value={"/test"}, method = RequestMethod.GET)

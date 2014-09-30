@@ -38,7 +38,7 @@ import com.xiovr.unibot.config.WebSecurityConfig;
  */
 @Configuration
 @EnableAutoConfiguration
-@ComponentScan(basePackages = {"com.xiovr.unibot.config" ,
+@ComponentScan(basePackages = {"com.xiovr.unibot.config" , "com.xiovr.unibot.secutiry",
 		"com.xiovr.unibot.data", "com.xiovr.unibot.web", "com.xiovr.unibot.bot"})
 @Import(value = {JdbcConfig.class, 
 				HibernateConfig.class,

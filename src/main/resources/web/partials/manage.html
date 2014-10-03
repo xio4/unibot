@@ -1,0 +1,77 @@
+
+<div class="panel panel-default">
+	<div class="panel-heading">
+		<h3 class="panel-title">
+			Bots list</h3>
+	</div>
+	<div class="panel-body" ng-controller="ManageCrudCtrl">
+		<!-- 		<div class="col-md-6"> -->
+		<div class="btn-toolbar" ng-controller="ManageConnectCtrl">
+			<span class="pull-left">&nbsp;&nbsp;</span>
+			<button type="button" class="btn btn-primary pull-left"
+				ng-click="createBot()">&nbsp;New&nbsp;</button>
+
+			<button type="button" class="btn btn-warning pull-right" ng-click="showEnvironment()">&nbsp;Environment&nbsp;</button>
+
+			<div class="pull-right vcenter">
+				<checkbox class="btn btn-primary" ng-model="autoconnect" ng-click="changeAutoconnect()"></checkbox>
+				<span class=""> Autoconnect</span>
+			</div>
+
+			<div class="center-element" style="width: 40%">
+				<span>&nbsp</span>
+				<button type="button" class="btn btn-default"
+					ng-click="connect(global.bot)">&nbsp;Connect&nbsp;</button>
+				<button type="button" class="btn btn-default"
+					ng-click="disconnect(global.bot)">&nbsp;Disconnect&nbsp;</button>
+				<span>&nbsp</span>
+				<button type="button" class="btn btn-info"
+					ng-click="confirmDisconnectAll()">&nbsp;DisconnectAll&nbsp;</button>
+			</div>
+		</div>
+		<div>
+			<table class="table table-hover table-header-grey">
+				<thead>
+					<tr>
+						<th></th>
+						<th>id</th>
+						<th>Login</th>
+						<th>Name</th>
+						<th>Type</th>
+						<th>Auto</th>
+						<th>Server ID</th>
+						<th>Disabled</th>
+						<th>Script path</th>
+						<th>Status</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-click="selectBot(bot)"
+						ng-class="{'text-muted': bot.disabled === true,
+					 'select-dark-grey': isSelected(bot)}"
+						ng-repeat="bot in global.bots">
+						<td>
+							<button type="button" class="btn btn-xs btn-default"
+								ng-click="confirmDel(bot)" ng-disabled="bot.type !== 'Outgame' ">X</button>
+							<button type="button" class="btn btn-xs btn-default"
+								ng-click="showEditor(bot)">&nbsp;Edit&nbsp;</button>
+						</td>
+						<td>{{ bot.botId }}</td>
+						<td>{{ bot.name }}</td>
+						<td>{{ bot.login }}</td>
+						<td>{{ bot.type }}</td>
+						<td>{{ bot.autoconnect }}</td>
+						<td>{{ bot.serverId }}</td>
+						<td>{{ bot.disabled }}</td>
+						<td>{{ bot.scriptPath }}</td>
+						<td class=""
+							ng-class="{'text-muted': bot.status === 'Offline', 'text-color-green': bot.status === 'Online'}"><b>{{
+								bot.status }}</b></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+
+</div>

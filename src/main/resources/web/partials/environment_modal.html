@@ -1,0 +1,73 @@
+<div class="modal-header" style="background-color: #333333">
+	<h4 class="modal-title" style="color: #ffffff">Environment</h4>
+</div>
+<div class="modal-body">
+	<div class="panel panel-info">
+		<div class="panel-body">
+			<div class="col-md-6">
+				<div class="row">
+					<div class="pull-left vcenter">Update bot interval</div>
+					<div class="input-group input-group pull-right input-width-100 ">
+						<input type="number" class="form-control text-right"
+							ng-model="env.update_interval"> <span
+							class="input-group-addon">ms</span>
+					</div>
+				</div>
+				<div class="row margin-top-5">
+					<div class="pull-left vcenter">Scripts path prefix</div>
+					<div class="input pull-right input-width-200 ">
+						<input type="text" class="form-control" ng-model="env.pathprefix">
+					</div>
+				</div>
+				<div class="row margin-top-5">
+					<div class="pull-left vcenter">Next bot connection interval</div>
+					<div class="input-group pull-right input-width-100 ">
+						<input type="text" class="form-control text-right"
+							ng-model="env.next_connection_interval"> <span
+							class="input-group-addon">s</span>
+					</div>
+				</div>
+				<div class="row margin-top-5 vcenter">
+					<div class="pull-left ">Inject raw data in script</div>
+					<div class="vcenter margin-top-5">
+						<checkbox class="pull-right  btn-primary" ng-model="env.raw_data"></checkbox>
+					</div>
+				</div>
+				<div class="row margin-top-5">
+					<div class="pull-left vcenter">Port range minimum</div>
+					<div class="input pull-right input-width-100 ">
+						<input type="number" class="form-control text-right"
+							ng-model="env.port_range_min">
+					</div>
+				</div>
+				<div class="row margin-top-5">
+					<div class="pull-left vcenter">Port range maximum</div>
+					<div class="input pull-right input-width-100 ">
+						<input type="number" class="form-control text-right"
+							ng-model="env.port_range_max">
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6 col-left-20">
+				<div class="row margin-top-5">
+					<div class="pull-left vcenter">Client connections</div>
+					<textarea class="form-control pull-right input-width-200"
+						maxlength="200" rows="4" ng-model="env.client"></textarea>
+				</div>
+				<div class="row margin-top-5">
+					<div class="pull-left vcenter">Server connections</div>
+					<textarea class="form-control pull-right input-width-200"
+						maxlength="200" rows="4" ng-model="env.server"></textarea>
+				</div>
+			</div>
+		</div>
+	</div>
+<div class="text-color-red">
+	*Warning: To accept the environment settings you need to restart unibot!
+</div>
+</div>
+
+<div class="modal-footer">
+	<button class="btn btn-primary" ng-click="save()">Save</button>
+	<button class="btn btn-default" ng-click="cancel()">Cancel</button>
+</div>

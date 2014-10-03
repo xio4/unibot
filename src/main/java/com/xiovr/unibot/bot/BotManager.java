@@ -58,5 +58,7 @@ public interface BotManager {
 	public void setBotMessageTransfer(@NonNull BotMessageTransferRunnable bmtt);
 	public void setPluginLoader(@NonNull PluginLoader pluginLoader);
 	public PluginLoader getPluginLoader();
+	public String botConfigNameGenerator(BotSettings botSettings);
+	public void disconnectAllBots();
 
 }

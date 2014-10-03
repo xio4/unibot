@@ -53,18 +53,22 @@ public class BotLauncher implements CommandLineRunner {
 	@SuppressWarnings("null")
 	public void run(String... args) {
 
-		String dir = new File("").getAbsolutePath();
 		
 //		botGameConfig.loadSettings(botEnvironment, dir + "/" + BotEnvironment.ENVIRONMENT_CFG_FN);
 		botGameConfig.loadSettings(botEnvironment, "/tmp/" + BotEnvironment.ENVIRONMENT_CFG_FN);
+		// Check prefixscriptpath exists
+		File fn = new File(botGameConfig.getAbsDirPath() + "/" + botEnvironment.getScriptsPathPrefix());
+		if (!fn.isDirectory()) {
+			if (!fn.mkdir()) {
+				logger.error("Cannot create directory with name {}" , botEnvironment.getScriptsPathPrefix());
+				return;
+			}
+		}
 		connectionFactory.init(botEnvironment);
 		botManager.setBotEnvironment(botEnvironment);
 		botManager.setBotGameConfig(botGameConfig);
 		// Dir for tests in eclipse
-		 dir = getClass().getProtectionDomain().getCodeSource()
-				.getLocation().toString().substring(6);
-		logger.info("DIR:" + dir);
-		System.out.println("DIR:" + dir);
+
 		try {
 //			pluginLoader.loadCryptorPlugin("/" + dir + "../bsfg_cryptor.jar");
 			pluginLoader.loadCryptorPlugin("/tmp/bsfg_cryptor.jar");

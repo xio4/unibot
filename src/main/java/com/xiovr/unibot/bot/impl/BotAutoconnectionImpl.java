@@ -24,13 +24,13 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import com.xiovr.unibot.bot.BotAutoconnectRunnable;
+import com.xiovr.unibot.bot.BotAutoconnection;
 import com.xiovr.unibot.bot.BotContext;
 import com.xiovr.unibot.bot.BotEnvironment;
 import com.xiovr.unibot.bot.BotManager;
 import com.xiovr.unibot.bot.BotSettings;
 
-public class BotAutoconnectRunnableImpl implements BotAutoconnectRunnable {
+public class BotAutoconnectionImpl implements BotAutoconnection {
 
 	private List<Integer> curTime;
 	private List<BotContext> botContexts;
@@ -39,13 +39,17 @@ public class BotAutoconnectRunnableImpl implements BotAutoconnectRunnable {
 	private TimerTask timerTask;
 	private BotEnvironment botEnvironment;
 
-	public BotAutoconnectRunnableImpl(BotManager botManager) {
+	private volatile boolean bStart;
+
+	public BotAutoconnectionImpl(BotManager botManager) {
+
+		bStart = false;
 		this.botManager = botManager;
 
 		this.botEnvironment = botManager.getBotEnvironment();
 		curTime = new ArrayList<Integer>(BotManager.BOT_MAX_COUNT);
 
-		for (int i = 0; i < BotManager.BOT_MAX_COUNT; ++i ) {
+		for (int i = 0; i < BotManager.BOT_MAX_COUNT; ++i) {
 			curTime.add(0);
 		}
 
@@ -58,10 +62,9 @@ public class BotAutoconnectRunnableImpl implements BotAutoconnectRunnable {
 			public void run() {
 				skipTime++;
 
-				List<BotContext> botContexts = BotAutoconnectRunnableImpl.this.botContexts;
-				BotManager botManager = BotAutoconnectRunnableImpl.this.botManager;
-				if (skipTime < botEnvironment
-						.getNextBotConnectionInterval())
+				List<BotContext> botContexts = BotAutoconnectionImpl.this.botContexts;
+				BotManager botManager = BotAutoconnectionImpl.this.botManager;
+				if (skipTime < botEnvironment.getNextBotConnectionInterval())
 					return;
 				for (int i = 0; i < botContexts.size(); ++i) {
 					BotContext botContext = botContexts.get(i);
@@ -92,12 +95,22 @@ public class BotAutoconnectRunnableImpl implements BotAutoconnectRunnable {
 
 	@Override
 	public void start() {
-		timer.scheduleAtFixedRate(timerTask, 1000, 1000);
+		if (!bStart) {
+			timer.scheduleAtFixedRate(timerTask, 1000, 1000);
+			bStart = true;
+		}
 	}
 
 	@Override
 	public void stop() {
-		timer.cancel();
+		if (bStart) {
+			timer.cancel();
+			bStart = false;
+		}
 	}
 
+	@Override
+	public boolean enabled() {
+		return this.bStart;
+	}
 }

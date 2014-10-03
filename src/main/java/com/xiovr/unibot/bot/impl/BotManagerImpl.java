@@ -49,7 +49,6 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class BotManagerImpl implements BotManager {
-	@SuppressWarnings("unused")
 	private Logger logger = LoggerFactory.getLogger(BotManagerImpl.class);
 	private List<BotContext> proxyBots;
 	private List<BotContext> ingameBots;
@@ -163,7 +162,8 @@ public class BotManagerImpl implements BotManager {
 		BotSettings botSettings = new BotSettingsImpl();
 		botGameConfig.loadSettings(botSettings, configName);
 		if (botSettings.getType() != botType) {
-			logger.info("Bot type in config {} and then create bot type {} is several",
+			logger.info(
+					"Bot type in config {} and then create bot type {} is several",
 					botSettings.getType(), botType);
 			botSettings.setType(botType);
 		}
@@ -313,9 +313,11 @@ public class BotManagerImpl implements BotManager {
 		for (int i = 0; i < botEnvironment.getServerAddresses().size(); ++i) {
 			botContext.getServerConnections().get(i).disconnect();
 		}
-		for (int i = 0; i < botEnvironment.getClientAddresses().size(); ++i) {
-			botContext.getClientConnections().get(i).disconnect();
-		}
+		// May be it Outgame bot
+		if (botContext.getClientConnections().size() > 0)
+			for (int i = 0; i < botEnvironment.getClientAddresses().size(); ++i) {
+				botContext.getClientConnections().get(i).disconnect();
+			}
 	}
 
 	@Override
@@ -399,4 +401,45 @@ public class BotManagerImpl implements BotManager {
 		bots.addAll(outgameBots);
 		return bots;
 	}
+
+	@Override
+	public String botConfigNameGenerator(BotSettings botSettings) {
+		StringBuilder configNameBuilder = new StringBuilder();
+		configNameBuilder.append(botSettings.getLogin());
+		configNameBuilder.append("_");
+		configNameBuilder.append(botSettings.getName());
+		configNameBuilder.append("_");
+		configNameBuilder.append(botSettings.getType());
+		configNameBuilder.append(".cfg");
+		return configNameBuilder.toString();
+	}
+
+	@Override
+	public void disconnectAllBots() {
+		List<BotContext> bots = new ArrayList<BotContext>();
+		bots.addAll(proxyBots);
+		bots.addAll(ingameBots);
+		bots.addAll(outgameBots);
+
+		try {
+			for (BotContext botContext : bots) {
+				for (int i = 0; i < botEnvironment.getServerAddresses().size(); ++i) {
+					botContext.getServerConnections().get(i).disconnect();
+				}
+				for (int i = 0; i < botEnvironment.getClientAddresses().size(); ++i) {
+					botContext.getClientConnections().get(i).disconnect();
+				}
+				resetBot(botContext.getBotId(), botContext.getBotSettings()
+						.getType());
+
+			}
+		} catch (BotDoNotExistsException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (BotScriptCannotStopException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
 }

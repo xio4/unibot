@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en" ng-app="unibot" ng-controller="MainCtrl">
+<head>
+<meta charset="utf-8"/>
+<title ng-bind-template="Unibot: {{global.bot.name}}">Unibot</title>
+<link rel="shortcut icon" href="/img/favicon.ico" />
+<link rel="stylesheet"
+	href="bower_components/bootstrap/dist/css/bootstrap.css"/>
+<link rel="stylesheet"
+	href="bower_components/bootstrap/dist/css/bootstrap-theme.css"/>
+<link rel="stylesheet" href="css/unibot.css"/>
+<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+<script src="bower_components/jquery/jquery.js"></script>
+<!-- <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script> -->
+<script src="bower_components/angular/angular.js"></script>
+<script src="bower_components/angular-route/angular-route.js"></script>
+<script src="bower_components/angular-resource/angular-resource.js"></script>
+<script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+<script src="build/app.js"></script>
+</head>
+<body>
+	<div id="wrapper">
+<!-- 	<button popover="I appeared on mouse enter!" popover-trigger="mouseenter" class="btn btn-default">Mouseenter</button> -->
+		<div class="navbar navbar-inverse navbar-fixed-top">
+			<div class="container">
+				<div class="navbar-header">
+					<div class="navbar-collapse collapse">
+						<ul class="nav navbar-nav">
+							<li ng-class="{active: isActivePath('manage')}"><a
+								ng-href="#/manage" href="#/manage">Manage</a></li>
+							<li ng-class="{active: isActivePath('script')}"><a
+								ng-href="#/script" href="#/script">Script</a></li>
+							<li ng-class="{active: isActivePath('log')}"><a
+								ng-href="#/log" href="#/log">Log</a></li>
+							<li ng-class="{active: isActivePath('packets')}"><a
+								ng-href="#/packets" href="#/packets">Packets</a></li>
+							<li ng-class="{active: isActivePath('external')}"><a
+								ng-href="#/external" href="#/external">External</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="container">
+			<div ng-view>Test</div>
+
+			<div class="footer text-muted">
+				<hr />
+				<p>Copyright&copy; 2014 xio4</p>
+			</div>
+
+		</div>
+	</div>
+
+
+</body>
+</html>

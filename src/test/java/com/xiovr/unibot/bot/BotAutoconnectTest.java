@@ -27,12 +27,12 @@ import org.easymock.IAnswer;
 import org.testng.annotations.Test;
 
 import com.xiovr.unibot.TestBase;
-import com.xiovr.unibot.bot.BotAutoconnectRunnable;
+import com.xiovr.unibot.bot.BotAutoconnection;
 import com.xiovr.unibot.bot.BotContext;
 import com.xiovr.unibot.bot.BotEnvironment;
 import com.xiovr.unibot.bot.BotManager;
 import com.xiovr.unibot.bot.BotSettings;
-import com.xiovr.unibot.bot.impl.BotAutoconnectRunnableImpl;
+import com.xiovr.unibot.bot.impl.BotAutoconnectionImpl;
 import com.xiovr.unibot.bot.impl.BotContextImpl;
 import com.xiovr.unibot.utils.exceptions.BotDoNotExistsException;
 
@@ -78,7 +78,7 @@ public class BotAutoconnectTest extends TestBase {
 		
 		EasyMock.replay(bs, be, bm);
 
-		BotAutoconnectRunnable bar = new BotAutoconnectRunnableImpl(bm);
+		BotAutoconnection bar = new BotAutoconnectionImpl(bm);
 		bar.start();
 		try {
 			Thread.sleep(3000);

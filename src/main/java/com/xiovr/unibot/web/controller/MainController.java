@@ -37,7 +37,6 @@ class MainController {
     public String error() {
         return "error";
     }
-
     @RequestMapping(value={"/test"}, method = RequestMethod.GET)
     public String index() {
         return "Greetings from Spring Boot!";

@@ -24,6 +24,7 @@ public interface BotGameConfig {
 	public static final int DEFAULT_PORT = 6666;
 	public static final String DEFAULT_HOSTNAME = "127.0.0.1";
 
+	public String getAbsDirPath();
 	public void loadSettings(Settings instance, String fn);
 
 	public void saveSettings(Settings instance, String fn, String comment);

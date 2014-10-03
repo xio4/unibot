@@ -1,0 +1,65 @@
+body {
+  padding-top: 70px;
+  padding-bottom: 20px;
+}
+
+.header-fixed {
+position:fixed;
+z-index:1000;
+top:3px;
+left:0;
+right:0;
+} 
+#wrapper {
+min-height:100%;
+position:relative;
+padding-bottom:120px; 
+}
+.text-color-red {
+	color: red;
+}
+.text-color-green {
+	color: green;
+}
+.text-color-grey {
+	color: grey;
+}
+.text-color-lightgreen {
+	color: lightgreen;
+}
+.table-hover>tbody>tr:hover>td, .table-hover>tbody>tr:hover>th {
+  background-color: #dee5eb;
+/*  color:#eeeeee; */
+}
+.table-header-grey {
+	margin-top: 15px;
+}
+.table-header-grey>thead {
+	background-color: #E6E6E6;
+}
+.center-element {
+	margin:0 auto;
+}
+.btn-group-disable > button {
+		
+}
+.select-dark-grey {
+	background-color: #464646;
+	color: #ffffff;
+}
+.input-width-200 {
+	width: 200px;
+}
+.input-width-100 {
+	width: 100px;
+}
+.margin-top-5 {
+	margin-top: 5px;
+}
+.col-left-20 {
+	padding-left: 50px;
+}
+.vcenter {
+    vertical-align: middle;
+    line-height: 32px;
+}

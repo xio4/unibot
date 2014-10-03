@@ -65,7 +65,6 @@ public class ServerConnectionHandlerImpl extends
 	@Override
 	public void channelActive(ChannelHandlerContext ctx) throws Exception {
 		botContext.getServerConnections().get(stage).setHandlerContext(ctx);
-		System.out.println("ChannelActive stage=" + stage);
 		final CryptorPlugin cp = botContext.getCryptorPlugin();
 		if (cp != null)
 			cp.onConnected(ScriptPlugin.CONN_TO_SERVER);

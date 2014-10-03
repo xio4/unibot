@@ -101,7 +101,17 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
 		registry.addResourceHandler("/js/**").addResourceLocations(
 				"classpath:/web/js/");
 		registry.addResourceHandler("/templates/**").addResourceLocations(
-				"classpath:/web/templates");
+				"classpath:/web/templates/");
+		registry.addResourceHandler("/build/**").addResourceLocations(
+				"classpath:/web/build/");
+		registry.addResourceHandler("/bower_components/**").addResourceLocations(
+				"classpath:/web/bower_components/");
+		registry.addResourceHandler("/partials/**").addResourceLocations(
+				"classpath:/web/partials/");
+		registry.addResourceHandler("/static/**").addResourceLocations(
+				"classpath:/web/static/");
+		registry.addResourceHandler("/unibot.html").addResourceLocations(
+				"classpath:/web/unibot.html");
 	}
 
 	// Thymeleaf templates path

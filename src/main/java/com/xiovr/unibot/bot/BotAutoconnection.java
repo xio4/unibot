@@ -19,9 +19,9 @@
  */
 package com.xiovr.unibot.bot;
 
-public interface BotAutoconnectRunnable {
+public interface BotAutoconnection {
 //	CopyOnWriteArrayList<BotContext> botContexts;
 	public void start();
 	public void stop();
-
+	public boolean enabled();
 }

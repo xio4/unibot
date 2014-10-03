@@ -24,7 +24,7 @@
  
 	<triggeringPolicy
 		class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
-		<MaxFileSize>2MB</MaxFileSize>
+		<MaxFileSize>10MB</MaxFileSize>
 	</triggeringPolicy>
  
   </appender>
@@ -40,6 +40,8 @@
   <logger name="org.hibernate.type" level="INFO" />
   <logger name="org.hibernate" level="INFO" />
   
+  <logger name="org.xiovr.unibot" level="DEBUG" />
+
   <root>  
     <level value="DEBUG" />  
     <appender-ref ref="STDOUT" />  

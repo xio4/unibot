@@ -1,10 +1,17 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<title>BsfgE5 bot</title>
-	<meta http-equiv="Content-Type" content="text/html" charset="UTF-8"/>
-</head>
-<body>
-
-</body>
+<!DOCTYPE HTML>
+<html lang="en-US">
+    <head>
+        <title>Page Redirection</title>
+        <meta charset="UTF-8" http-equiv="refresh" content="1;url=http://localhost:8080/unibot.html"/>
+        <script type="text/javascript">
+        		var url = document.URL + "unibot.html";
+            var aRedirect = document.getElementById("redirectId");
+            aRedirect.href = url; 
+            window.location.href = url;
+        </script>
+    </head>
+    <body>
+        <!-- Note: don't tell people to `click` the link, just tell them that it is a link. -->
+        If you are not redirected automatically, follow the <a id ="redirectId" href='http://localhost:8080/unibot.html'> link to unibot</a>
+    </body>
 </html>

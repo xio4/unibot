@@ -30,6 +30,9 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.servlet.configuration.EnableWebMvcSecurity;
 import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
+import org.springframework.security.web.header.writers.HstsHeaderWriter;
+import org.springframework.security.web.header.writers.frameoptions.XFrameOptionsHeaderWriter;
+import org.springframework.security.web.util.matcher.AnyRequestMatcher;
 
 import com.xiovr.unibot.security.UserPasswordAuthenticationProvider;
 
@@ -53,7 +56,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	 * .annotation.web.builders.HttpSecurity)
 	 */
 	@Override
-	// In antMathcers is not required authentication
 	protected void configure(HttpSecurity http) throws Exception {
 //		http.authorizeRequests().antMatchers("/css/**", "/images/**, /js/**")
 //				.permitAll().anyRequest().authenticated();
@@ -64,7 +66,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //				.defaultSuccessUrl("/", false).permitAll();
 //		http.logout().logoutUrl("/logout").invalidateHttpSession(true)
 //				.permitAll();
-		http.authorizeRequests().antMatchers("/css/**", "/images/**")
+
+
+		http.headers().addHeaderWriter(new XFrameOptionsHeaderWriter(XFrameOptionsHeaderWriter.XFrameOptionsMode.SAMEORIGIN));
+		http.headers().xssProtection();
+		http.headers().cacheControl();
+		http.headers().contentTypeOptions();
+		HstsHeaderWriter writer = new HstsHeaderWriter(false);
+		writer.setRequestMatcher(AnyRequestMatcher.INSTANCE);
+		http.headers().addHeaderWriter(writer);
+		http.csrf().disable();
+		http.authorizeRequests().antMatchers("/**","/css/**", "/images/**")
 		.permitAll().anyRequest().authenticated();
 		http.formLogin().usernameParameter("username")
 		.passwordParameter("password").loginPage("/login").loginProcessingUrl("/login/submit")

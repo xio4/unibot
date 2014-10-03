@@ -22,6 +22,7 @@ package com.xiovr.unibot.bot;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import com.xiovr.unibot.bot.impl.BotAutoconnectionImpl;
 import com.xiovr.unibot.bot.impl.BotEnvironmentImpl;
 import com.xiovr.unibot.bot.impl.BotGameConfigImpl;
 import com.xiovr.unibot.bot.impl.BotManagerImpl;
@@ -40,6 +41,12 @@ public class BotConfig {
 	{
 		BotManager bm = new BotManagerImpl();
 		return bm;
+	}
+	
+	@Bean
+	public BotAutoconnection getBotAutoconnection() {
+		BotAutoconnection ba = new BotAutoconnectionImpl(getBotManager());
+		return ba;
 	}
 	
 	@Bean(name="botGameConfig")

@@ -55,7 +55,7 @@ public class BotGameConfigTest extends TestBase {
 	{
 		String dir = getClass().getProtectionDomain().getCodeSource()
 				.getLocation().toString().substring(6);
-		File fn = new File(((BotGameConfigImpl)botGameConfig).DIR_PATH + "/" + BotEnvironment.ENVIRONMENT_CFG_FN);
+		File fn = new File(dir+ "/" + BotEnvironment.ENVIRONMENT_CFG_FN);
 		fn.delete();
 //		botGameConfig.loadPropsToBotEnvironment(botEnvironment);
 		botGameConfig.loadSettings(botEnvironment, "/" + dir + "/" + BotEnvironment.ENVIRONMENT_CFG_FN);
@@ -123,7 +123,7 @@ public class BotGameConfigTest extends TestBase {
 		String dir = getClass().getProtectionDomain().getCodeSource()
 				.getLocation().toString().substring(6);
 		BotSettings botSettings = new BotSettingsImpl();
-		File fn = new File(((BotGameConfigImpl)botGameConfig).DIR_PATH + "/" + "testBotSettings.cfg");
+		File fn = new File(dir + "/" + "testBotSettings.cfg");
 		fn.delete();
 //		botGameConfig.loadBotSettings(botSettings, "testBotSettings.cfg");
 		botGameConfig.loadSettings(botSettings, "/" + dir + "/" +"testBotSettings.cfg");

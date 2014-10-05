@@ -293,7 +293,6 @@ public class BotManagerImpl implements BotManager {
 			// It works only outgame bot!
 			break;
 		case BotSettings.OUTGAME_TYPE:
-			System.out.println("Conn stage in manager connect=" + botContext.getConnectStage());
 			InetSocketAddress address = botEnvironment.getServerAddresses()
 					.get(botContext.getConnectStage());
 			botContext.getServerConnections().get(botContext.getConnectStage())

@@ -52,11 +52,10 @@ public class ServerConnectionHandlerImpl extends
 	public void channelRead(ChannelHandlerContext ctx, Object msg)
 			throws Exception {
 		final Packet pck = (Packet)msg;
+//		System.out.println("Channel read stge=" + stage);
 		pck.setConnStage(stage);
 		pck.setTime(System.currentTimeMillis());
 		pck.setType(Packet.RAW_PCK_FROM_SERVER);
-//		PacketPool.free(readBufPool.put(pck));
-//		System.out.println("Packet read");
 		readBufPool.put(pck);
 		// See source code this class
 		//ReferenceCountUtil.release(msg); 
@@ -64,6 +63,7 @@ public class ServerConnectionHandlerImpl extends
 
 	@Override
 	public void channelActive(ChannelHandlerContext ctx) throws Exception {
+//		System.out.println("Channel ACTIVE stage=" + stage + " context=" + ctx);
 		botContext.getServerConnections().get(stage).setHandlerContext(ctx);
 		final CryptorPlugin cp = botContext.getCryptorPlugin();
 		if (cp != null)
@@ -80,6 +80,8 @@ public class ServerConnectionHandlerImpl extends
 
 	@Override
 	public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+
+//		System.out.println("Channel INACTIVE stage=" + stage + " context=" + ctx);
 		botContext.getServerConnections().get(stage).setHandlerContext(null);
 		final CryptorPlugin cp = botContext.getCryptorPlugin();
 		if (cp != null)

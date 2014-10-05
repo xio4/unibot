@@ -44,6 +44,9 @@ public interface Packet extends Poolable {
 
 	public byte[] array();
 	
+	/**
+	 * Set offset packet to 2
+	 */
 	public void clear();
 
 	/**

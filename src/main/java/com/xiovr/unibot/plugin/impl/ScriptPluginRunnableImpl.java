@@ -95,10 +95,16 @@ public class ScriptPluginRunnableImpl implements ScriptPluginRunnable {
 							script.onPck(pck2, time - oldTime);
 						if (bModifLogging)
 							botLogger.pckModifLog(pck2);
+
 						cryptorPlugin.modifyServerPacket(pck2);
+						pck2.setConnStage(pck.getConnStage());
+						pck2.setTime(pck.getTime());
+						pck2.setType(Packet.PCK_FROM_SERVER);
+
 						if (pck2.getPosition() > 2) {
 							cryptorPlugin.encryptToClient(pck2, pck);
 							pck.setType(Packet.RAW_PCK_TO_CLIENT);
+							pck.setConnStage(pck2.getConnStage());
 							if (bRawData && script != null)
 								script.onPck(pck, time - oldTime);
 							cryptorPlugin.execServerCommand(pck, pck2);
@@ -118,9 +124,15 @@ public class ScriptPluginRunnableImpl implements ScriptPluginRunnable {
 							botLogger.pckModifLog(pck2);
 
 						cryptorPlugin.modifyClientPacket(pck2);
+
+						pck2.setConnStage(pck.getConnStage());
+						pck2.setTime(pck.getTime());
+						pck2.setType(Packet.PCK_FROM_CLIENT);
+
 						if (pck2.getPosition() > 2) {
 							cryptorPlugin.encryptToServer(pck2, pck);
 							pck.setType(Packet.RAW_PCK_TO_SERVER);
+							pck.setConnStage(pck2.getConnStage());
 							if (bRawData && script != null)
 								script.onPck(pck, time - oldTime);
 								cryptorPlugin.execClientCommand(pck, pck2);

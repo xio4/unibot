@@ -32,6 +32,8 @@ public interface ScriptPlugin {
 	 * Max time in milliseconds which can script methods works
 	 */
 	public static final int MAX_WORK_TIME = 10;
+
+	public static final int NO_CONNECTION = 0x00;
 	public static final int CONN_TO_SERVER = 0x01;
 	public static final int CONN_TO_CLIENT = 0x02;
 	public static final int DISCONN_FROM_SERVER = 0x03;

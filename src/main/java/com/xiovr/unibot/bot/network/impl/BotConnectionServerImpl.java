@@ -49,10 +49,10 @@ public class BotConnectionServerImpl implements BotConnection {
 	private BotContext botContext;
 	private NioEventLoopGroup workerGroup;
 	private Bootstrap bs;
-	private ChannelFuture cf;
-	private ChannelHandlerContext ctx;
+	private volatile ChannelFuture cf;
+	private volatile ChannelHandlerContext ctx;
 	private int stage;
-	private boolean bDisconnectPermit;
+	private volatile boolean bDisconnectPermit;
 
 	public BotConnectionServerImpl() {
 		this.ctx = null;
@@ -161,7 +161,7 @@ public class BotConnectionServerImpl implements BotConnection {
 		if (ctx != null) {
 			ctx.writeAndFlush(pck);
 		} else {
-			System.out.println("Server ctx is null!");
+			System.out.println("Server ctx is null! stage=" + stage);
 		}
 	}
 

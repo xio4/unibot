@@ -35,7 +35,7 @@ public class PacketImpl implements Packet {
 	private int offset;
 	private byte[] array;
 	private int markSize;
-	private int stage;
+	private volatile int stage;
 
 	public PacketImpl() {
 		this(Packet.PCK_SIZE);
@@ -51,6 +51,7 @@ public class PacketImpl implements Packet {
 		type = Packet.PCK_UNKNOWN;
 		ownerId = -1;
 		markSize = 0;
+		stage = 0;
 	}
 	@Override
 	public void putHeader(int head)
@@ -124,11 +125,16 @@ public class PacketImpl implements Packet {
 	public void clear() {
 		// pos 0 and 1 for header
 		offset = 2;
+
 	}
 
 	@Override
 	public void reset() {
 		offset = 2;
+		type = Packet.PCK_UNKNOWN;
+		ownerId = -1;
+		markSize = 0;
+		stage = 0;
 		buf.clear();
 	}
 

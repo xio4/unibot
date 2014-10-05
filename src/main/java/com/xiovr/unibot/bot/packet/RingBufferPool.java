@@ -31,6 +31,16 @@ import org.eclipse.jdt.annotation.NonNull;
  *
  * @param <T>
  */
+/**
+ * @author luser
+ *
+ * @param <T>
+ */
+/**
+ * @author luser
+ *
+ * @param <T>
+ */
 public interface RingBufferPool<T> extends Serializable {
 
 	public static final int DEFAULT_SIZE = 10000;
@@ -73,4 +83,10 @@ public interface RingBufferPool<T> extends Serializable {
 	 * @return count items in buffer
 	 */
 	public int count() throws InterruptedException;
+
+
+	/**
+	 * Clear buffer
+	 */
+	public void clear();
 }

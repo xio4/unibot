@@ -56,7 +56,7 @@ public class ClientConnectionHandlerImpl extends
 	@Override
 	public void channelRead(ChannelHandlerContext ctx, Object msg)
 			throws Exception {
-//		System.out.println("Packet from client has been read pck.len="+((Packet)msg).getPosition());
+//		System.out.println("Client Channel read stage =" + stage);
 		if (readBufPool != null) {
 			final Packet pck = (Packet)msg;
 			pck.setConnStage(stage);
@@ -76,13 +76,13 @@ public class ClientConnectionHandlerImpl extends
 		for (BotContext bot: proxyBots) {
 			if (bot.setStatus(BotContext.CONN_STATUS)) {
 				this.botContext = bot;
-
 				break;
 			}
 		}
 		if (botContext == null) {
 			throw new RuntimeException("Can't find proxy bot to connect");
 		}
+//		System.out.println("Client channel active stage=" + stage);
 		botContext.getClientConnections().get(stage).setHandlerContext(ctx);
 		botContext.setConnectStage(stage);
 

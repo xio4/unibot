@@ -34,9 +34,9 @@ import com.xiovr.unibot.bot.packet.Packet;
 
 public class BotConnectionClientImpl implements BotConnection {
 	private int stage;
-	private boolean bDisconnectPermit;
+	private volatile boolean bDisconnectPermit;
 
-	private ChannelHandlerContext ctx;
+	private volatile ChannelHandlerContext ctx;
 
 	public BotConnectionClientImpl() {
 		ctx = null;

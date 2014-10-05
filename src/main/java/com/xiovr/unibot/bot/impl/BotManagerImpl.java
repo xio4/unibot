@@ -293,6 +293,7 @@ public class BotManagerImpl implements BotManager {
 			// It works only outgame bot!
 			break;
 		case BotSettings.OUTGAME_TYPE:
+			System.out.println("Conn stage in manager connect=" + botContext.getConnectStage());
 			InetSocketAddress address = botEnvironment.getServerAddresses()
 					.get(botContext.getConnectStage());
 			botContext.getServerConnections().get(botContext.getConnectStage())
@@ -379,6 +380,7 @@ public class BotManagerImpl implements BotManager {
 			throws BotDoNotExistsException, BotScriptCannotStopException {
 		BotContext botContext = getBot(botId, botType);
 		botContext.setStatus(BotContext.OFFLINE_STATUS);
+		botContext.getReadBuffer().clear();
 		botContext.setConnectStage(0);
 		Thread spt = createScriptThreadBot(botContext);
 
@@ -424,12 +426,14 @@ public class BotManagerImpl implements BotManager {
 
 		try {
 			for (BotContext botContext : bots) {
-				for (int i = 0; i < botEnvironment.getServerAddresses().size(); ++i) {
-					botContext.getServerConnections().get(i).disconnect();
-				}
-				for (int i = 0; i < botEnvironment.getClientAddresses().size(); ++i) {
-					botContext.getClientConnections().get(i).disconnect();
-				}
+//				for (int i = 0; i < botEnvironment.getServerAddresses().size(); ++i) {
+//					botContext.getServerConnections().get(i).disconnect();
+//				}
+//				for (int i = 0; i < botEnvironment.getClientAddresses().size(); ++i) {
+//					botContext.getClientConnections().get(i).disconnect();
+//				}
+				disconnect(botContext.getBotId(), botContext.getBotSettings()
+						.getType());
 				resetBot(botContext.getBotId(), botContext.getBotSettings()
 						.getType());
 

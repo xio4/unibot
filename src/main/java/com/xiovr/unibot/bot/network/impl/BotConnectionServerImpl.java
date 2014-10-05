@@ -40,12 +40,12 @@ import com.xiovr.unibot.bot.network.BotConnection;
 import com.xiovr.unibot.bot.packet.Packet;
 
 /**
- * @author xio4
- * Major controller for server connection
+ * @author xio4 Major controller for server connection
  */
 public class BotConnectionServerImpl implements BotConnection {
 	@SuppressWarnings("unused")
-	private static final Logger logger = LoggerFactory.getLogger(BotConnectionServerImpl.class);
+	private static final Logger logger = LoggerFactory
+			.getLogger(BotConnectionServerImpl.class);
 	private BotContext botContext;
 	private NioEventLoopGroup workerGroup;
 	private Bootstrap bs;
@@ -62,36 +62,27 @@ public class BotConnectionServerImpl implements BotConnection {
 		this.botContext = null;
 		this.workerGroup = null;
 		this.bs = null;
+
 	}
 
 	@Override
 	public void connect(@NonNull InetSocketAddress address) {
-		bs = new Bootstrap();
-		bs.group(workerGroup);
-		bs.channel(NioSocketChannel.class);
-		bs.option(ChannelOption.SO_KEEPALIVE, true);
-		bs.handler(new ChannelInitializer<SocketChannel>() {
-			@Override
-			protected void initChannel(SocketChannel ch) throws Exception {
-				ch.pipeline().addLast(new ConnectionDecoderImpl(),
-						new ConnectionEncoderImpl(),
-						new ServerConnectionHandlerImpl(botContext, stage));
-			}
-		});
+
 		cf = bs.connect(address);
 		cf.addListener(new ChannelFutureListener() {
 			@Override
-			public void operationComplete(ChannelFuture future) throws Exception {
+			public void operationComplete(ChannelFuture future)
+					throws Exception {
 				if (future.isSuccess()) {
-//				botContext.getCryptorPlugin().onConnected(ScriptPlugin.CONN_TO_SERVER);
-//				final ScriptPlugin sp = botContext.getScript();
-//				if (sp != null)
-//					sp.onConnected(ScriptPlugin.CONN_TO_SERVER);
-//				bConnected = true;
+					// botContext.getCryptorPlugin().onConnected(ScriptPlugin.CONN_TO_SERVER);
+					// final ScriptPlugin sp = botContext.getScript();
+					// if (sp != null)
+					// sp.onConnected(ScriptPlugin.CONN_TO_SERVER);
+					// bConnected = true;
 
 				}
 			}
-		}); 
+		});
 	}
 
 	@Override
@@ -101,14 +92,17 @@ public class BotConnectionServerImpl implements BotConnection {
 		}
 		cf.channel().close().addListener(new ChannelFutureListener() {
 			@Override
-			public void operationComplete(ChannelFuture future) throws Exception {
-//				botContext.getCryptorPlugin().onDisconnected(ScriptPlugin.DISCONN_FROM_SERVER);
-//				final ScriptPlugin sp = botContext.getScript();
-//				if (sp != null)
-//					sp.onDisconnected(ScriptPlugin.DISCONN_FROM_SERVER);
+			public void operationComplete(ChannelFuture future)
+					throws Exception {
+				// botContext.getCryptorPlugin().onDisconnected(ScriptPlugin.DISCONN_FROM_SERVER);
+				// final ScriptPlugin sp = botContext.getScript();
+				// if (sp != null)
+				// sp.onDisconnected(ScriptPlugin.DISCONN_FROM_SERVER);
 				cf = null;
 			}
 		});
+
+		
 	}
 
 	@Override
@@ -124,6 +118,20 @@ public class BotConnectionServerImpl implements BotConnection {
 		this.botContext = botContext;
 		this.workerGroup = workerGroup;
 		this.stage = stage;
+
+		bs = new Bootstrap();
+		bs.group(workerGroup);
+		bs.channel(NioSocketChannel.class);
+		bs.option(ChannelOption.SO_KEEPALIVE, true);
+		bs.handler(new ChannelInitializer<SocketChannel>() {
+			@Override
+			protected void initChannel(SocketChannel ch) throws Exception {
+				ch.pipeline().addLast(new ConnectionDecoderImpl(),
+						new ConnectionEncoderImpl(),
+						new ServerConnectionHandlerImpl(BotConnectionServerImpl.this.botContext, 
+								BotConnectionServerImpl.this.stage));
+			}
+		});
 	}
 
 	@Override
@@ -152,8 +160,7 @@ public class BotConnectionServerImpl implements BotConnection {
 	public void writeAndFlush(Packet pck) {
 		if (ctx != null) {
 			ctx.writeAndFlush(pck);
-		}
-		else {
+		} else {
 			System.out.println("Server ctx is null!");
 		}
 	}

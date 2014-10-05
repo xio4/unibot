@@ -82,7 +82,7 @@ public class BotLauncher implements CommandLineRunner {
 		BotContext bot = null;
 //		Thread.currentThread().setContextClassLoader();
 		try {
-//			botManager.createBot(BotSettings.PROXY_TYPE, "/tmp/test1.cfg");
+			botManager.createBot(BotSettings.PROXY_TYPE, "/tmp/test1.cfg");
 			bot = botManager.createBot(BotSettings.OUTGAME_TYPE, "/tmp/test1.cfg");
 
 //			botManager.connect(bot.getBotId(), bot.getBotSettings().getType());

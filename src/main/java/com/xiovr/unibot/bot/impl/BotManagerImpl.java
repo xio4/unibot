@@ -313,7 +313,7 @@ public class BotManagerImpl implements BotManager {
 		for (int i = 0; i < botEnvironment.getServerAddresses().size(); ++i) {
 			botContext.getServerConnections().get(i).disconnect();
 		}
-		// May be it Outgame bot
+		// May be it isn't Outgame bot
 		if (botContext.getClientConnections().size() > 0)
 			for (int i = 0; i < botEnvironment.getClientAddresses().size(); ++i) {
 				botContext.getClientConnections().get(i).disconnect();
@@ -378,6 +378,7 @@ public class BotManagerImpl implements BotManager {
 	public void resetBot(int botId, int botType)
 			throws BotDoNotExistsException, BotScriptCannotStopException {
 		BotContext botContext = getBot(botId, botType);
+		botContext.setStatus(BotContext.OFFLINE_STATUS);
 		botContext.setConnectStage(0);
 		Thread spt = createScriptThreadBot(botContext);
 

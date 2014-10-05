@@ -6,17 +6,14 @@ Unibot is universal bot for stress tests MMO-games. It supports scripts on pure 
 Installation
 ============
 
-git clone https://github.com/xio4/unibot
-
-Compilation
-===========
-
+git clone https://github.com/xio4/unibot<br/>
 mvn clean package 
 
-Wiki
-====
+Usage
+=====
 
-On development
+java -jar unibot-x.x.x.jar<br/>
+Open in browser http://localhost:8080
 
 License
 =======
@@ -27,4 +24,4 @@ Copyright(C) 2014 xio4 (Petr Shalkov mApostol@yandex.ru)
 
 Tags
 ====
-Spring, Thymeleaf, Netty, Hibernate
+Spring, Thymeleaf, Netty, JPA, Hibernate, AngularJS

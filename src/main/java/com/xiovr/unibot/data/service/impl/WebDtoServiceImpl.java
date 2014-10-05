@@ -53,6 +53,8 @@ public class WebDtoServiceImpl implements WebDtoService {
 		final int status = bot.getStatus();
 		if (status == BotContext.INWORLD_STATUS)
 			botDto.status = "Online";
+		else if (status == BotContext.CONN_STATUS) 
+			botDto.status = "Connecting";
 		else
 			botDto.status = "Offline";
 		final int type = botSettings.getType();
@@ -199,7 +201,7 @@ public class WebDtoServiceImpl implements WebDtoService {
 	public void disconnectBot(String type, int id) {
 		try {
 			botManager.disconnect(id, strTypeToInt(type));
-			botManager.resetBot(strTypeToInt(type), id);
+			botManager.resetBot(id, strTypeToInt(type));
 			logger.debug("Bot with botId={} and type={} is disconnected", id,
 					type);
 		} catch (BotDoNotExistsException e) {

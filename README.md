@@ -13,7 +13,8 @@ Usage
 =====
 
 java -jar unibot-x.x.x.jar<br/>
-Open in browser http://localhost:8080
+Open in browser http://localhost:8080<br/>
+there is login "test", password "test"
 
 License
 =======

@@ -115,27 +115,10 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
 	}
 
 	// Thymeleaf templates path
-	// Right order!
-	/**
-	 * Overrided resource resolver for thymeleaf templates
-	 */
-	@Autowired
-	SpringResourceResourceResolver resourceResolver;
-	/**
-	 * Overrided template resolver for thymeleaf templates
-	 */
-	@Autowired
-	ITemplateResolver _templateResolver;
-	/**
-	 * Overrided template engine for thymeleaf templates
-	 */
-	@Autowired
-	SpringTemplateEngine templateEngine;
-
 	/**
 	 * @return Resource resolver bean
 	 */
-	@Bean(name = "resourceResolver")
+	@Bean
 	public SpringResourceResourceResolver getResourceResolver() {
 		SpringResourceResourceResolver srrr = new SpringResourceResourceResolver();
 		srrr.setApplicationContext(appContext);
@@ -145,11 +128,11 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
 	/**
 	 * @return Template resolver bean
 	 */
-	@Bean(name = "_templateResolver")
-	public TemplateResolver getTemplateResolver() {
+	@Bean
+	public ITemplateResolver getTemplateResolver() {
 		TemplateResolver resolver = new TemplateResolver();
 		resolver.setCharacterEncoding("UTF-8");
-		resolver.setResourceResolver(resourceResolver);
+		resolver.setResourceResolver(getResourceResolver());
 		resolver.setPrefix("classpath:/web/templates/");
 		// resolver.setPrefix("/templates/");
 		resolver.setSuffix(".html");
@@ -160,10 +143,10 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
 	/**
 	 * @return Template engine bean
 	 */
-	@Bean(name = "templateEngine")
+	@Bean
 	public SpringTemplateEngine getTemplateEngine() {
 		SpringTemplateEngine ste = new SpringTemplateEngine();
-		ste.setTemplateResolver(_templateResolver);
+		ste.setTemplateResolver(getTemplateResolver());
 		return ste;
 	}
 
@@ -174,7 +157,7 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
 	@Bean
 	public ThymeleafViewResolver getThymeleafViewResolver() {
 		ThymeleafViewResolver tvr = new ThymeleafViewResolver();
-		tvr.setTemplateEngine(templateEngine);
+		tvr.setTemplateEngine(getTemplateEngine());
 		tvr.setOrder(1);
 		tvr.setViewNames(new String[] { "*.html", "*.xhtml" });
 		return tvr;

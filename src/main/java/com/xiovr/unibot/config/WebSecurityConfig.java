@@ -76,7 +76,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		writer.setRequestMatcher(AnyRequestMatcher.INSTANCE);
 		http.headers().addHeaderWriter(writer);
 		http.csrf().disable();
-		http.authorizeRequests().antMatchers("/**","/css/**", "/images/**")
+		http.authorizeRequests().antMatchers("/css/**", "/images/**")
 		.permitAll().anyRequest().authenticated();
 		http.formLogin().usernameParameter("username")
 		.passwordParameter("password").loginPage("/login").loginProcessingUrl("/login/submit")

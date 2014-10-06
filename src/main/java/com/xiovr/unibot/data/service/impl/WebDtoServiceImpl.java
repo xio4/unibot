@@ -1,5 +1,6 @@
 package com.xiovr.unibot.data.service.impl;
 
+import java.io.File;
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.List;
@@ -53,7 +54,7 @@ public class WebDtoServiceImpl implements WebDtoService {
 		final int status = bot.getStatus();
 		if (status == BotContext.INWORLD_STATUS)
 			botDto.status = "Online";
-		else if (status == BotContext.CONN_STATUS) 
+		else if (status == BotContext.CONN_STATUS)
 			botDto.status = "Connecting";
 		else
 			botDto.status = "Offline";
@@ -174,7 +175,7 @@ public class WebDtoServiceImpl implements WebDtoService {
 		}
 		BotSettings botSettings = webDtoToBotSettings(botDto);
 		String configPath = botGameConfig.getAbsDirPath() + "/"
-				+ botEnvironment.getScriptsPathPrefix() + "/"
+				+ BotSettings.PATH_PREFIX + "/"
 				+ botManager.botConfigNameGenerator(botSettings);
 		botGameConfig.saveSettings(botSettings, configPath,
 				"Saved from frontend");
@@ -190,6 +191,14 @@ public class WebDtoServiceImpl implements WebDtoService {
 		int typeId = strTypeToInt(type);
 		try {
 			botManager.disconnect(id, typeId);
+			String configPath = botGameConfig.getAbsDirPath()
+					+ "/"
+					+ BotSettings.PATH_PREFIX
+					+ "/"
+					+ botManager.botConfigNameGenerator(botManager.getBot(id,
+							typeId).getBotSettings());
+			final File fn = new File(configPath);
+			fn.delete();
 			botManager.destroyBot(id, typeId);
 			logger.debug("Bot with botId={} and type={} is deleted", id, type);
 		} catch (BotDoNotExistsException e) {
@@ -206,8 +215,7 @@ public class WebDtoServiceImpl implements WebDtoService {
 					type);
 		} catch (BotDoNotExistsException e) {
 			logger.warn("Cannot find bot with botId={} and type={}", id, type);
-		}
-		catch (BotScriptCannotStopException e) {
+		} catch (BotScriptCannotStopException e) {
 			logger.error("Bot with botId={} and type={} cannot stop", id, type);
 		}
 	}
@@ -272,13 +280,32 @@ public class WebDtoServiceImpl implements WebDtoService {
 		try {
 			BotContext botContext = botManager.getBot(id, strTypeToInt(type));
 			BotSettings botSettings = webDtoToBotSettings(botDto);
+			// Delete old config
+			final File fn = new File(botGameConfig.getAbsDirPath()
+					+ "/"
+					+ BotSettings.PATH_PREFIX
+					+ "/"
+					+ botManager.botConfigNameGenerator(botContext
+							.getBotSettings()));
+			fn.delete();
+			// Save new config
 			botGameConfig.saveSettings(
 					botSettings,
 					botGameConfig.getAbsDirPath() + "/"
-							+ botEnvironment.getScriptsPathPrefix() + "/"
+							+ BotSettings.PATH_PREFIX + "/"
 							+ botManager.botConfigNameGenerator(botSettings),
 					"Saved from frontend");
+			String oldScriptPath = botContext.getBotSettings().getScriptPath();
 			botContext.setBotSettings(botSettings);
+			if (!"".equals(botSettings.getScriptPath())
+					&& !oldScriptPath.equals(botSettings.getScriptPath())) {
+				try {
+					botManager.loadScript(id, strTypeToInt(type),
+							botSettings.getScriptPath());
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
 
 			logger.debug("Bot with botId={} and type={} is updated ", id, type);
 

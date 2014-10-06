@@ -51,8 +51,11 @@
 					 'select-dark-grey': isSelected(bot)}"
 						ng-repeat="bot in global.bots">
 						<td>
-							<button type="button" class="btn btn-xs btn-default"
+<!--							<button type="button" class="btn btn-xs btn-default"
 								ng-click="confirmDel(bot)" ng-disabled="bot.type !== 'Outgame' ">X</button>
+								-->
+							<button type="button" class="btn btn-xs btn-default"
+								ng-click="confirmDel(bot)">X</button>
 							<button type="button" class="btn btn-xs btn-default"
 								ng-click="showEditor(bot)">&nbsp;Edit&nbsp;</button>
 						</td>

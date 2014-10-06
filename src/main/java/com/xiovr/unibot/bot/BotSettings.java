@@ -23,6 +23,7 @@ public interface BotSettings extends Settings {
 	public static final int INGAME_TYPE = 0x01;
 	public static final int OUTGAME_TYPE = 0x02;
 	public static final int PROXY_TYPE = 0x03;
+	public static final String PATH_PREFIX="bot_config";
 
 
 	public int getType();

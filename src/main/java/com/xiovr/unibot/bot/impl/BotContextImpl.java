@@ -267,7 +267,6 @@ public class BotContextImpl implements BotContext {
 
 	@Override
 	public void setConnectStage(int stage) {
-		System.out.println("Set conn stage=" + stage);
 		this.connStage = stage;
 		
 	}

@@ -37,7 +37,6 @@ public class BotAutoconnectionImpl implements BotAutoconnection {
 	private BotManager botManager;
 	private Timer timer;
 	private TimerTask timerTask;
-	private BotEnvironment botEnvironment;
 
 	private volatile boolean bStart;
 
@@ -46,7 +45,6 @@ public class BotAutoconnectionImpl implements BotAutoconnection {
 		bStart = false;
 		this.botManager = botManager;
 
-		this.botEnvironment = botManager.getBotEnvironment();
 		curTime = new ArrayList<Integer>(BotManager.BOT_MAX_COUNT);
 
 		for (int i = 0; i < BotManager.BOT_MAX_COUNT; ++i) {
@@ -55,47 +53,48 @@ public class BotAutoconnectionImpl implements BotAutoconnection {
 
 		this.botContexts = botManager.getBots(BotSettings.OUTGAME_TYPE);
 
-		this.timerTask = new TimerTask() {
-			private int skipTime = 0;
-
-			@Override
-			public void run() {
-				skipTime++;
-
-				List<BotContext> botContexts = BotAutoconnectionImpl.this.botContexts;
-				BotManager botManager = BotAutoconnectionImpl.this.botManager;
-				if (skipTime < botEnvironment.getNextBotConnectionInterval())
-					return;
-				for (int i = 0; i < botContexts.size(); ++i) {
-					BotContext botContext = botContexts.get(i);
-					if (botContext != null
-							&& botContext.getBotSettings().getAutoConnect()
-							&& botContext.getStatus() == BotContext.OFFLINE_STATUS) {
-						Integer tm = curTime.get(i);
-						tm++;
-						if (tm < botContext.getBotSettings()
-								.getAutoConnectInterval())
-							curTime.set(i, tm);
-						else {
-							curTime.set(i, 0);
-							skipTime = 0;
-							try {
-								botManager.connect(botContext.getBotId(),
-										BotSettings.OUTGAME_TYPE);
-							} catch (Exception e) {
-								e.printStackTrace();
-							}
-						}
-					}
-				}
-			}
-		};
-		timer = new Timer();
 	}
 
 	@Override
 	public void start() {
 		if (!bStart) {
+			this.timerTask = new TimerTask() {
+				private int skipTime = 0;
+
+				@Override
+				public void run() {
+					skipTime++;
+
+					List<BotContext> botContexts = BotAutoconnectionImpl.this.botContexts;
+					BotManager botManager = BotAutoconnectionImpl.this.botManager;
+					if (skipTime < botManager.getBotEnvironment()
+							.getNextBotConnectionInterval())
+						return;
+					for (int i = 0; i < botContexts.size(); ++i) {
+						BotContext botContext = botContexts.get(i);
+						if (botContext != null
+								&& botContext.getBotSettings().getAutoConnect()
+								&& botContext.getStatus() == BotContext.OFFLINE_STATUS) {
+							Integer tm = curTime.get(i);
+							tm++;
+							if (tm < botContext.getBotSettings()
+									.getAutoConnectInterval())
+								curTime.set(i, tm);
+							else {
+								curTime.set(i, 0);
+								skipTime = 0;
+								try {
+									botManager.connect(botContext.getBotId(),
+											BotSettings.OUTGAME_TYPE);
+								} catch (Exception e) {
+									e.printStackTrace();
+								}
+							}
+						}
+					}
+				}
+			};
+			timer = new Timer();
 			timer.scheduleAtFixedRate(timerTask, 1000, 1000);
 			bStart = true;
 		}

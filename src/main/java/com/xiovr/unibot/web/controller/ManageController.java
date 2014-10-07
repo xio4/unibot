@@ -100,6 +100,7 @@ public class ManageController {
 	@RequestMapping(value = { "/bot/autoconnect" }, method = RequestMethod.PUT)
 	@ResponseStatus(HttpStatus.OK)
 	public AutoconnectStatus botChangeAutoconnect(@RequestBody @Valid AutoconnectStatus autoconnect) {
+		System.out.println("Autoconnect status=" + autoconnect.status);
 		if (autoconnect.status) {
 			botAutoconnection.start();
 		} else {

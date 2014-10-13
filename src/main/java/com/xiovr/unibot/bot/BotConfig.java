@@ -19,6 +19,9 @@
  */
 package com.xiovr.unibot.bot;
 
+import javax.servlet.MultipartConfigElement;
+
+import org.springframework.boot.context.embedded.MultipartConfigFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -36,6 +39,14 @@ import com.xiovr.unibot.plugin.impl.PluginLoaderImpl;
 @Configuration
 public class BotConfig {
 
+    @Bean
+    MultipartConfigElement multipartConfigElement() {
+        MultipartConfigFactory factory = new MultipartConfigFactory();
+        factory.setMaxFileSize("1024KB");
+        factory.setMaxRequestSize("1024KB");
+        return factory.createMultipartConfig();
+    }
+    
 	@Bean
 	public BotManager getBotManager()
 	{

@@ -27,6 +27,7 @@ import org.eclipse.jdt.annotation.NonNull;
 public interface BotEnvironment extends Settings {
 
 	public static final String ENVIRONMENT_CFG_FN = "environment.cfg";
+	public static final String LIBS_PATH = "libs";
 
 	@Param(name="script.update_interval", values = "100")
 	public void setUpdateInterval(long updatInterval);

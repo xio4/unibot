@@ -71,6 +71,13 @@ public class BotLauncher implements CommandLineRunner {
 				return;
 			}
 		}
+		File fn3 = new File(botGameConfig.getAbsDirPath() + "/" + BotEnvironment.LIBS_PATH);
+		if (!fn3.isDirectory()) {
+			if (!fn3.mkdir()) {
+				logger.error("Cannot create directory with name {}" , BotEnvironment.LIBS_PATH);
+				return;
+			}
+		}
 		connectionFactory.init(botEnvironment);
 		botManager.setBotEnvironment(botEnvironment);
 		botManager.setBotGameConfig(botGameConfig);

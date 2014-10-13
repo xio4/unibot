@@ -43,6 +43,7 @@ public class BotAutoconnectTest extends TestBase {
 		BotSettings bs = EasyMock.createMock(BotSettings.class);
 		EasyMock.expect(bs.getAutoConnect()).andReturn(true).anyTimes();
 		EasyMock.expect(bs.getAutoConnectInterval()).andReturn(1).anyTimes();
+		EasyMock.expect(bs.getDisabled()).andReturn(false).anyTimes();
 		
 		BotEnvironment be = EasyMock.createMock(BotEnvironment.class);
 		EasyMock.expect(be.getNextBotConnectionInterval()).andReturn(1).anyTimes();

@@ -60,11 +60,19 @@
 						maxlength="200" rows="4" ng-model="env.server"></textarea>
 				</div>
 			</div>
+			<div class="float-end">
+				<div class="pull-left vcenter">Cryptor file name</div>
+				<div class="input-group pull-right">
+					<input type="text" class="form-control" readonly ng-model="cryptorFile.file.name"> <span
+						class="input-group-btn">
+						<span class="btn btn-default btn-file">Browse...<input type="file" fileread="cryptorFile"/></span>
+					</span>
+				</div>
+			</div>
 		</div>
 	</div>
-<div class="text-color-red">
-	*Warning: To accept the environment settings you need to restart unibot!
-</div>
+	<div class="text-color-red">*Warning: To accept the environment
+		settings you need to restart unibot!</div>
 </div>
 
 <div class="modal-footer">

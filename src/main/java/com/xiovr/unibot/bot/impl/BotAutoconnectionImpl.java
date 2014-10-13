@@ -72,12 +72,14 @@ public class BotAutoconnectionImpl implements BotAutoconnection {
 						return;
 					for (int i = 0; i < botContexts.size(); ++i) {
 						BotContext botContext = botContexts.get(i);
+						BotSettings botSettings = botContext.getBotSettings();
 						if (botContext != null
-								&& botContext.getBotSettings().getAutoConnect()
+								&& !botSettings.getDisabled()
+								&& botSettings.getAutoConnect()
 								&& botContext.getStatus() == BotContext.OFFLINE_STATUS) {
 							Integer tm = curTime.get(i);
 							tm++;
-							if (tm < botContext.getBotSettings()
+							if (tm < botSettings
 									.getAutoConnectInterval())
 								curTime.set(i, tm);
 							else {
@@ -95,7 +97,7 @@ public class BotAutoconnectionImpl implements BotAutoconnection {
 				}
 			};
 			timer = new Timer();
-			timer.scheduleAtFixedRate(timerTask, 1000, 1000);
+			timer.scheduleAtFixedRate(timerTask, 100, 1000);
 			bStart = true;
 		}
 	}

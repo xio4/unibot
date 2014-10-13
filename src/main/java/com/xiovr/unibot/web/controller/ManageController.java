@@ -19,6 +19,9 @@
  */
 package com.xiovr.unibot.web.controller;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,10 +35,12 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.xiovr.unibot.bot.BotAutoconnection;
 import com.xiovr.unibot.bot.BotContext;
@@ -61,6 +66,11 @@ public class ManageController {
 	@Autowired
 	WebDtoService webDtoService;
 	
+	@Autowired
+	BotEnvironment botEnvironment;
+	@Autowired
+	BotGameConfig botGameConfig;
+
 	@Autowired
 	BotAutoconnection botAutoconnection;
 
@@ -139,6 +149,25 @@ public class ManageController {
 			webDtoService.connectBot(type, id);
 		}
 	}
+	
+	@RequestMapping(value="/bot/uploadscript", method=RequestMethod.POST)
+    public @ResponseBody String scriptFileUpload(@RequestParam("name") String name,
+    		@RequestParam("file") MultipartFile file){
+        if (!file.isEmpty()) {
+            try {
+                byte[] bytes = file.getBytes();
+                BufferedOutputStream stream =
+                        new BufferedOutputStream(new FileOutputStream(new File(botGameConfig.getAbsDirPath() + "/" +  botEnvironment.getScriptsPathPrefix() + "/" + name))); 
+                stream.write(bytes);
+                stream.close();
+                return "You successfully uploaded " + name + " into " + name + "-uploaded !";
+            } catch (Exception e) {
+                return "You failed to upload " + name + " => " + e.getMessage();
+            }
+        } else {
+            return "You failed to upload " + name + " because the file was empty.";
+        }
+    }
 
 	@RequestMapping(value = { "/env" }, method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.OK)
@@ -152,4 +181,23 @@ public class ManageController {
 	public void saveEnvironment(@RequestBody @Valid WebEnvDto envDto) {
 		webDtoService.saveEnv(envDto);
 	}
+
+    @RequestMapping(value="/env/uploadcryptor", method=RequestMethod.POST)
+    public @ResponseBody String cryptoreFileUpload(@RequestParam("name") String name,
+    		@RequestParam("file") MultipartFile file){
+        if (!file.isEmpty()) {
+            try {
+                byte[] bytes = file.getBytes();
+                BufferedOutputStream stream =
+                        new BufferedOutputStream(new FileOutputStream(new File(botGameConfig.getAbsDirPath() + "/" +  BotEnvironment.LIBS_PATH + "/" + name))); 
+                stream.write(bytes);
+                stream.close();
+                return "You successfully uploaded " + name + " into " + name + "-uploaded !";
+            } catch (Exception e) {
+                return "You failed to upload " + name + " => " + e.getMessage();
+            }
+        } else {
+            return "You failed to upload " + name + " because the file was empty.";
+        }
+    }
 }

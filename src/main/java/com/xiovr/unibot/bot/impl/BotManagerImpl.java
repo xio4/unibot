@@ -229,11 +229,13 @@ public class BotManagerImpl implements BotManager {
 		BotContext botContext = null;
 		botContext = getBotContextByIdAndType(botId, botType);
 
-		if (botContext.getScript() != null) {
-			pluginLoader.unloadPlugin(botContext.getScript().getClass());
+		ScriptPlugin script = botContext.getScript();
+		if (script != null) {
 			botContext.setScript(null);
+			pluginLoader.unloadPlugin(script.getClass());
 		}
-		ScriptPlugin script = pluginLoader.createScriptPlugin(scriptPath);
+
+		script = pluginLoader.createScriptPlugin(scriptPath);
 		botContext.setScript(script);
 		botContext.getBotSettings().setScriptPath(scriptPath);
 	}
